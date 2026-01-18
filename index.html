@@ -14,32 +14,36 @@
         <h2>Vidyarthi 🎓</h2>
         <ul>
             <li onclick="showSection('dashboard')" class="active-nav">Dashboard</li>
-            <li onclick="showSection('scheduler')">Daily Scheduler</li>
-            <li onclick="showSection('tasks')">Task Board (Kanban)</li>
+            <li onclick="showSection('scheduler')">Scheduler & Classes</li>
+            <li onclick="showSection('alarms')">Alarms 🔔</li>
+            <li onclick="showSection('tasks')">Task Board</li>
             <li onclick="showSection('flashcards')">Flashcards</li>
-            <li onclick="showSection('notes')">Quick Notes</li>
         </ul>
+        
+        <div id="alarm-status" style="margin-top: 20px; font-size: 0.8em; color: #ccc;">
+            Next Alarm: <span id="next-alarm-display">None</span>
+        </div>
     </nav>
 
     <main class="main-content">
         
         <section id="dashboard" class="active-section">
             <header>
-                <h1>Welcome back!</h1>
-                <p>Here is your overview for today.</p>
+                <h1>Dashboard</h1>
+                <p id="date-display">Date Loading...</p>
             </header>
             
             <div class="cards-grid">
-                <div class="card">
-                    <h3>Assignments Due</h3>
-                    <p class="big-number">3</p>
-                    <p>Math, Science, History</p>
+                <div class="card urgent-card">
+                    <h3>⚠️ Upcoming Deadlines</h3>
+                    <ul id="deadline-list" class="simple-list">
+                        </ul>
+                    <div class="input-group">
+                        <input type="text" id="new-deadline" placeholder="New deadline...">
+                        <button onclick="addDeadline()" class="small-btn">+</button>
+                    </div>
                 </div>
-                <div class="card">
-                    <h3>Next Class</h3>
-                    <p class="big-number">10:00 AM</p>
-                    <p>Physics (Room 302)</p>
-                </div>
+
                 <div class="card timer-card">
                     <h3>Study Timer</h3>
                     <div id="pomodoro">25:00</div>
@@ -50,14 +54,27 @@
 
         <section id="scheduler" style="display:none;">
             <h1>Daily Scheduler</h1>
-            <div class="schedule-container">
-                <div class="time-slot"><span>08:00 AM</span> <div class="event">Wake Up & Yoga</div></div>
-                <div class="time-slot"><span>09:00 AM</span> <div class="event school">School: Math Class</div></div>
-                <div class="time-slot"><span>10:00 AM</span> <div class="event school">School: Physics</div></div>
-                <div class="time-slot"><span>01:00 PM</span> <div class="event">Lunch Break</div></div>
-                <div class="time-slot"><span>04:00 PM</span> <div class="event home">Homework Session</div></div>
-                <div class="time-slot"><span>06:00 PM</span> <div class="event home">Project Work</div></div>
+            
+            <div class="add-event-box">
+                <input type="time" id="class-time">
+                <input type="text" id="class-name" placeholder="Class/Event Name">
+                <input type="text" id="class-link" placeholder="Meeting Link (Zoom/Meet)">
+                <button onclick="addClass()">Add Class</button>
             </div>
+
+            <div class="schedule-container" id="schedule-list">
+                </div>
+        </section>
+
+        <section id="alarms" style="display:none;">
+            <h1>Alarms</h1>
+            <div class="add-event-box">
+                <input type="time" id="alarm-time">
+                <input type="text" id="alarm-label" placeholder="Label (e.g., Wake Up)">
+                <button onclick="setAlarm()">Set Alarm</button>
+            </div>
+            <div id="active-alarms-list" class="cards-grid">
+                </div>
         </section>
 
         <section id="tasks" style="display:none;">
@@ -66,7 +83,6 @@
                 <div class="kanban-column" id="todo">
                     <h3>To Do 📌</h3>
                     <div class="task" contenteditable="true">Write History Essay</div>
-                    <div class="task" contenteditable="true">Buy Chart Paper</div>
                 </div>
                 <div class="kanban-column" id="inprogress">
                     <h3>In Progress 🚧</h3>
@@ -74,10 +90,8 @@
                 </div>
                 <div class="kanban-column" id="done">
                     <h3>Done ✅</h3>
-                    <div class="task" contenteditable="true">Math Worksheet</div>
                 </div>
             </div>
-            <p style="margin-top:20px; color:#666; font-size:0.9em;">*Tip: Click on a task to edit text.</p>
         </section>
 
         <section id="flashcards" style="display:none;">
@@ -85,24 +99,20 @@
             <div class="flashcard-container" onclick="flipCard()">
                 <div class="flashcard-inner" id="cardInner">
                     <div class="flashcard-front">
-                        <h2>What is the powerhouse of the cell?</h2>
-                        <p>(Click to flip)</p>
+                        <h2>Click to Flip</h2>
                     </div>
                     <div class="flashcard-back">
-                        <h2>Mitochondria</h2>
+                        <h2>Answer</h2>
                     </div>
                 </div>
             </div>
             <button onclick="nextCard()" style="margin-top: 20px;">Next Card</button>
         </section>
 
-        <section id="notes" style="display:none;">
-            <h1>Quick Notes</h1>
-            <textarea placeholder="Type your class notes or reminders here..." class="notepad"></textarea>
-        </section>
-
     </main>
 </div>
+
+<audio id="alarm-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
 <script src="script.js"></script>
 </body>
