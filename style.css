@@ -1,0 +1,140 @@
+:root {
+    --primary: #4a90e2;
+    --sidebar-bg: #2c3e50;
+    --sidebar-text: #ecf0f1;
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-color: #333;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+
+body { background-color: var(--bg-color); color: var(--text-color); }
+
+.container { display: flex; height: 100vh; }
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 20px;
+}
+
+.sidebar h2 { margin-bottom: 30px; text-align: center; }
+
+.sidebar ul { list-style: none; }
+
+.sidebar li {
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    transition: 0.3s;
+}
+
+.sidebar li:hover, .active-nav { background-color: var(--primary); }
+
+/* Main Content */
+.main-content { flex: 1; padding: 40px; overflow-y: auto; }
+
+h1 { margin-bottom: 20px; color: var(--sidebar-bg); }
+
+/* Dashboard Cards */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.big-number { font-size: 2.5em; font-weight: bold; color: var(--primary); margin: 10px 0; }
+
+/* Scheduler */
+.time-slot {
+    display: flex;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    align-items: center;
+}
+.time-slot span { width: 100px; font-weight: bold; color: #777; }
+.event { background: #e0eafc; padding: 10px; border-radius: 5px; width: 100%; }
+.event.school { background: #d1f2eb; border-left: 4px solid #2ecc71; }
+.event.home { background: #fadbd8; border-left: 4px solid #e74c3c; }
+
+/* Kanban Board */
+.kanban-board { display: flex; gap: 20px; }
+.kanban-column {
+    flex: 1;
+    background: #e2e4e6;
+    padding: 15px;
+    border-radius: 8px;
+}
+.task {
+    background: white;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    cursor: pointer;
+}
+
+/* Flashcards */
+.flashcard-container {
+    background-color: transparent;
+    width: 300px;
+    height: 200px;
+    perspective: 1000px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+.flip { transform: rotateY(180deg); }
+.flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.flashcard-front { background-color: var(--primary); color: white; }
+.flashcard-back { background-color: var(--sidebar-bg); color: white; transform: rotateY(180deg); }
+
+/* Notes */
+.notepad {
+    width: 100%;
+    height: 300px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1.1em;
+    line-height: 1.5;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
