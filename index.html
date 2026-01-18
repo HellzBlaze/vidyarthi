@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vidyarthi | Student Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <nav class="sidebar">
+        <h2>Vidyarthi 🎓</h2>
+        <ul>
+            <li onclick="showSection('dashboard')" class="active-nav">Dashboard</li>
+            <li onclick="showSection('scheduler')">Daily Scheduler</li>
+            <li onclick="showSection('tasks')">Task Board (Kanban)</li>
+            <li onclick="showSection('flashcards')">Flashcards</li>
+            <li onclick="showSection('notes')">Quick Notes</li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        
+        <section id="dashboard" class="active-section">
+            <header>
+                <h1>Welcome back!</h1>
+                <p>Here is your overview for today.</p>
+            </header>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>Assignments Due</h3>
+                    <p class="big-number">3</p>
+                    <p>Math, Science, History</p>
+                </div>
+                <div class="card">
+                    <h3>Next Class</h3>
+                    <p class="big-number">10:00 AM</p>
+                    <p>Physics (Room 302)</p>
+                </div>
+                <div class="card timer-card">
+                    <h3>Study Timer</h3>
+                    <div id="pomodoro">25:00</div>
+                    <button onclick="startTimer()">Start Focus</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="scheduler" style="display:none;">
+            <h1>Daily Scheduler</h1>
+            <div class="schedule-container">
+                <div class="time-slot"><span>08:00 AM</span> <div class="event">Wake Up & Yoga</div></div>
+                <div class="time-slot"><span>09:00 AM</span> <div class="event school">School: Math Class</div></div>
+                <div class="time-slot"><span>10:00 AM</span> <div class="event school">School: Physics</div></div>
+                <div class="time-slot"><span>01:00 PM</span> <div class="event">Lunch Break</div></div>
+                <div class="time-slot"><span>04:00 PM</span> <div class="event home">Homework Session</div></div>
+                <div class="time-slot"><span>06:00 PM</span> <div class="event home">Project Work</div></div>
+            </div>
+        </section>
+
+        <section id="tasks" style="display:none;">
+            <h1>Project Tracker</h1>
+            <div class="kanban-board">
+                <div class="kanban-column" id="todo">
+                    <h3>To Do 📌</h3>
+                    <div class="task" contenteditable="true">Write History Essay</div>
+                    <div class="task" contenteditable="true">Buy Chart Paper</div>
+                </div>
+                <div class="kanban-column" id="inprogress">
+                    <h3>In Progress 🚧</h3>
+                    <div class="task" contenteditable="true">Science Model</div>
+                </div>
+                <div class="kanban-column" id="done">
+                    <h3>Done ✅</h3>
+                    <div class="task" contenteditable="true">Math Worksheet</div>
+                </div>
+            </div>
+            <p style="margin-top:20px; color:#666; font-size:0.9em;">*Tip: Click on a task to edit text.</p>
+        </section>
+
+        <section id="flashcards" style="display:none;">
+            <h1>Study Flashcards</h1>
+            <div class="flashcard-container" onclick="flipCard()">
+                <div class="flashcard-inner" id="cardInner">
+                    <div class="flashcard-front">
+                        <h2>What is the powerhouse of the cell?</h2>
+                        <p>(Click to flip)</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <h2>Mitochondria</h2>
+                    </div>
+                </div>
+            </div>
+            <button onclick="nextCard()" style="margin-top: 20px;">Next Card</button>
+        </section>
+
+        <section id="notes" style="display:none;">
+            <h1>Quick Notes</h1>
+            <textarea placeholder="Type your class notes or reminders here..." class="notepad"></textarea>
+        </section>
+
+    </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
