@@ -1,71 +1,76 @@
-// --- STATE MANAGEMENT (Data Persistence) ---
-// We load data from LocalStorage or use default empty arrays
-let appData = JSON.parse(localStorage.getItem('vidyarthiData')) || {
+// === STATE MANAGEMENT ===
+let appData = JSON.parse(localStorage.getItem('vidyarthiProData')) || {
     schedule: [],
     alarms: [],
     tasks: { todo: [], done: [] },
-    deadlines: [],
     theme: 'light'
 };
 
 function saveData() {
-    localStorage.setItem('vidyarthiData', JSON.stringify(appData));
-    updateDashboardCounts();
+    localStorage.setItem('vidyarthiProData', JSON.stringify(appData));
+    updateUI();
 }
 
-// --- INITIALIZATION ---
+// === INITIALIZATION ===
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
+    updateDate();
     renderSchedule();
     renderAlarms();
     renderTasks();
-    renderDeadlines();
-    initChart();
-    updateDate();
-    updateDashboardCounts();
     
     // Check alarms every second
     setInterval(checkAlarms, 1000);
 });
 
-// --- THEME & TIME ---
+// === HELPER FUNCTIONS ===
+function updateUI() {
+    document.getElementById('todo-count').innerText = appData.tasks.todo.length;
+    document.getElementById('done-count').innerText = appData.tasks.done.length;
+    renderTasks(); // Re-render tasks to ensure correct state
+    renderSchedule(); // Re-render schedule for dashboard widget
+}
+
+function handleKeyPress(event, callback) {
+    if (event.key === 'Enter') callback();
+}
+
+// === THEME & DATE ===
 function initTheme() {
-    if (appData.theme === 'dark') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('theme-toggle').innerHTML = '<i class="fa-solid fa-sun"></i> Light Mode';
-    }
+    if (appData.theme === 'dark') document.body.classList.add('dark-mode');
+    updateThemeIcon();
 }
 
 function toggleTheme() {
     document.body.classList.toggle('dark-mode');
     appData.theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-    const btnIcon = appData.theme === 'dark' ? '<i class="fa-solid fa-sun"></i> Light Mode' : '<i class="fa-solid fa-moon"></i> Dark Mode';
-    document.getElementById('theme-toggle').innerHTML = btnIcon;
+    updateThemeIcon();
     saveData();
+}
+
+function updateThemeIcon() {
+    const icon = document.querySelector('#theme-toggle i');
+    icon.className = appData.theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
 }
 
 function updateDate() {
     const now = new Date();
-    document.getElementById('date-display').innerText = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-    
+    document.getElementById('current-date').innerText = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
     const hour = now.getHours();
-    let greeting = "Good Morning";
-    if (hour >= 12) greeting = "Good Afternoon";
-    if (hour >= 17) greeting = "Good Evening";
-    document.getElementById('greeting-text').innerText = `${greeting}, Student`;
+    let greeting = hour < 12 ? "Good Morning" : hour < 17 ? "Good Afternoon" : "Good Evening";
+    document.getElementById('greeting').innerText = greeting;
 }
 
-// --- NAVIGATION ---
-function showSection(id) {
+// === NAVIGATION ===
+function showSection(sectionId) {
     document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
-    document.getElementById(id).style.display = 'block';
+    document.getElementById(sectionId).style.display = 'block';
     
-    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-    // Simple logic to find nav item by onclick matching (simplified for brevity)
-    // In production, you'd give nav items IDs.
+    document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+    document.getElementById('nav-' + sectionId).classList.add('active');
 }
 
-// --- SCHEDULER ---
+// === SCHEDULER ===
 function addClass() {
     const time = document.getElementById('new-class-time').value;
     const name = document.getElementById('new-class-name').value;
@@ -75,82 +80,124 @@ function addClass() {
         appData.schedule.push({ time, name, link });
         appData.schedule.sort((a, b) => a.time.localeCompare(b.time));
         saveData();
-        renderSchedule();
         closeModal('class-modal');
+        // Clear inputs
+        document.getElementById('new-class-time').value = '';
+        document.getElementById('new-class-name').value = '';
+        document.getElementById('new-class-link').value = '';
     }
 }
 
 function renderSchedule() {
-    const list = document.getElementById('schedule-list');
-    list.innerHTML = '';
-    appData.schedule.forEach((item, index) => {
-        list.innerHTML += `
-            <div class="schedule-item">
-                <span style="font-weight:bold; color:var(--primary);">${item.time}</span>
-                <span style="flex:1; margin-left:15px;">${item.name}</span>
-                ${item.link ? `<a href="${item.link}" target="_blank" class="primary-btn" style="padding:5px 10px; font-size:0.8rem;">Join</a>` : ''}
-                <button onclick="deleteItem('schedule', ${index})" style="color:red; background:none; border:none; margin-left:10px; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+    const fullList = document.getElementById('full-schedule-list');
+    const dashList = document.getElementById('dashboard-schedule-list');
+    
+    let htmlContent = '';
+    
+    if (appData.schedule.length === 0) {
+        htmlContent = '<p class="sub-text" style="text-align:center; padding:20px;">No classes added yet.</p>';
+        dashList.innerHTML = '<p class="sub-text">No classes scheduled today.</p>';
+    } else {
+        appData.schedule.forEach((item, index) => {
+            htmlContent += `
+                <div class="schedule-row">
+                    <span class="schedule-time">${item.time}</span>
+                    <span class="schedule-details">${item.name}</span>
+                    <div class="schedule-actions">
+                        ${item.link ? `<a href="${item.link}" target="_blank" class="btn-join">Join Meeting</a>` : ''}
+                        <button onclick="deleteItem('schedule', ${index})" class="btn-icon" style="color:var(--color-danger); border:none; background:none;"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+        // Dashboard widget shows max 3 items
+        dashList.innerHTML = appData.schedule.slice(0, 3).map(item => `
+             <div class="widget-list-item">
+                <span style="font-weight:600; font-size:0.9rem;">${item.time}</span>
+                <span style="font-size:0.9rem;">${item.name}</span>
             </div>
-        `;
-    });
+        `).join('');
+    }
+    fullList.innerHTML = htmlContent;
 }
 
-// --- TASKS (KANBAN) ---
+// === TASKS (KANBAN & QUICK DASHBOARD TASKS) ===
+function addQuickTask() {
+     const input = document.getElementById('quick-task-input');
+     if(input.value) {
+         appData.tasks.todo.unshift(input.value); // Add to top of todo list
+         input.value = '';
+         saveData();
+     }
+}
+
 function addTask(type) {
-    const input = document.getElementById('todo-input');
+    const input = document.getElementById('kanban-input');
     if (input.value) {
         appData.tasks[type].push(input.value);
         input.value = '';
         saveData();
-        renderTasks();
     }
 }
 
 function renderTasks() {
     const todoList = document.getElementById('todo-list');
     const doneList = document.getElementById('done-list');
-    
+    const dashDeadlineList = document.getElementById('deadline-list');
+
+    // Kanban rendering
     todoList.innerHTML = appData.tasks.todo.map((t, i) => `
         <div class="task-card" onclick="moveTask(${i}, 'todo', 'done')">${t}</div>
     `).join('');
     
     doneList.innerHTML = appData.tasks.done.map((t, i) => `
-        <div class="task-card" style="text-decoration:line-through; opacity:0.6;" onclick="moveTask(${i}, 'done', 'todo')">${t}</div>
+        <div class="task-card task-done" onclick="moveTask(${i}, 'done', 'todo')">${t}</div>
     `).join('');
+
+    // Dashboard "Quick Tasks" rendering (Top 5 todos)
+    if(appData.tasks.todo.length === 0) {
+        dashDeadlineList.innerHTML = '<li class="sub-text">Nothing due soon!</li>';
+    } else {
+        dashDeadlineList.innerHTML = appData.tasks.todo.slice(0, 5).map((t, i) => `
+            <li>
+                <span>${t}</span>
+                <button onclick="moveTask(${i}, 'todo', 'done')" class="btn-text" style="color:var(--color-success);"><i class="fa-solid fa-check"></i></button>
+            </li>
+        `).join('');
+    }
 }
 
 function moveTask(index, from, to) {
     const item = appData.tasks[from].splice(index, 1)[0];
-    appData.tasks[to].push(item);
+    appData.tasks[to].unshift(item); // Add to top of new list
     saveData();
-    renderTasks();
 }
 
-// --- ALARMS ---
+// === ALARMS ===
 function addAlarm() {
     const time = document.getElementById('alarm-time').value;
-    const label = document.getElementById('alarm-label').value;
+    const label = document.getElementById('alarm-label').value || 'Alarm';
     if (time) {
         appData.alarms.push({ time, label, active: true });
+        appData.alarms.sort((a, b) => a.time.localeCompare(b.time));
+        document.getElementById('alarm-time').value = '';
+        document.getElementById('alarm-label').value = '';
         saveData();
         renderAlarms();
     }
 }
 
 function renderAlarms() {
-    const list = document.getElementById('alarm-list');
-    list.innerHTML = '';
-    appData.alarms.forEach((alarm, index) => {
-        list.innerHTML += `
-            <div class="stat-card" style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <h3>${alarm.time}</h3>
-                    <p style="font-size:0.8rem; color:var(--text-muted);">${alarm.label}</p>
-                </div>
-                <button onclick="deleteItem('alarms', ${index})" style="color:red; background:none; border:none;"><i class="fa-solid fa-trash"></i></button>
+    const list = document.getElementById('alarm-list-grid');
+    list.innerHTML = appData.alarms.map((alarm, index) => `
+        <div class="alarm-card">
+            <div>
+                <h3 style="font-size:1.5rem; margin-bottom:4px;">${alarm.time}</h3>
+                <p class="sub-text">${alarm.label}</p>
             </div>
-        `;
-    });
+            <button onclick="deleteItem('alarms', ${index})" class="btn-icon" style="color:var(--color-danger);"><i class="fa-solid fa-trash"></i></button>
+        </div>
+    `).join('');
 }
 
 function checkAlarms() {
@@ -160,97 +207,64 @@ function checkAlarms() {
         if (alarm.active && alarm.time === currentTime) {
             document.getElementById('alarm-sound').play();
             alert(`⏰ Alarm: ${alarm.label}`);
-            alarm.active = false; // Prevent multiple rings
+            alarm.active = false; 
             saveData();
         }
     });
 }
 
-// --- DEADLINES & UTILS ---
-function addDeadline() {
-    const val = document.getElementById('deadline-input').value;
-    if (val) {
-        appData.deadlines.push(val);
-        document.getElementById('deadline-input').value = '';
-        saveData();
-        renderDeadlines();
-    }
-}
-
-function renderDeadlines() {
-    const list = document.getElementById('deadline-list');
-    list.innerHTML = appData.deadlines.map((d, i) => `
-        <li style="padding:8px 0; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;">
-            ${d} <i class="fa-solid fa-xmark" onclick="deleteItem('deadlines', ${i})" style="cursor:pointer; color:red;"></i>
-        </li>
-    `).join('');
-}
-
+// === UTILS & TIMER ===
 function deleteItem(category, index) {
     appData[category].splice(index, 1);
     saveData();
     if(category === 'schedule') renderSchedule();
     if(category === 'alarms') renderAlarms();
-    if(category === 'deadlines') renderDeadlines();
 }
 
-function updateDashboardCounts() {
-    document.getElementById('task-count').innerText = `${appData.tasks.todo.length} Pending`;
-}
-
-// --- MODAL UTILS ---
 function openModal(id) { document.getElementById(id).style.display = 'flex'; }
 function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-// --- CHART.JS (Visual Analytics) ---
-function initChart() {
-    const ctx = document.getElementById('studyChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            datasets: [{
-                label: 'Hours Studied',
-                data: [2, 4, 3, 5, 2, 6, 4], // Placeholder data
-                backgroundColor: '#4f46e5',
-                borderRadius: 5
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: { beginAtZero: true, grid: { display: false } },
-                x: { grid: { display: false } }
-            }
-        }
-    });
-}
-
-// --- TIMER (Simplified) ---
+// Timer Logic
 let timerInterval;
-let timeLeft = 1500;
+let timeLeft = 1500; // 25 mins
 let isTimerRunning = false;
 
 function toggleTimer() {
     const btn = document.getElementById('timer-btn');
     if (!isTimerRunning) {
         isTimerRunning = true;
-        btn.innerText = "Pause";
+        btn.innerText = "Pause Focus";
+        btn.classList.replace('btn-primary', 'btn-secondary');
         timerInterval = setInterval(() => {
             if(timeLeft > 0) {
                 timeLeft--;
-                const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-                const s = (timeLeft % 60).toString().padStart(2, '0');
-                document.getElementById('pomodoro').innerText = `${m}:${s}`;
+                updateTimerDisplay();
             } else {
                 clearInterval(timerInterval);
+                document.getElementById('alarm-sound').play();
                 alert("Focus session complete!");
+                resetTimer();
             }
         }, 1000);
     } else {
         clearInterval(timerInterval);
         isTimerRunning = false;
-        btn.innerText = "Start";
+        btn.innerText = "Resume Focus";
+        btn.classList.replace('btn-secondary', 'btn-primary');
     }
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('pomodoro').innerText = `${m}:${s}`;
+}
+
+function resetTimer() {
+     timeLeft = 1500;
+     isTimerRunning = false;
+     updateTimerDisplay();
+     const btn = document.getElementById('timer-btn');
+     btn.innerText = "Start Focus";
+     btn.classList.replace('btn-secondary', 'btn-primary');
 }
