@@ -3,150 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vidyarthi | Pro Dashboard</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Vidyarthi | Student Workspace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="app-container">
+<div class="app-wrapper">
     
     <aside class="sidebar">
-        <div class="logo">
-            <i class="fa-solid fa-graduation-cap"></i> Vidyarthi
+        <div class="brand">
+            <i class="fa-solid fa-graduation-cap brand-icon"></i>
+            <span>Vidyarthi</span>
         </div>
         
-        <nav>
-            <ul>
-                <li onclick="showSection('dashboard')" class="nav-item active">
-                    <i class="fa-solid fa-house"></i> Dashboard
+        <nav class="menu">
+            <div class="menu-label">Main</div>
+            <ul class="menu-list">
+                <li onclick="showSection('dashboard')" class="menu-item active" id="nav-dashboard">
+                    <i class="fa-solid fa-house"></i> <span>Dashboard</span>
                 </li>
-                <li onclick="showSection('scheduler')" class="nav-item">
-                    <i class="fa-solid fa-calendar-days"></i> Schedule
+                <li onclick="showSection('scheduler')" class="menu-item" id="nav-scheduler">
+                    <i class="fa-regular fa-calendar"></i> <span>Schedule</span>
                 </li>
-                <li onclick="showSection('tasks')" class="nav-item">
-                    <i class="fa-solid fa-list-check"></i> Tasks
+                <li onclick="showSection('tasks')" class="menu-item" id="nav-tasks">
+                    <i class="fa-solid fa-list-check"></i> <span>Tasks</span>
                 </li>
-                <li onclick="showSection('alarms')" class="nav-item">
-                    <i class="fa-solid fa-clock"></i> Alarms
+            </ul>
+            
+            <div class="menu-label" style="margin-top: 20px;">Tools</div>
+            <ul class="menu-list">
+                 <li onclick="showSection('alarms')" class="menu-item" id="nav-alarms">
+                    <i class="fa-regular fa-clock"></i> <span>Alarms</span>
                 </li>
             </ul>
         </nav>
 
         <div class="sidebar-footer">
-            <button id="theme-toggle" onclick="toggleTheme()">
-                <i class="fa-solid fa-moon"></i> Dark Mode
+            <button id="theme-toggle" onclick="toggleTheme()" class="theme-btn">
+                <i class="fa-solid fa-moon"></i>
             </button>
         </div>
     </aside>
 
-    <main class="main-content">
+    <main class="main-container">
         
-        <header class="top-bar">
-            <div class="greeting">
-                <h1 id="greeting-text">Good Morning, Student</h1>
-                <p id="date-display">Loading date...</p>
+        <header class="top-header">
+            <div>
+                <h1 id="greeting">Good Morning</h1>
+                <p id="current-date" class="sub-text">Loading date...</p>
             </div>
-            <div class="profile-actions">
-                <div class="notification-badge">
-                    <i class="fa-solid fa-bell"></i>
-                    <span class="dot"></span>
-                </div>
-            </div>
-        </header>
+            </header>
 
         <section id="dashboard" class="view-section active-section">
             <div class="dashboard-grid">
-                <div class="stat-card">
-                    <div class="icon-box blue"><i class="fa-solid fa-book-open"></i></div>
-                    <div class="stat-info">
-                        <h3>Assignments</h3>
-                        <p class="stat-num" id="task-count">0 Pending</p>
+                <div class="card timer-widget">
+                    <div class="card-header">
+                        <h3>Focus Session</h3>
+                        <i class="fa-solid fa-stopwatch"></i>
                     </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="icon-box purple"><i class="fa-solid fa-hourglass-start"></i></div>
-                    <div class="stat-info">
-                        <h3>Focus Timer</h3>
-                        <p class="stat-num" id="pomodoro">25:00</p>
-                        <button onclick="toggleTimer()" id="timer-btn" class="text-btn">Start</button>
-                    </div>
+                    <div class="timer-display" id="pomodoro">25:00</div>
+                    <button id="timer-btn" onclick="toggleTimer()" class="btn btn-primary btn-full">Start Focus</button>
                 </div>
 
-                <div class="chart-container">
-                    <h3>Weekly Focus Hours</h3>
-                    <canvas id="studyChart"></canvas>
-                </div>
-
-                <div class="deadline-container">
-                    <h3><i class="fa-solid fa-triangle-exclamation"></i> Priority Deadlines</h3>
-                    <div class="input-group">
-                        <input type="text" id="deadline-input" placeholder="Add new deadline...">
-                        <button onclick="addDeadline()"><i class="fa-solid fa-plus"></i></button>
+                 <div class="card schedule-widget">
+                    <div class="card-header">
+                         <h3>Today's Schedule</h3>
+                         <button onclick="showSection('scheduler')" class="btn-text">View All</button>
                     </div>
-                    <ul id="deadline-list"></ul>
+                    <div id="dashboard-schedule-list" class="widget-list">
+                        <p class="sub-text">No classes scheduled today.</p>
+                    </div>
+                 </div>
+
+                 <div class="card task-widget">
+                    <div class="card-header">
+                        <h3>Quick Tasks & Deadlines</h3>
+                    </div>
+                     <div class="input-group">
+                        <input type="text" id="quick-task-input" placeholder="Add a new task..." onkeypress="handleKeyPress(event, addQuickTask)">
+                        <button onclick="addQuickTask()" class="btn-icon"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <ul id="deadline-list" class="checklist">
+                        </ul>
                 </div>
             </div>
         </section>
 
         <section id="scheduler" class="view-section" style="display:none;">
             <div class="section-header">
-                <h2>Class Schedule</h2>
-                <button onclick="openModal('class-modal')" class="primary-btn"><i class="fa-solid fa-plus"></i> Add Class</button>
+                <h2>Weekly Schedule</h2>
+                <button onclick="openModal('class-modal')" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Class</button>
             </div>
-            <div class="schedule-list" id="schedule-list">
+            <div class="schedule-container" id="full-schedule-list">
                 </div>
         </section>
 
         <section id="tasks" class="view-section" style="display:none;">
-            <div class="kanban-wrapper">
-                <div class="kanban-col">
-                    <div class="col-header todo">To Do</div>
-                    <div id="todo-list" class="task-list"></div>
-                    <div class="add-task-wrapper">
-                        <input type="text" id="todo-input" placeholder="+ Add task">
-                        <button onclick="addTask('todo')">Add</button>
+            <div class="section-header">
+                 <h2>Task Board</h2>
+            </div>
+            <div class="kanban-board">
+                <div class="kanban-col col-todo">
+                    <div class="col-header">
+                        <span class="col-title">To Do</span>
+                        <span class="col-count" id="todo-count">0</span>
                     </div>
+                     <div class="input-group">
+                        <input type="text" id="kanban-input" placeholder="+ Add task..." onkeypress="handleKeyPress(event, ()=>addTask('todo'))">
+                    </div>
+                    <div id="todo-list" class="task-list-container"></div>
                 </div>
-                <div class="kanban-col">
-                    <div class="col-header done">Completed</div>
-                    <div id="done-list" class="task-list"></div>
+                <div class="kanban-col col-done">
+                     <div class="col-header">
+                        <span class="col-title">Completed</span>
+                         <span class="col-count" id="done-count">0</span>
+                    </div>
+                    <div id="done-list" class="task-list-container"></div>
                 </div>
             </div>
         </section>
 
         <section id="alarms" class="view-section" style="display:none;">
-            <h2>Active Alarms</h2>
-            <div class="alarm-controls">
-                <input type="time" id="alarm-time">
-                <input type="text" id="alarm-label" placeholder="Label">
-                <button onclick="addAlarm()" class="primary-btn">Set Alarm</button>
+             <div class="section-header">
+                <h2>Active Alarms</h2>
             </div>
-            <div id="alarm-list" class="alarm-grid"></div>
+            <div class="card alarm-creation-card">
+                <div class="alarm-inputs">
+                    <input type="time" id="alarm-time" class="time-input">
+                    <input type="text" id="alarm-label" placeholder="Alarm Label (e.g., Wake up)">
+                    <button onclick="addAlarm()" class="btn btn-primary">Set Alarm</button>
+                </div>
+            </div>
+            <div id="alarm-list-grid" class="grid-3">
+                </div>
         </section>
 
     </main>
 </div>
 
-<div id="class-modal" class="modal">
-    <div class="modal-content">
-        <h3>Add New Class</h3>
-        <input type="time" id="new-class-time">
-        <input type="text" id="new-class-name" placeholder="Subject Name">
-        <input type="text" id="new-class-link" placeholder="Zoom/Meet Link">
-        <div class="modal-actions">
-            <button onclick="closeModal('class-modal')">Cancel</button>
-            <button onclick="addClass()" class="primary-btn">Save</button>
+<div id="class-modal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Add New Class</h3>
+            <button onclick="closeModal('class-modal')" class="btn-close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Time</label>
+                <input type="time" id="new-class-time">
+            </div>
+             <div class="form-group">
+                <label>Class Name</label>
+                <input type="text" id="new-class-name" placeholder="e.g., Advanced Mathematics">
+            </div>
+             <div class="form-group">
+                <label>Meeting Link (Optional)</label>
+                <input type="url" id="new-class-link" placeholder="https://zoom.us/...">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('class-modal')" class="btn btn-secondary">Cancel</button>
+            <button onclick="addClass()" class="btn btn-primary">Save Class</button>
         </div>
     </div>
 </div>
 
 <audio id="alarm-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
