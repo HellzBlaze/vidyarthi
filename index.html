@@ -2,308 +2,452 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentLife 360 - Daily Planner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vidyarthi - Student Planner</title>
     <style>
         :root {
             --primary: #4361ee;
-            --secondary: #3f37c9;
+            --primary-dark: #3a0ca3;
+            --secondary: #7209b7;
             --accent: #4cc9f0;
             --bg: #f8f9fa;
             --card-bg: #ffffff;
             --text: #2b2d42;
             --text-light: #8d99ae;
-            --academic: #4361ee;
-            --personal: #f72585;
-            --success: #2ec4b6;
-            --radius: 12px;
-            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --border: #e9ecef;
+            --radius: 16px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.05);
+            --nav-height: 70px; /* For mobile bottom bar */
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
-        body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg); 
+            color: var(--text); 
+            display: flex; 
+            height: 100vh; 
+            overflow: hidden; 
+        }
 
-        /* Sidebar */
-        .sidebar { width: 250px; background: var(--card-bg); padding: 20px; display: flex; flex-direction: column; border-right: 1px solid #e9ecef; }
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
+        /* --- SIDEBAR (Desktop) --- */
+        .sidebar { 
+            width: 260px; 
+            background: var(--card-bg); 
+            padding: 25px; 
+            display: flex; 
+            flex-direction: column; 
+            border-right: 1px solid var(--border);
+            z-index: 100;
+        }
+
+        .logo { 
+            font-size: 1.8rem; 
+            font-weight: 800; 
+            color: var(--primary); 
+            margin-bottom: 40px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            letter-spacing: -0.5px;
+        }
+
         .nav-btn {
-            background: none; border: none; width: 100%; padding: 12px 15px; text-align: left;
-            cursor: pointer; border-radius: var(--radius); color: var(--text-light); font-weight: 600;
-            transition: all 0.2s; margin-bottom: 5px; display: flex; align-items: center; gap: 10px;
+            background: none; 
+            border: none; 
+            width: 100%; 
+            padding: 14px 18px; 
+            text-align: left;
+            cursor: pointer; 
+            border-radius: 12px; 
+            color: var(--text-light); 
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s; 
+            margin-bottom: 8px; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
         }
+        
         .nav-btn:hover { background: #eef2ff; color: var(--primary); }
-        .nav-btn.active { background: var(--primary); color: white; }
+        .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3); }
         
-        /* Main Content */
-        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .date-display { font-size: 1.2rem; font-weight: 600; color: var(--text-light); }
-        
-        /* Sections */
-        .section { display: none; animation: fadeIn 0.3s ease; }
-        .section.active { display: block; }
+        /* --- MAIN CONTENT --- */
+        .main-content { 
+            flex: 1; 
+            padding: 30px; 
+            overflow-y: auto; 
+            scroll-behavior: smooth;
+        }
 
-        /* Dashboard Grid */
+        .header { margin-bottom: 25px; }
+        .greeting { font-size: 0.9rem; color: var(--text-light); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        h2 { font-size: 2rem; font-weight: 800; color: var(--text); }
+
+        /* --- SECTIONS & CARDS --- */
+        .section { display: none; animation: fadeIn 0.3s ease; padding-bottom: 80px; } /* Padding for mobile FAB/Nav */
+        .section.active { display: block; }
+        
         .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .card { background: var(--card-bg); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); }
+        .dashboard-grid.two-col { grid-template-columns: 1fr 1fr; }
+
+        .card { 
+            background: var(--card-bg); 
+            padding: 24px; 
+            border-radius: var(--radius); 
+            box-shadow: var(--shadow); 
+            border: 1px solid var(--border);
+        }
+
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .card-title { font-weight: 700; font-size: 1.1rem; }
 
-        /* Stats Cards */
-        .stat-card { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
-        .stat-value { font-size: 2.5rem; font-weight: 800; }
-        .stat-label { opacity: 0.8; }
+        /* Stats */
+        .stat-card { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; }
+        .stat-value { font-size: 3rem; font-weight: 800; line-height: 1; margin: 10px 0; }
+        .stat-label { opacity: 0.9; font-weight: 500; }
+
+        /* Inputs */
+        .input-group { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        input, select { 
+            padding: 12px 15px; border: 2px solid var(--border); border-radius: 12px; 
+            outline: none; font-size: 1rem; flex: 1; background: var(--bg); transition: 0.2s;
+        }
+        input:focus, select:focus { border-color: var(--primary); background: white; }
+        
+        .btn { 
+            padding: 12px 24px; background: var(--primary); color: white; border: none; 
+            border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 1rem;
+            transition: transform 0.1s;
+        }
+        .btn:active { transform: scale(0.98); }
 
         /* Task List */
-        .task-input-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        input, select { padding: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
-        input:focus { border-color: var(--primary); }
-        .btn { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .btn:hover { opacity: 0.9; }
-        
+        .task-list { display: flex; flex-direction: column; gap: 10px; }
         .task-item { 
-            display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f1f1f1; 
-            transition: background 0.2s;
+            display: flex; align-items: center; padding: 16px; 
+            background: white; border: 1px solid var(--border); border-radius: 12px;
+            transition: 0.2s;
         }
-        .task-item:hover { background: #f8f9fa; }
-        .task-tag { font-size: 0.75rem; padding: 4px 8px; border-radius: 12px; margin-right: 10px; font-weight: 700; text-transform: uppercase; }
-        .tag-academic { background: #eef2ff; color: var(--academic); }
-        .tag-personal { background: #fce4ec; color: var(--personal); }
-        .task-content { flex: 1; }
-        .task-date { font-size: 0.8rem; color: var(--text-light); }
+        .task-tag { font-size: 0.7rem; padding: 4px 8px; border-radius: 6px; margin-right: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .tag-academic { background: #e0e7ff; color: var(--primary); }
+        .tag-personal { background: #fce7f3; color: #db2777; }
         
         /* Timetable */
-        .timetable-grid { display: grid; grid-template-columns: 100px repeat(5, 1fr); gap: 1px; background: #e9ecef; border-radius: var(--radius); overflow: hidden; border: 1px solid #e9ecef; }
-        .tt-cell { background: white; padding: 15px; min-height: 80px; font-size: 0.9rem; }
-        .tt-header { background: #f8f9fa; font-weight: 700; text-align: center; padding: 10px; }
-        .tt-time { font-weight: 600; color: var(--text-light); display: flex; align-items: center; justify-content: center; }
-
-        /* Grades & Progress */
-        .progress-bar-bg { background: #e9ecef; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 5px; }
-        .progress-bar-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.5s; }
-        .grade-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .tt-container { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius); }
+        .timetable-grid { 
+            display: grid; 
+            grid-template-columns: 80px repeat(5, minmax(100px, 1fr)); 
+            gap: 2px; 
+            background: var(--border); 
+            min-width: 600px; /* Forces scroll on small screens */
+        }
+        .tt-cell { background: white; padding: 12px; font-size: 0.9rem; min-height: 60px; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .tt-header { background: #f1f5f9; font-weight: 700; color: var(--text-light); }
         
-        /* FAB */
-        .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4); cursor: pointer; border: none; }
+        /* Floating Action Button (FAB) */
+        .fab { 
+            position: fixed; bottom: 40px; right: 40px; 
+            width: 64px; height: 64px; 
+            background: var(--primary); color: white; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            font-size: 2rem; box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4); 
+            cursor: pointer; border: none; z-index: 1000; transition: transform 0.2s;
+        }
+        .fab:hover { transform: scale(1.1); }
+
+        /* --- MOBILE STYLES (< 768px) --- */
+        @media (max-width: 768px) {
+            body { flex-direction: column; height: 100vh; }
+            
+            /* Hide Desktop Sidebar */
+            .sidebar { 
+                position: fixed; bottom: 0; left: 0; width: 100%; height: var(--nav-height);
+                flex-direction: row; padding: 0; border-top: 1px solid var(--border); border-right: none;
+                justify-content: space-around; align-items: center; background: white;
+            }
+            .sidebar .logo { display: none; }
+            
+            /* Bottom Nav Items */
+            .nav-btn { 
+                flex-direction: column; justify-content: center; align-items: center; 
+                gap: 4px; padding: 8px; margin: 0; font-size: 0.7rem; border-radius: 0; height: 100%;
+                color: #94a3b8;
+            }
+            .nav-btn span:first-child { font-size: 1.4rem; } /* Icon size */
+            .nav-btn.active { background: transparent; color: var(--primary); box-shadow: none; }
+            
+            /* Main Content Adjustments */
+            .main-content { padding: 20px; margin-bottom: var(--nav-height); }
+            h2 { font-size: 1.75rem; }
+            
+            /* Stack Grids */
+            .dashboard-grid, .dashboard-grid.two-col { grid-template-columns: 1fr; }
+            
+            /* Input stacking */
+            .input-group { flex-direction: column; }
+            .input-group input, .input-group select, .input-group button { width: 100%; flex: auto; }
+            
+            /* Move FAB up slightly to avoid bottom nav */
+            .fab { bottom: calc(var(--nav-height) + 20px); right: 20px; width: 56px; height: 56px; }
+            
+            /* Hide non-critical UI elements on mobile */
+            .desktop-only { display: none; }
+        }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            body { flex-direction: column; height: auto; overflow: auto; }
-            .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; padding: 10px; }
-            .nav-btn { width: auto; white-space: nowrap; margin-bottom: 0; margin-right: 10px; }
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .timetable-grid { overflow-x: scroll; min-width: 600px; }
-        }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="logo">📅 PlannerPro</div>
-        <button class="nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
-        <button class="nav-btn" onclick="showSection('planner')">📅 Daily Planner</button>
-        <button class="nav-btn" onclick="showSection('timetable')">🏫 Timetable</button>
-        <button class="nav-btn" onclick="showSection('grades')">📊 Grades & Progress</button>
-        <button class="nav-btn" onclick="showSection('personal')">🧘 Private Life</button>
-    </div>
+    <nav class="sidebar">
+        <div class="logo">🎓 Vidyarthi</div>
+        
+        <button class="nav-btn active" onclick="showSection('dashboard')">
+            <span>🏠</span> <span>Home</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('planner')">
+            <span>📅</span> <span>Planner</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('timetable')">
+            <span>🏫</span> <span>Classes</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('grades')">
+            <span>📊</span> <span>Results</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('personal')">
+            <span>🧘</span> <span>Life</span>
+        </button>
+    </nav>
 
-    <div class="main-content">
+    <main class="main-content">
         
         <div class="header">
+            <div class="greeting" id="greeting">Good Morning</div>
             <h2 id="page-title">Dashboard</h2>
-            <div class="date-display" id="current-date">Loading...</div>
         </div>
 
-        <div id="dashboard" class="section active">
+        <section id="dashboard" class="section active">
             <div class="dashboard-grid">
                 <div class="card stat-card">
-                    <div class="card-header">
-                        <span>Pending Tasks</span>
-                    </div>
+                    <div class="card-header"><span>Tasks Due Today</span></div>
                     <div class="stat-value" id="pending-count">0</div>
-                    <div class="stat-label">Tasks to finish today</div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Next Class</span>
-                    </div>
-                    <h3 style="color: var(--primary);">Maths (10:00 AM)</h3>
-                    <p style="color: var(--text-light);">Room 302 • Chapter 5</p>
+                    <div class="stat-label">Stay focused!</div>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Average Grade</span>
-                    </div>
-                    <div class="stat-value" style="color: var(--success); font-size: 2rem;">A-</div>
-                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 85%;"></div></div>
+                    <div class="card-header"><span class="card-title">Up Next</span></div>
+                    <h3 style="color: var(--primary); font-size: 1.4rem;">Mathematics</h3>
+                    <p style="color: var(--text-light); margin-top: 5px;">10:00 AM • Room 302</p>
                 </div>
 
-                <div class="card" style="grid-column: span 2;">
+                <div class="card" style="text-align: center;">
+                    <div style="color: var(--primary); font-weight: 800; font-size: 1.2rem; text-transform: uppercase;" id="cal-month">Month</div>
+                    <div style="font-size: 3.5rem; font-weight: 800; color: var(--text); line-height: 1;" id="cal-day">00</div>
+                    <div style="color: var(--text-light);" id="cal-weekday">Day</div>
+                </div>
+
+                <div class="card" style="grid-column: 1 / -1;">
                     <div class="card-header">
                         <span class="card-title">Today's Agenda</span>
                     </div>
-                    <div id="dashboard-tasks">
-                        </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header"><span class="card-title">Calendar</span></div>
-                    <div style="text-align: center; font-size: 3rem; font-weight: bold; color: var(--text-light);" id="cal-day">18</div>
-                    <div style="text-align: center; font-weight: 600;" id="cal-month">January</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="planner" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">Tasks, Homework & To-Do</span>
-                </div>
-                
-                <div class="task-input-group">
-                    <input type="text" id="task-desc" placeholder="Enter task (e.g. Physics Homework)..." style="flex: 2;">
-                    <select id="task-type">
-                        <option value="academic">Academic 🏫</option>
-                        <option value="personal">Personal 🏠</option>
-                    </select>
-                    <input type="date" id="task-date">
-                    <button class="btn" onclick="addTask()">Add Task</button>
-                </div>
-
-                <div id="task-list-container">
+                    <div id="dashboard-tasks" class="task-list">
+                        <div style="color: var(--text-light); text-align: center; padding: 20px;">No tasks for today! 🎉</div>
                     </div>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <div id="timetable" class="section">
+        <section id="planner" class="section">
+            <div class="card">
+                <div class="card-header"><span class="card-title">Add New Task</span></div>
+                <div class="input-group">
+                    <input type="text" id="task-desc" placeholder="What needs to be done?">
+                    <select id="task-type" style="flex: 0 0 140px;">
+                        <option value="academic">🏫 Academic</option>
+                        <option value="personal">🏠 Personal</option>
+                    </select>
+                    <input type="date" id="task-date" style="flex: 0 0 150px;">
+                    <button class="btn" onclick="addTask()">Add</button>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <h3 style="margin-bottom: 15px;">Upcoming Tasks</h3>
+                <div id="task-list-container" class="task-list"></div>
+            </div>
+        </section>
+
+        <section id="timetable" class="section">
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">Weekly Schedule</span>
-                    <button class="btn" style="font-size: 0.8rem; padding: 5px 10px;" onclick="alert('In a real app, you would edit cells here!')">Edit</button>
+                    <small style="color: var(--text-light)">Scroll to see more ➡</small>
                 </div>
-                <div class="timetable-grid">
-                    <div class="tt-header">Time</div>
-                    <div class="tt-header">Mon</div>
-                    <div class="tt-header">Tue</div>
-                    <div class="tt-header">Wed</div>
-                    <div class="tt-header">Thu</div>
-                    <div class="tt-header">Fri</div>
+                <div class="tt-container">
+                    <div class="timetable-grid">
+                        <div class="tt-cell tt-header">Time</div>
+                        <div class="tt-cell tt-header">Mon</div>
+                        <div class="tt-cell tt-header">Tue</div>
+                        <div class="tt-cell tt-header">Wed</div>
+                        <div class="tt-cell tt-header">Thu</div>
+                        <div class="tt-cell tt-header">Fri</div>
 
-                    <div class="tt-cell tt-time">09:00</div>
-                    <div class="tt-cell">Maths</div>
-                    <div class="tt-cell">Physics</div>
-                    <div class="tt-cell">Maths</div>
-                    <div class="tt-cell">History</div>
-                    <div class="tt-cell">Art</div>
+                        <div class="tt-cell tt-header">09:00</div>
+                        <div class="tt-cell" style="background: #e0e7ff; color: var(--primary);"><b>Maths</b><br>Rm 101</div>
+                        <div class="tt-cell">Physics</div>
+                        <div class="tt-cell">Maths</div>
+                        <div class="tt-cell">History</div>
+                        <div class="tt-cell">Art</div>
+
+                        <div class="tt-cell tt-header">10:00</div>
+                        <div class="tt-cell">English</div>
+                        <div class="tt-cell" style="background: #e0e7ff; color: var(--primary);"><b>Chem</b><br>Lab</div>
+                        <div class="tt-cell">English</div>
+                        <div class="tt-cell">PE</div>
+                        <div class="tt-cell">Bio</div>
+                        
+                        <div class="tt-cell tt-header">11:00</div>
+                        <div class="tt-cell" colspan="5" style="background: #f1f5f9; letter-spacing: 2px;">BREAK</div>
+
+                         <div class="tt-cell tt-header">11:30</div>
+                        <div class="tt-cell">CS</div>
+                        <div class="tt-cell">Maths</div>
+                        <div class="tt-cell">Physics</div>
+                        <div class="tt-cell">Library</div>
+                        <div class="tt-cell">CS</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="grades" class="section">
+            <div class="dashboard-grid two-col">
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Performance</span></div>
                     
-                    <div class="tt-cell tt-time">10:00</div>
-                    <div class="tt-cell">English</div>
-                    <div class="tt-cell">Chem</div>
-                    <div class="tt-cell">English</div>
-                    <div class="tt-cell">PE</div>
-                    <div class="tt-cell">Bio</div>
-                </div>
-            </div>
-        </div>
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <strong>Mathematics</strong>
+                            <span style="color: var(--primary);">92%</span>
+                        </div>
+                        <div style="background: #e9ecef; height: 8px; border-radius: 4px;">
+                            <div style="width: 92%; height: 100%; background: var(--primary); border-radius: 4px;"></div>
+                        </div>
+                    </div>
 
-        <div id="grades" class="section">
-            <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr;">
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <strong>Science</strong>
+                            <span style="color: #7209b7;">88%</span>
+                        </div>
+                        <div style="background: #e9ecef; height: 8px; border-radius: 4px;">
+                            <div style="width: 88%; height: 100%; background: #7209b7; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <strong>History</strong>
+                            <span style="color: #4cc9f0;">75%</span>
+                        </div>
+                        <div style="background: #e9ecef; height: 8px; border-radius: 4px;">
+                            <div style="width: 75%; height: 100%; background: #4cc9f0; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card">
-                    <div class="card-header"><span class="card-title">Subject Progress</span></div>
-                    <div class="grade-item">
-                        <span>Mathematics</span>
-                        <span>92%</span>
+                    <div class="card-header"><span class="card-title">Recent Grades</span></div>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f8f9fa; padding-bottom: 10px;">
+                            <div>
+                                <div style="font-weight: 600;">Calculus Quiz</div>
+                                <div style="font-size: 0.8rem; color: var(--text-light);">Jan 15</div>
+                            </div>
+                            <div style="font-weight: 800; font-size: 1.2rem; color: #10b981;">A</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f8f9fa; padding-bottom: 10px;">
+                            <div>
+                                <div style="font-weight: 600;">History Essay</div>
+                                <div style="font-size: 0.8rem; color: var(--text-light);">Jan 12</div>
+                            </div>
+                            <div style="font-weight: 800; font-size: 1.2rem; color: #f59e0b;">B+</div>
+                        </div>
                     </div>
-                    <div class="progress-bar-bg" style="margin-bottom: 15px;"><div class="progress-bar-fill" style="width: 92%;"></div></div>
-
-                    <div class="grade-item">
-                        <span>Science</span>
-                        <span>85%</span>
-                    </div>
-                    <div class="progress-bar-bg" style="margin-bottom: 15px;"><div class="progress-bar-fill" style="width: 85%; background: #f72585;"></div></div>
                 </div>
-                
+            </div>
+        </section>
+
+        <section id="personal" class="section">
+            <div class="dashboard-grid two-col">
                 <div class="card">
-                    <div class="card-header"><span class="card-title">Grade Log</span></div>
-                    <ul id="grade-list" style="list-style: none;">
-                        <li style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
-                            <span>Maths Quiz</span> 
-                            <strong style="color: var(--success);">A</strong>
-                        </li>
-                        <li style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
-                            <span>History Essay</span> 
-                            <strong style="color: orange;">B+</strong>
-                        </li>
-                    </ul>
+                    <div class="card-header"><span class="card-title">Habit Tracker</span></div>
+                    <div style="display: flex; gap: 10px; text-align: center;">
+                        <div style="flex: 1; padding: 15px; background: #f8f9fa; border-radius: 12px; cursor: pointer;" onclick="this.style.background='#d1fae5'">
+                            <div style="font-size: 1.5rem;">💧</div>
+                            <small>Water</small>
+                        </div>
+                        <div style="flex: 1; padding: 15px; background: #f8f9fa; border-radius: 12px; cursor: pointer;" onclick="this.style.background='#dbeafe'">
+                            <div style="font-size: 1.5rem;">📖</div>
+                            <small>Read</small>
+                        </div>
+                        <div style="flex: 1; padding: 15px; background: #f8f9fa; border-radius: 12px; cursor: pointer;" onclick="this.style.background='#fae8ff'">
+                            <div style="font-size: 1.5rem;">🏃</div>
+                            <small>Run</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Private To-Do</span></div>
+                    <div id="personal-task-list" class="task-list"></div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div id="personal" class="section">
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">My Personal Goals & Habits</span>
-                </div>
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <div style="text-align: center; padding: 15px; border: 1px solid #eee; border-radius: 8px; flex: 1;">
-                        <div style="font-size: 2rem;">💧</div>
-                        <div>Water</div>
-                        <small>4/8 cups</small>
-                    </div>
-                    <div style="text-align: center; padding: 15px; border: 1px solid #eee; border-radius: 8px; flex: 1;">
-                        <div style="font-size: 2rem;">🏃</div>
-                        <div>Exercise</div>
-                        <small>30 mins</small>
-                    </div>
-                    <div style="text-align: center; padding: 15px; border: 1px solid #eee; border-radius: 8px; flex: 1;">
-                        <div style="font-size: 2rem;">📖</div>
-                        <div>Reading</div>
-                        <small>0 mins</small>
-                    </div>
-                </div>
-                <h3>Personal To-Do List</h3>
-                <div id="personal-task-list">
-                    </div>
-            </div>
-        </div>
-
-    </div>
+    </main>
 
     <button class="fab" onclick="showSection('planner'); document.getElementById('task-desc').focus()">+</button>
 
     <script>
-        // --- 1. Navigation & UI Logic ---
+        // --- LOGIC ---
+
+        // 1. Navigation
         function showSection(id) {
-            // Hide all sections
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             
-            // Show selected
             document.getElementById(id).classList.add('active');
             
-            // Highlight sidebar
-            const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(id));
-            if(btn) btn.classList.add('active');
+            // Highlight both desktop and mobile buttons matching the ID
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.onclick.toString().includes(id)) btn.classList.add('active');
+            });
 
-            // Update Header
-            document.getElementById('page-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
+            // Update Header Title (Capitalize)
+            const titleMap = {
+                'dashboard': 'Dashboard',
+                'planner': 'Planner',
+                'timetable': 'Class Schedule',
+                'grades': 'My Results',
+                'personal': 'Private Life'
+            };
+            document.getElementById('page-title').innerText = titleMap[id];
             
             refreshUI();
         }
 
-        // --- 2. Data Logic (LocalStorage) ---
-        let tasks = JSON.parse(localStorage.getItem('studentTasks')) || [
-            { id: 1, desc: "Finish Math Worksheet", type: "academic", date: "2023-10-25", done: false },
-            { id: 2, desc: "Buy Birthday Gift", type: "personal", date: "2023-10-26", done: false }
+        // 2. Data Management
+        let tasks = JSON.parse(localStorage.getItem('vidyarthiTasks')) || [
+            { id: 1, desc: "Complete Math Worksheet Ex 5.2", type: "academic", date: new Date().toISOString().split('T')[0], done: false },
+            { id: 2, desc: "Grocery Shopping", type: "personal", date: "2024-02-20", done: false }
         ];
 
         function saveTasks() {
-            localStorage.setItem('studentTasks', JSON.stringify(tasks));
+            localStorage.setItem('vidyarthiTasks', JSON.stringify(tasks));
             refreshUI();
         }
 
@@ -314,89 +458,88 @@
 
             if (!desc) return alert("Please enter a task!");
 
-            const newTask = {
+            tasks.push({
                 id: Date.now(),
-                desc,
-                type,
+                desc, type,
                 date: date || new Date().toISOString().split('T')[0],
                 done: false
-            };
-
-            tasks.push(newTask);
-            saveTasks();
+            });
             
-            // Clear input
+            saveTasks();
             document.getElementById('task-desc').value = '';
+            // Toast notification could go here
         }
 
         function toggleTask(id) {
             const task = tasks.find(t => t.id === id);
-            if (task) {
-                task.done = !task.done;
+            if (task) { task.done = !task.done; saveTasks(); }
+        }
+
+        function deleteTask(id) {
+            if(confirm('Delete this task?')) {
+                tasks = tasks.filter(t => t.id !== id);
                 saveTasks();
             }
         }
 
-        function deleteTask(id) {
-            tasks = tasks.filter(t => t.id !== id);
-            saveTasks();
-        }
-
-        // --- 3. Rendering ---
+        // 3. Render
         function refreshUI() {
-            const listContainer = document.getElementById('task-list-container');
-            const personalContainer = document.getElementById('personal-task-list');
-            const dashboardContainer = document.getElementById('dashboard-tasks');
+            const plannerList = document.getElementById('task-list-container');
+            const personalList = document.getElementById('personal-task-list');
+            const dashList = document.getElementById('dashboard-tasks');
             
-            // Clear Lists
-            listContainer.innerHTML = '';
-            personalContainer.innerHTML = '';
-            dashboardContainer.innerHTML = '';
+            plannerList.innerHTML = '';
+            personalList.innerHTML = '';
+            dashList.innerHTML = '';
 
-            let pendingCount = 0;
+            let pending = 0;
+            const today = new Date().toISOString().split('T')[0];
+
+            // Sort: Pending first, then by date
+            tasks.sort((a,b) => (a.done === b.done) ? 0 : a.done ? 1 : -1);
 
             tasks.forEach(task => {
-                if (!task.done) pendingCount++;
+                if (!task.done) pending++;
 
                 const html = `
-                    <div class="task-item" style="opacity: ${task.done ? '0.5' : '1'}">
-                        <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${task.id})" style="margin-right: 15px;">
-                        <div class="task-content">
-                            <div style="display:flex; align-items:center; margin-bottom: 4px;">
+                    <div class="task-item" style="opacity: ${task.done ? '0.6' : '1'}; background: ${task.done ? '#f8f9fa' : 'white'}">
+                        <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${task.id})" style="width: 20px; height: 20px; margin-right: 15px; flex: 0 0 auto;">
+                        <div style="flex: 1;">
+                            <div style="display:flex; align-items: center; flex-wrap: wrap; gap: 5px; margin-bottom: 4px;">
                                 <span class="task-tag tag-${task.type}">${task.type}</span>
-                                <span style="text-decoration: ${task.done ? 'line-through' : 'none'}">${task.desc}</span>
+                                <span style="text-decoration: ${task.done ? 'line-through' : 'none'}; font-weight: 500;">${task.desc}</span>
                             </div>
-                            <div class="task-date">Due: ${task.date}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-light);">📅 ${task.date}</div>
                         </div>
-                        <button onclick="deleteTask(${task.id})" style="background:none; border:none; color: #ef233c; cursor:pointer;">✕</button>
+                        <button onclick="deleteTask(${task.id})" style="background:none; border:none; color: #ef233c; font-size: 1.2rem; padding: 0 10px;">&times;</button>
                     </div>
                 `;
 
-                // Add to Planner
-                listContainer.innerHTML += html;
-
-                // Add to Personal Tab if type is personal
-                if (task.type === 'personal') {
-                    personalContainer.innerHTML += html;
-                }
-
-                // Add to Dashboard if not done
-                if (!task.done) {
-                    dashboardContainer.innerHTML += html;
-                }
+                plannerList.innerHTML += html;
+                if(task.type === 'personal') personalList.innerHTML += html;
+                if(!task.done && task.date === today) dashList.innerHTML += html;
             });
 
-            // Update Stats
-            document.getElementById('pending-count').innerText = pendingCount;
+            document.getElementById('pending-count').innerText = pending;
+            if(dashList.innerHTML === '') dashList.innerHTML = '<div style="text-align:center; color: #adb5bd; padding: 20px;">No tasks due today! 🌟</div>';
         }
 
-        // --- 4. Initialization ---
+        // 4. Init
         const d = new Date();
-        document.getElementById('current-date').innerText = d.toDateString();
-        document.getElementById('cal-day').innerText = d.getDate();
-        document.getElementById('cal-month').innerText = d.toLocaleString('default', { month: 'long' });
+        const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+        const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
         
-        // Initial render
+        document.getElementById('cal-day').innerText = d.getDate();
+        document.getElementById('cal-month').innerText = months[d.getMonth()];
+        document.getElementById('cal-weekday').innerText = days[d.getDay()];
+        
+        const hour = d.getHours();
+        const greeting = hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : "Good Evening";
+        document.getElementById('greeting').innerText = greeting + ", Student!";
+
+        // Set default date picker to today
+        document.getElementById('task-date').valueAsDate = new Date();
+
         refreshUI();
 
     </script>
