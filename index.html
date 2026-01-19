@@ -2,191 +2,187 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vidyarthi | Academic Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vidyarthi | Ultimate</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="app-wrapper">
+<div class="app-layout">
     
     <aside class="sidebar">
         <div class="brand">
-            <i class="fa-solid fa-graduation-cap brand-icon"></i>
+            <div class="logo-icon"><i class="fa-solid fa-graduation-cap"></i></div>
             <span>Vidyarthi</span>
         </div>
         
-        <nav class="menu">
-            <div class="menu-label">Overview</div>
-            <ul class="menu-list">
-                <li onclick="showSection('dashboard')" class="menu-item active" id="nav-dashboard">
-                    <i class="fa-solid fa-house"></i> <span>Dashboard</span>
-                </li>
-                <li onclick="showSection('agenda')" class="menu-item" id="nav-agenda">
-                    <i class="fa-solid fa-book-open"></i> <span>Agenda</span>
-                </li>
-                 <li onclick="showSection('calendar')" class="menu-item" id="nav-calendar">
-                    <i class="fa-brands fa-google"></i> <span>Google Cal</span>
-                </li>
-            </ul>
-            
-            <div class="menu-label" style="margin-top: 20px;">Academics</div>
-            <ul class="menu-list">
-                <li onclick="showSection('timetable')" class="menu-item" id="nav-timetable">
-                    <i class="fa-solid fa-timeline"></i> <span>Timetable</span>
-                </li>
-                <li onclick="showSection('subjects')" class="menu-item" id="nav-subjects">
-                    <i class="fa-solid fa-shapes"></i> <span>Subjects & Grades</span>
-                </li>
-            </ul>
+        <nav class="nav-links">
+            <button onclick="nav('dashboard')" class="nav-btn active" id="desk-dashboard">
+                <i class="fa-solid fa-house"></i> Dashboard
+            </button>
+            <button onclick="nav('agenda')" class="nav-btn" id="desk-agenda">
+                <i class="fa-solid fa-layer-group"></i> Agenda
+            </button>
+            <button onclick="nav('timetable')" class="nav-btn" id="desk-timetable">
+                <i class="fa-regular fa-calendar-days"></i> Timetable
+            </button>
+            <button onclick="nav('subjects')" class="nav-btn" id="desk-subjects">
+                <i class="fa-solid fa-book"></i> Subjects
+            </button>
+            <button onclick="nav('calendar')" class="nav-btn" id="desk-calendar">
+                <i class="fa-brands fa-google"></i> Calendar
+            </button>
         </nav>
 
-        <div class="palette-container">
-            <div class="menu-label">Theme Color</div>
-            <div class="color-options">
-                <div class="color-dot" style="background:#4f46e5;" onclick="setThemeColor('#4f46e5')"></div>
-                <div class="color-dot" style="background:#0ea5e9;" onclick="setThemeColor('#0ea5e9')"></div>
-                <div class="color-dot" style="background:#10b981;" onclick="setThemeColor('#10b981')"></div>
-                <div class="color-dot" style="background:#f59e0b;" onclick="setThemeColor('#f59e0b')"></div>
-                <div class="color-dot" style="background:#e11d48;" onclick="setThemeColor('#e11d48')"></div>
-            </div>
-            <button id="mode-toggle" onclick="toggleMode()" class="theme-btn-text">
-                <i class="fa-solid fa-moon"></i> Dark Mode
+        <div class="sidebar-footer">
+            <button onclick="toggleTheme()" class="theme-toggle">
+                <i class="fa-solid fa-moon"></i> <span>Dark Mode</span>
             </button>
         </div>
     </aside>
 
-    <main class="main-container">
+    <main class="content-area">
         
-        <header class="top-header">
-            <div>
-                <h1 id="greeting">Student Planner</h1>
-                <p id="current-date" class="sub-text">Loading...</p>
-            </div>
+        <header class="mobile-header">
+            <h1 id="page-title">Dashboard</h1>
+            <div id="date-badge" class="date-badge">Loading...</div>
         </header>
 
-        <section id="dashboard" class="view-section active-section">
-            <div class="dashboard-grid">
-                <div class="card highlight-card">
-                    <div class="card-header">
-                        <h3><i class="fa-solid fa-bell"></i> Up Next</h3>
-                    </div>
-                    <div id="next-class-display">
-                        <h2>No classes right now</h2>
-                        <p class="sub-text">Free time</p>
-                    </div>
+        <section id="dashboard" class="view active">
+            <div class="grid-2">
+                <div class="card hero-card">
+                    <div class="card-label">HAPPENING NOW</div>
+                    <h2 id="next-class-title">Free Time</h2>
+                    <p id="next-class-time">No classes scheduled right now</p>
                 </div>
 
                 <div class="card">
-                    <div class="card-header">
-                        <h3>Agenda Summary</h3>
+                    <h3>Quick Actions</h3>
+                    <div class="action-buttons">
+                        <button onclick="openModal('agenda-modal')" class="btn-action">
+                            <i class="fa-solid fa-plus"></i> Task
+                        </button>
+                        <button onclick="openModal('assign-modal')" class="btn-action">
+                            <i class="fa-solid fa-calendar-plus"></i> Class
+                        </button>
                     </div>
-                    <div id="dashboard-agenda-list" class="mini-list">
-                        </div>
                 </div>
             </div>
-        </section>
 
-        <section id="agenda" class="view-section" style="display:none;">
-            <div class="section-header">
-                <h2>Agenda</h2>
-                <button onclick="openModal('agenda-modal')" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Item</button>
+            <div class="section-title">
+                <h3>Agenda Overview</h3>
             </div>
-            <div class="agenda-controls">
-                <button class="filter-btn active" onclick="filterAgenda('all')">All</button>
-                <button class="filter-btn" onclick="filterAgenda('homework')">Homework</button>
-                <button class="filter-btn" onclick="filterAgenda('exam')">Exams</button>
-            </div>
-            <div id="agenda-list" class="agenda-container">
+            <div id="dash-agenda-list" class="list-vertical">
                 </div>
         </section>
 
-        <section id="calendar" class="view-section" style="display:none;">
-            <div class="section-header">
-                <h2>Google Calendar</h2>
-                <a href="https://calendar.google.com" target="_blank" class="btn btn-secondary">Open in New Tab <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-            </div>
-            <div class="calendar-wrapper">
-                <iframe src="https://calendar.google.com/calendar/embed?src=en.indian%23holiday%40group.v.calendar.google.com&ctz=Asia%2FKolkata" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
-            </div>
-        </section>
-
-        <section id="timetable" class="view-section" style="display:none;">
-            <div class="section-header">
-                <h2>Timetable</h2>
-                <div class="btn-group">
-                    <button onclick="openModal('block-modal')" class="btn btn-secondary">1. Define Blocks</button>
-                    <button onclick="openModal('assign-modal')" class="btn btn-primary">2. Assign Subjects</button>
-                </div>
+        <section id="agenda" class="view" style="display:none;">
+            <div class="header-actions">
+                <div class="scroll-chips" id="category-filters">
+                    <button class="chip active" onclick="renderAgenda('all')">All</button>
+                    </div>
+                <button onclick="openModal('category-modal')" class="btn-icon"><i class="fa-solid fa-gear"></i></button>
             </div>
             
-            <div class="timetable-days">
-                <button class="day-btn active" onclick="renderTimetable('Monday')">Mon</button>
-                <button class="day-btn" onclick="renderTimetable('Tuesday')">Tue</button>
-                <button class="day-btn" onclick="renderTimetable('Wednesday')">Wed</button>
-                <button class="day-btn" onclick="renderTimetable('Thursday')">Thu</button>
-                <button class="day-btn" onclick="renderTimetable('Friday')">Fri</button>
-                <button class="day-btn" onclick="renderTimetable('Saturday')">Sat</button>
+            <div id="agenda-list" class="list-vertical">
+                </div>
+            
+            <button class="fab" onclick="openModal('agenda-modal')">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </section>
+
+        <section id="timetable" class="view" style="display:none;">
+            <div class="header-actions">
+                <button onclick="openModal('block-modal')" class="btn-text">Edit Blocks</button>
+                <button onclick="openModal('assign-modal')" class="btn-primary">Assign Subject</button>
             </div>
 
-            <div id="timetable-display" class="tune-timeline">
+            <div class="day-selector">
+                <button class="day-chip active" onclick="loadTimetable('Monday')">M</button>
+                <button class="day-chip" onclick="loadTimetable('Tuesday')">T</button>
+                <button class="day-chip" onclick="loadTimetable('Wednesday')">W</button>
+                <button class="day-chip" onclick="loadTimetable('Thursday')">T</button>
+                <button class="day-chip" onclick="loadTimetable('Friday')">F</button>
+                <button class="day-chip" onclick="loadTimetable('Saturday')">S</button>
+            </div>
+
+            <div id="timetable-list" class="timeline-container">
                 </div>
         </section>
 
-        <section id="subjects" class="view-section" style="display:none;">
-            <div class="section-header">
-                <h2>Subjects & Performance</h2>
-                <button onclick="openModal('subject-modal')" class="btn btn-primary"><i class="fa-solid fa-plus"></i> New Subject</button>
+        <section id="subjects" class="view" style="display:none;">
+            <div class="header-actions" style="justify-content: flex-end;">
+                <button onclick="openModal('subject-modal')" class="btn-primary">+ Add Subject</button>
             </div>
-            <div id="subjects-grid" class="subjects-grid">
-                </div>
+            <div id="subjects-list" class="grid-2"></div>
+        </section>
+
+         <section id="calendar" class="view" style="display:none;">
+            <div class="card-full">
+                <iframe src="https://calendar.google.com/calendar/embed?src=en.indian%23holiday%40group.v.calendar.google.com&ctz=Asia%2FKolkata" style="border: 0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
+            </div>
         </section>
 
     </main>
+
+    <nav class="bottom-nav">
+        <button onclick="nav('dashboard')" id="mob-dashboard" class="active"><i class="fa-solid fa-house"></i></button>
+        <button onclick="nav('timetable')" id="mob-timetable"><i class="fa-regular fa-calendar-days"></i></button>
+        <button onclick="openModal('agenda-modal')" class="nav-main-action"><i class="fa-solid fa-plus"></i></button>
+        <button onclick="nav('agenda')" id="mob-agenda"><i class="fa-solid fa-layer-group"></i></button>
+        <button onclick="nav('subjects')" id="mob-subjects"><i class="fa-solid fa-book"></i></button>
+    </nav>
+
 </div>
 
 <div id="subject-modal" class="modal-overlay">
-    <div class="modal-box">
-        <h3>New Subject</h3>
+    <div class="modal-sheet">
+        <div class="modal-header">
+            <h3>New Subject</h3>
+            <button onclick="closeModal('subject-modal')">Done</button>
+        </div>
         <div class="modal-body">
             <input type="text" id="sub-name" placeholder="Subject Name (e.g. Math)">
             <input type="text" id="sub-teacher" placeholder="Teacher Name">
-            <label>Color Tag:</label>
-            <input type="color" id="sub-color" value="#4f46e5" style="width:100%; height:40px;">
-        </div>
-        <div class="modal-footer">
-            <button onclick="closeModal('subject-modal')" class="btn btn-secondary">Cancel</button>
-            <button onclick="addSubject()" class="btn btn-primary">Save</button>
+            <label>Color Code</label>
+            <div class="color-picker-row">
+                <input type="color" id="sub-color" value="#4f46e5">
+            </div>
         </div>
     </div>
 </div>
 
 <div id="block-modal" class="modal-overlay">
-    <div class="modal-box">
-        <h3>Define Time Block</h3>
-        <p class="sub-text">Create reusable time slots (e.g. Period 1)</p>
+    <div class="modal-sheet">
+        <div class="modal-header">
+            <h3>Define Time Slot</h3>
+            <button onclick="closeModal('block-modal')">Done</button>
+        </div>
         <div class="modal-body">
-            <input type="text" id="block-name" placeholder="Name (e.g. Period 1)">
-            <div class="input-group">
+            <p class="hint">Create a slot like "Period 1" or "Lunch". You only do this once.</p>
+            <input type="text" id="block-name" placeholder="Name (e.g. 1st Period)">
+            <div class="row">
                 <input type="time" id="block-start">
-                <span>to</span>
+                <span style="padding:0 10px">to</span>
                 <input type="time" id="block-end">
             </div>
-        </div>
-        <div class="modal-footer">
-            <button onclick="closeModal('block-modal')" class="btn btn-secondary">Close</button>
-            <button onclick="addTimeBlock()" class="btn btn-primary">Create Block</button>
+            <button onclick="addBlock()" class="btn-full-primary">Save Block</button>
+            <div id="existing-blocks-list" style="margin-top:20px;"></div>
         </div>
     </div>
 </div>
 
 <div id="assign-modal" class="modal-overlay">
-    <div class="modal-box">
-        <h3>Assign Class</h3>
+    <div class="modal-sheet">
+        <div class="modal-header">
+            <h3>Assign Class</h3>
+            <button onclick="closeModal('assign-modal')">Close</button>
+        </div>
         <div class="modal-body">
-            <label>Select Day</label>
             <select id="assign-day">
                 <option value="Monday">Monday</option>
                 <option value="Tuesday">Tuesday</option>
@@ -195,34 +191,44 @@
                 <option value="Friday">Friday</option>
                 <option value="Saturday">Saturday</option>
             </select>
-            <label>Select Time Block</label>
             <select id="assign-block"></select>
-            <label>Select Subject</label>
             <select id="assign-subject"></select>
-        </div>
-        <div class="modal-footer">
-            <button onclick="closeModal('assign-modal')" class="btn btn-secondary">Cancel</button>
-            <button onclick="assignSubjectToSchedule()" class="btn btn-primary">Assign</button>
+            <button onclick="assignSubject()" class="btn-full-primary">Assign</button>
         </div>
     </div>
 </div>
 
 <div id="agenda-modal" class="modal-overlay">
-    <div class="modal-box">
-        <h3>Add to Agenda</h3>
-        <div class="modal-body">
-            <select id="agenda-type">
-                <option value="Homework">Homework</option>
-                <option value="Exam">Exam</option>
-                <option value="Reminder">Reminder</option>
-            </select>
-            <input type="text" id="agenda-title" placeholder="Description">
-            <select id="agenda-subject"></select>
-            <input type="date" id="agenda-date">
+    <div class="modal-sheet">
+        <div class="modal-header">
+            <h3>New Task</h3>
+            <button onclick="closeModal('agenda-modal')">Cancel</button>
         </div>
-        <div class="modal-footer">
-            <button onclick="closeModal('agenda-modal')" class="btn btn-secondary">Cancel</button>
-            <button onclick="addAgendaItem()" class="btn btn-primary">Add</button>
+        <div class="modal-body">
+            <input type="text" id="agenda-title" placeholder="What needs to be done?">
+            <div class="row">
+                <select id="agenda-cat"></select>
+                <select id="agenda-sub"></select>
+            </div>
+            <input type="date" id="agenda-date">
+            <button onclick="addAgenda()" class="btn-full-primary">Add Task</button>
+        </div>
+    </div>
+</div>
+
+<div id="category-modal" class="modal-overlay">
+    <div class="modal-sheet">
+        <div class="modal-header">
+            <h3>Categories</h3>
+            <button onclick="closeModal('category-modal')">Done</button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <input type="text" id="new-cat-name" placeholder="New Category Name">
+                <input type="color" id="new-cat-color" value="#ff0000" style="width:50px">
+                <button onclick="addCategory()" class="btn-primary">Add</button>
+            </div>
+            <div id="cat-list-display" class="list-vertical" style="margin-top:15px"></div>
         </div>
     </div>
 </div>
