@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentLife 360 - Daily Planner</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #2b2d42;
+            --text-light: #8d99ae;
+            --academic: #4361ee;
+            --personal: #f72585;
+            --success: #2ec4b6;
+            --radius: 12px;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+
+        /* Sidebar */
+        .sidebar { width: 250px; background: var(--card-bg); padding: 20px; display: flex; flex-direction: column; border-right: 1px solid #e9ecef; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
+        .nav-btn {
+            background: none; border: none; width: 100%; padding: 12px 15px; text-align: left;
+            cursor: pointer; border-radius: var(--radius); color: var(--text-light); font-weight: 600;
+            transition: all 0.2s; margin-bottom: 5px; display: flex; align-items: center; gap: 10px;
+        }
+        .nav-btn:hover { background: #eef2ff; color: var(--primary); }
+        .nav-btn.active { background: var(--primary); color: white; }
+        
+        /* Main Content */
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .date-display { font-size: 1.2rem; font-weight: 600; color: var(--text-light); }
+        
+        /* Sections */
+        .section { display: none; animation: fadeIn 0.3s ease; }
+        .section.active { display: block; }
+
+        /* Dashboard Grid */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .card-title { font-weight: 700; font-size: 1.1rem; }
+
+        /* Stats Cards */
+        .stat-card { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+        .stat-value { font-size: 2.5rem; font-weight: 800; }
+        .stat-label { opacity: 0.8; }
+
+        /* Task List */
+        .task-input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        input, select { padding: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
+        input:focus { border-color: var(--primary); }
+        .btn { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn:hover { opacity: 0.9; }
+        
+        .task-item { 
+            display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f1f1f1; 
+            transition: background 0.2s;
+        }
+        .task-item:hover { background: #f8f9fa; }
+        .task-tag { font-size: 0.75rem; padding: 4px 8px; border-radius: 12px; margin-right: 10px; font-weight: 700; text-transform: uppercase; }
+        .tag-academic { background: #eef2ff; color: var(--academic); }
+        .tag-personal { background: #fce4ec; color: var(--personal); }
+        .task-content { flex: 1; }
+        .task-date { font-size: 0.8rem; color: var(--text-light); }
+        
+        /* Timetable */
+        .timetable-grid { display: grid; grid-template-columns: 100px repeat(5, 1fr); gap: 1px; background: #e9ecef; border-radius: var(--radius); overflow: hidden; border: 1px solid #e9ecef; }
+        .tt-cell { background: white; padding: 15px; min-height: 80px; font-size: 0.9rem; }
+        .tt-header { background: #f8f9fa; font-weight: 700; text-align: center; padding: 10px; }
+        .tt-time { font-weight: 600; color: var(--text-light); display: flex; align-items: center; justify-content: center; }
+
+        /* Grades & Progress */
+        .progress-bar-bg { background: #e9ecef; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 5px; }
+        .progress-bar-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.5s; }
+        .grade-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        
+        /* FAB */
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4); cursor: pointer; border: none; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { flex-direction: column; height: auto; overflow: auto; }
+            .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; padding: 10px; }
+            .nav-btn { width: auto; white-space: nowrap; margin-bottom: 0; margin-right: 10px; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .timetable-grid { overflow-x: scroll; min-width: 600px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">📅 PlannerPro</div>
+        <button class="nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
+        <button class="nav-btn" onclick="showSection('planner')">📅 Daily Planner</button>
+        <button class="nav-btn" onclick="showSection('timetable')">🏫 Timetable</button>
+        <button class="nav-btn" onclick="showSection('grades')">📊 Grades & Progress</button>
+        <button class="nav-btn" onclick="showSection('personal')">🧘 Private Life</button>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="header">
+            <h2 id="page-title">Dashboard</h2>
+            <div class="date-display" id="current-date">Loading...</div>
+        </div>
+
+        <div id="dashboard" class="section active">
+            <div class="dashboard-grid">
+                <div class="card stat-card">
+                    <div class="card-header">
+                        <span>Pending Tasks</span>
+                    </div>
+                    <div class="stat-value" id="pending-count">0</div>
+                    <div class="stat-label">Tasks to finish today</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Next Class</span>
+                    </div>
+                    <h3 style="color: var(--primary);">Maths (10:00 AM)</h3>
+                    <p style="color: var(--text-light);">Room 302 • Chapter 5</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Average Grade</span>
+                    </div>
+                    <div class="stat-value" style="color: var(--success); font-size: 2rem;">A-</div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 85%;"></div></div>
+                </div>
+
+                <div class="card" style="grid-column: span 2;">
+                    <div class="card-header">
+                        <span class="card-title">Today's Agenda</span>
+                    </div>
+                    <div id="dashboard-tasks">
+                        </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Calendar</span></div>
+                    <div style="text-align: center; font-size: 3rem; font-weight: bold; color: var(--text-light);" id="cal-day">18</div>
+                    <div style="text-align: center; font-weight: 600;" id="cal-month">January</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="planner" class="section">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Tasks, Homework & To-Do</span>
+                </div>
+                
+                <div class="task-input-group">
+                    <input type="text" id="task-desc" placeholder="Enter task (e.g. Physics Homework)..." style="flex: 2;">
+                    <select id="task-type">
+                        <option value="academic">Academic 🏫</option>
+                        <option value="personal">Personal 🏠</option>
+                    </select>
+                    <input type="date" id="task-date">
+                    <button class="btn" onclick="addTask()">Add Task</button>
+                </div>
+
+                <div id="task-list-container">
+                    </div>
+            </div>
+        </div>
+
+        <div id="timetable" class="section">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Weekly Schedule</span>
+                    <button class="btn" style="font-size: 0.8rem; padding: 5px 10px;" onclick="alert('In a real app, you would edit cells here!')">Edit</button>
+                </div>
+                <div class="timetable-grid">
+                    <div class="tt-header">Time</div>
+                    <div class="tt-header">Mon</div>
+                    <div class="tt-header">Tue</div>
+                    <div class="tt-header">Wed</div>
+                    <div class="tt-header">Thu</div>
+                    <div class="tt-header">Fri</div>
+
+                    <div class="tt-cell tt-time">09:00</div>
+                    <div class="tt-cell">Maths</div>
+                    <div class="tt-cell">Physics</div>
+                    <div class="tt-cell">Maths</div>
+                    <div class="tt-cell">History</div>
+                    <div class="tt-cell">Art</div>
+                    
+                    <div class="tt-cell tt-time">10:00</div>
+                    <div class="tt-cell">English</div>
+                    <div class="tt-cell">Chem</div>
+                    <div class="tt-cell">English</div>
+                    <div class="tt-cell">PE</div>
+                    <div class="tt-cell">Bio</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="grades" class="section">
+            <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Subject Progress</span></div>
+                    <div class="grade-item">
+                        <span>Mathematics</span>
+                        <span>92%</span>
+                    </div>
+                    <div class="progress-bar-bg" style="margin-bottom: 15px;"><div class="progress-bar-fill" style="width: 92%;"></div></div>
+
+                    <div class="grade-item">
+                        <span>Science</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="progress-bar-bg" style="margin-bottom: 15px;"><div class="progress-bar-fill" style="width: 85%; background: #f72585;"></div></div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Grade Log</span></div>
+                    <ul id="grade-list" style="list-style: none;">
+                        <li style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+                            <span>Maths Quiz</span> 
+                            <strong style="color: var(--success);">A</strong>
+                        </li>
+                        <li style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;">
+                            <span>History Essay</span> 
+                            <strong style="color: orange;">B+</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="personal" class="section">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">My Personal Goals & Habits</span>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <div style="text-align: center; padding: 15px; border: 1px solid #eee; border-radius: 8px; flex: 1;">
+                        <div style="font-size: 2rem;">💧</div>
+                        <div>Water</div>
+                        <small>4/8 cups</small>
+                    </div>
+                    <div style="text-align: center; padding: 15px; border: 1px solid #eee; border-radius: 8px; flex: 1;">
+                        <div style="font-size: 2rem;">🏃</div>
+                        <div>Exercise</div>
+                        <small>30 mins</small>
+                    </div>
+                    <div style="text-align: center; padding: 15px; border: 1px solid #eee; border-radius: 8px; flex: 1;">
+                        <div style="font-size: 2rem;">📖</div>
+                        <div>Reading</div>
+                        <small>0 mins</small>
+                    </div>
+                </div>
+                <h3>Personal To-Do List</h3>
+                <div id="personal-task-list">
+                    </div>
+            </div>
+        </div>
+
+    </div>
+
+    <button class="fab" onclick="showSection('planner'); document.getElementById('task-desc').focus()">+</button>
+
+    <script>
+        // --- 1. Navigation & UI Logic ---
+        function showSection(id) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            // Show selected
+            document.getElementById(id).classList.add('active');
+            
+            // Highlight sidebar
+            const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(id));
+            if(btn) btn.classList.add('active');
+
+            // Update Header
+            document.getElementById('page-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
+            
+            refreshUI();
+        }
+
+        // --- 2. Data Logic (LocalStorage) ---
+        let tasks = JSON.parse(localStorage.getItem('studentTasks')) || [
+            { id: 1, desc: "Finish Math Worksheet", type: "academic", date: "2023-10-25", done: false },
+            { id: 2, desc: "Buy Birthday Gift", type: "personal", date: "2023-10-26", done: false }
+        ];
+
+        function saveTasks() {
+            localStorage.setItem('studentTasks', JSON.stringify(tasks));
+            refreshUI();
+        }
+
+        function addTask() {
+            const desc = document.getElementById('task-desc').value;
+            const type = document.getElementById('task-type').value;
+            const date = document.getElementById('task-date').value;
+
+            if (!desc) return alert("Please enter a task!");
+
+            const newTask = {
+                id: Date.now(),
+                desc,
+                type,
+                date: date || new Date().toISOString().split('T')[0],
+                done: false
+            };
+
+            tasks.push(newTask);
+            saveTasks();
+            
+            // Clear input
+            document.getElementById('task-desc').value = '';
+        }
+
+        function toggleTask(id) {
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.done = !task.done;
+                saveTasks();
+            }
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            saveTasks();
+        }
+
+        // --- 3. Rendering ---
+        function refreshUI() {
+            const listContainer = document.getElementById('task-list-container');
+            const personalContainer = document.getElementById('personal-task-list');
+            const dashboardContainer = document.getElementById('dashboard-tasks');
+            
+            // Clear Lists
+            listContainer.innerHTML = '';
+            personalContainer.innerHTML = '';
+            dashboardContainer.innerHTML = '';
+
+            let pendingCount = 0;
+
+            tasks.forEach(task => {
+                if (!task.done) pendingCount++;
+
+                const html = `
+                    <div class="task-item" style="opacity: ${task.done ? '0.5' : '1'}">
+                        <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${task.id})" style="margin-right: 15px;">
+                        <div class="task-content">
+                            <div style="display:flex; align-items:center; margin-bottom: 4px;">
+                                <span class="task-tag tag-${task.type}">${task.type}</span>
+                                <span style="text-decoration: ${task.done ? 'line-through' : 'none'}">${task.desc}</span>
+                            </div>
+                            <div class="task-date">Due: ${task.date}</div>
+                        </div>
+                        <button onclick="deleteTask(${task.id})" style="background:none; border:none; color: #ef233c; cursor:pointer;">✕</button>
+                    </div>
+                `;
+
+                // Add to Planner
+                listContainer.innerHTML += html;
+
+                // Add to Personal Tab if type is personal
+                if (task.type === 'personal') {
+                    personalContainer.innerHTML += html;
+                }
+
+                // Add to Dashboard if not done
+                if (!task.done) {
+                    dashboardContainer.innerHTML += html;
+                }
+            });
+
+            // Update Stats
+            document.getElementById('pending-count').innerText = pendingCount;
+        }
+
+        // --- 4. Initialization ---
+        const d = new Date();
+        document.getElementById('current-date').innerText = d.toDateString();
+        document.getElementById('cal-day').innerText = d.getDate();
+        document.getElementById('cal-month').innerText = d.toLocaleString('default', { month: 'long' });
+        
+        // Initial render
+        refreshUI();
+
+    </script>
+</body>
+</html>
