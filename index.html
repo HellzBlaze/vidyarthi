@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vidyarthi | Student Workspace</title>
+    <title>Vidyarthi | Academic Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -19,30 +19,41 @@
         </div>
         
         <nav class="menu">
-            <div class="menu-label">Main</div>
+            <div class="menu-label">Overview</div>
             <ul class="menu-list">
                 <li onclick="showSection('dashboard')" class="menu-item active" id="nav-dashboard">
                     <i class="fa-solid fa-house"></i> <span>Dashboard</span>
                 </li>
-                <li onclick="showSection('scheduler')" class="menu-item" id="nav-scheduler">
-                    <i class="fa-regular fa-calendar"></i> <span>Schedule</span>
+                <li onclick="showSection('agenda')" class="menu-item" id="nav-agenda">
+                    <i class="fa-solid fa-book-open"></i> <span>Agenda</span>
                 </li>
-                <li onclick="showSection('tasks')" class="menu-item" id="nav-tasks">
-                    <i class="fa-solid fa-list-check"></i> <span>Tasks</span>
+                 <li onclick="showSection('calendar')" class="menu-item" id="nav-calendar">
+                    <i class="fa-brands fa-google"></i> <span>Google Cal</span>
                 </li>
             </ul>
             
-            <div class="menu-label" style="margin-top: 20px;">Tools</div>
+            <div class="menu-label" style="margin-top: 20px;">Academics</div>
             <ul class="menu-list">
-                 <li onclick="showSection('alarms')" class="menu-item" id="nav-alarms">
-                    <i class="fa-regular fa-clock"></i> <span>Alarms</span>
+                <li onclick="showSection('timetable')" class="menu-item" id="nav-timetable">
+                    <i class="fa-solid fa-timeline"></i> <span>Timetable</span>
+                </li>
+                <li onclick="showSection('subjects')" class="menu-item" id="nav-subjects">
+                    <i class="fa-solid fa-shapes"></i> <span>Subjects & Grades</span>
                 </li>
             </ul>
         </nav>
 
-        <div class="sidebar-footer">
-            <button id="theme-toggle" onclick="toggleTheme()" class="theme-btn">
-                <i class="fa-solid fa-moon"></i>
+        <div class="palette-container">
+            <div class="menu-label">Theme Color</div>
+            <div class="color-options">
+                <div class="color-dot" style="background:#4f46e5;" onclick="setThemeColor('#4f46e5')"></div>
+                <div class="color-dot" style="background:#0ea5e9;" onclick="setThemeColor('#0ea5e9')"></div>
+                <div class="color-dot" style="background:#10b981;" onclick="setThemeColor('#10b981')"></div>
+                <div class="color-dot" style="background:#f59e0b;" onclick="setThemeColor('#f59e0b')"></div>
+                <div class="color-dot" style="background:#e11d48;" onclick="setThemeColor('#e11d48')"></div>
+            </div>
+            <button id="mode-toggle" onclick="toggleMode()" class="theme-btn-text">
+                <i class="fa-solid fa-moon"></i> Dark Mode
             </button>
         </div>
     </aside>
@@ -51,126 +62,170 @@
         
         <header class="top-header">
             <div>
-                <h1 id="greeting">Good Morning</h1>
-                <p id="current-date" class="sub-text">Loading date...</p>
+                <h1 id="greeting">Student Planner</h1>
+                <p id="current-date" class="sub-text">Loading...</p>
             </div>
-            </header>
+        </header>
 
         <section id="dashboard" class="view-section active-section">
             <div class="dashboard-grid">
-                <div class="card timer-widget">
+                <div class="card highlight-card">
                     <div class="card-header">
-                        <h3>Focus Session</h3>
-                        <i class="fa-solid fa-stopwatch"></i>
+                        <h3><i class="fa-solid fa-bell"></i> Up Next</h3>
                     </div>
-                    <div class="timer-display" id="pomodoro">25:00</div>
-                    <button id="timer-btn" onclick="toggleTimer()" class="btn btn-primary btn-full">Start Focus</button>
+                    <div id="next-class-display">
+                        <h2>No classes right now</h2>
+                        <p class="sub-text">Free time</p>
+                    </div>
                 </div>
 
-                 <div class="card schedule-widget">
+                <div class="card">
                     <div class="card-header">
-                         <h3>Today's Schedule</h3>
-                         <button onclick="showSection('scheduler')" class="btn-text">View All</button>
+                        <h3>Agenda Summary</h3>
                     </div>
-                    <div id="dashboard-schedule-list" class="widget-list">
-                        <p class="sub-text">No classes scheduled today.</p>
-                    </div>
-                 </div>
-
-                 <div class="card task-widget">
-                    <div class="card-header">
-                        <h3>Quick Tasks & Deadlines</h3>
-                    </div>
-                     <div class="input-group">
-                        <input type="text" id="quick-task-input" placeholder="Add a new task..." onkeypress="handleKeyPress(event, addQuickTask)">
-                        <button onclick="addQuickTask()" class="btn-icon"><i class="fa-solid fa-plus"></i></button>
-                    </div>
-                    <ul id="deadline-list" class="checklist">
-                        </ul>
+                    <div id="dashboard-agenda-list" class="mini-list">
+                        </div>
                 </div>
             </div>
         </section>
 
-        <section id="scheduler" class="view-section" style="display:none;">
+        <section id="agenda" class="view-section" style="display:none;">
             <div class="section-header">
-                <h2>Weekly Schedule</h2>
-                <button onclick="openModal('class-modal')" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Class</button>
+                <h2>Agenda</h2>
+                <button onclick="openModal('agenda-modal')" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Item</button>
             </div>
-            <div class="schedule-container" id="full-schedule-list">
+            <div class="agenda-controls">
+                <button class="filter-btn active" onclick="filterAgenda('all')">All</button>
+                <button class="filter-btn" onclick="filterAgenda('homework')">Homework</button>
+                <button class="filter-btn" onclick="filterAgenda('exam')">Exams</button>
+            </div>
+            <div id="agenda-list" class="agenda-container">
                 </div>
         </section>
 
-        <section id="tasks" class="view-section" style="display:none;">
+        <section id="calendar" class="view-section" style="display:none;">
             <div class="section-header">
-                 <h2>Task Board</h2>
+                <h2>Google Calendar</h2>
+                <a href="https://calendar.google.com" target="_blank" class="btn btn-secondary">Open in New Tab <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
             </div>
-            <div class="kanban-board">
-                <div class="kanban-col col-todo">
-                    <div class="col-header">
-                        <span class="col-title">To Do</span>
-                        <span class="col-count" id="todo-count">0</span>
-                    </div>
-                     <div class="input-group">
-                        <input type="text" id="kanban-input" placeholder="+ Add task..." onkeypress="handleKeyPress(event, ()=>addTask('todo'))">
-                    </div>
-                    <div id="todo-list" class="task-list-container"></div>
-                </div>
-                <div class="kanban-col col-done">
-                     <div class="col-header">
-                        <span class="col-title">Completed</span>
-                         <span class="col-count" id="done-count">0</span>
-                    </div>
-                    <div id="done-list" class="task-list-container"></div>
-                </div>
+            <div class="calendar-wrapper">
+                <iframe src="https://calendar.google.com/calendar/embed?src=en.indian%23holiday%40group.v.calendar.google.com&ctz=Asia%2FKolkata" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
             </div>
         </section>
 
-        <section id="alarms" class="view-section" style="display:none;">
-             <div class="section-header">
-                <h2>Active Alarms</h2>
-            </div>
-            <div class="card alarm-creation-card">
-                <div class="alarm-inputs">
-                    <input type="time" id="alarm-time" class="time-input">
-                    <input type="text" id="alarm-label" placeholder="Alarm Label (e.g., Wake up)">
-                    <button onclick="addAlarm()" class="btn btn-primary">Set Alarm</button>
+        <section id="timetable" class="view-section" style="display:none;">
+            <div class="section-header">
+                <h2>Timetable</h2>
+                <div class="btn-group">
+                    <button onclick="openModal('block-modal')" class="btn btn-secondary">1. Define Blocks</button>
+                    <button onclick="openModal('assign-modal')" class="btn btn-primary">2. Assign Subjects</button>
                 </div>
             </div>
-            <div id="alarm-list-grid" class="grid-3">
+            
+            <div class="timetable-days">
+                <button class="day-btn active" onclick="renderTimetable('Monday')">Mon</button>
+                <button class="day-btn" onclick="renderTimetable('Tuesday')">Tue</button>
+                <button class="day-btn" onclick="renderTimetable('Wednesday')">Wed</button>
+                <button class="day-btn" onclick="renderTimetable('Thursday')">Thu</button>
+                <button class="day-btn" onclick="renderTimetable('Friday')">Fri</button>
+                <button class="day-btn" onclick="renderTimetable('Saturday')">Sat</button>
+            </div>
+
+            <div id="timetable-display" class="tune-timeline">
+                </div>
+        </section>
+
+        <section id="subjects" class="view-section" style="display:none;">
+            <div class="section-header">
+                <h2>Subjects & Performance</h2>
+                <button onclick="openModal('subject-modal')" class="btn btn-primary"><i class="fa-solid fa-plus"></i> New Subject</button>
+            </div>
+            <div id="subjects-grid" class="subjects-grid">
                 </div>
         </section>
 
     </main>
 </div>
 
-<div id="class-modal" class="modal-overlay">
+<div id="subject-modal" class="modal-overlay">
     <div class="modal-box">
-        <div class="modal-header">
-            <h3>Add New Class</h3>
-            <button onclick="closeModal('class-modal')" class="btn-close"><i class="fa-solid fa-xmark"></i></button>
-        </div>
+        <h3>New Subject</h3>
         <div class="modal-body">
-            <div class="form-group">
-                <label>Time</label>
-                <input type="time" id="new-class-time">
-            </div>
-             <div class="form-group">
-                <label>Class Name</label>
-                <input type="text" id="new-class-name" placeholder="e.g., Advanced Mathematics">
-            </div>
-             <div class="form-group">
-                <label>Meeting Link (Optional)</label>
-                <input type="url" id="new-class-link" placeholder="https://zoom.us/...">
-            </div>
+            <input type="text" id="sub-name" placeholder="Subject Name (e.g. Math)">
+            <input type="text" id="sub-teacher" placeholder="Teacher Name">
+            <label>Color Tag:</label>
+            <input type="color" id="sub-color" value="#4f46e5" style="width:100%; height:40px;">
         </div>
         <div class="modal-footer">
-            <button onclick="closeModal('class-modal')" class="btn btn-secondary">Cancel</button>
-            <button onclick="addClass()" class="btn btn-primary">Save Class</button>
+            <button onclick="closeModal('subject-modal')" class="btn btn-secondary">Cancel</button>
+            <button onclick="addSubject()" class="btn btn-primary">Save</button>
         </div>
     </div>
 </div>
 
-<audio id="alarm-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+<div id="block-modal" class="modal-overlay">
+    <div class="modal-box">
+        <h3>Define Time Block</h3>
+        <p class="sub-text">Create reusable time slots (e.g. Period 1)</p>
+        <div class="modal-body">
+            <input type="text" id="block-name" placeholder="Name (e.g. Period 1)">
+            <div class="input-group">
+                <input type="time" id="block-start">
+                <span>to</span>
+                <input type="time" id="block-end">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('block-modal')" class="btn btn-secondary">Close</button>
+            <button onclick="addTimeBlock()" class="btn btn-primary">Create Block</button>
+        </div>
+    </div>
+</div>
+
+<div id="assign-modal" class="modal-overlay">
+    <div class="modal-box">
+        <h3>Assign Class</h3>
+        <div class="modal-body">
+            <label>Select Day</label>
+            <select id="assign-day">
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+            </select>
+            <label>Select Time Block</label>
+            <select id="assign-block"></select>
+            <label>Select Subject</label>
+            <select id="assign-subject"></select>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('assign-modal')" class="btn btn-secondary">Cancel</button>
+            <button onclick="assignSubjectToSchedule()" class="btn btn-primary">Assign</button>
+        </div>
+    </div>
+</div>
+
+<div id="agenda-modal" class="modal-overlay">
+    <div class="modal-box">
+        <h3>Add to Agenda</h3>
+        <div class="modal-body">
+            <select id="agenda-type">
+                <option value="Homework">Homework</option>
+                <option value="Exam">Exam</option>
+                <option value="Reminder">Reminder</option>
+            </select>
+            <input type="text" id="agenda-title" placeholder="Description">
+            <select id="agenda-subject"></select>
+            <input type="date" id="agenda-date">
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('agenda-modal')" class="btn btn-secondary">Cancel</button>
+            <button onclick="addAgendaItem()" class="btn btn-primary">Add</button>
+        </div>
+    </div>
+</div>
 
 <script src="script.js"></script>
 </body>
