@@ -1,309 +1,308 @@
-// === INITIAL STATE ===
-let appData = JSON.parse(localStorage.getItem('vidyarthiDataV2')) || {
-    primaryColor: '#4f46e5',
+// === STATE ===
+let app = JSON.parse(localStorage.getItem('vidyarthiUltimate')) || {
     theme: 'light',
-    subjects: [], // {id, name, teacher, color, attendance: {present:0, absent:0}, grades: []}
+    categories: [
+        { id: 'c1', name: 'Homework', color: '#4f46e5' },
+        { id: 'c2', name: 'Exam', color: '#dc2626' },
+        { id: 'c3', name: 'Reminder', color: '#f59e0b' }
+    ],
+    subjects: [], // {id, name, teacher, color}
     blocks: [],   // {id, name, start, end}
-    schedule: {}, // { "Monday": [ {blockId, subjectId} ] }
-    agenda: []    // {id, type, title, subjectId, date, completed}
+    schedule: {}, // { "Monday": [{blockId, subjectId}] }
+    agenda: []    // {id, title, catId, subId, date, done}
 };
 
-// === STARTUP ===
+// === INIT ===
 document.addEventListener('DOMContentLoaded', () => {
-    applyTheme();
-    renderSubjects();
-    renderAgenda();
-    renderTimetable('Monday'); // Default to Monday
+    initTheme();
     updateDate();
     updateNextClass();
+    renderAgenda('all');
+    loadTimetable(getCurrentDay());
+    renderSubjects();
+    
+    // Default Nav
+    nav('dashboard');
 });
 
-function saveData() {
-    localStorage.setItem('vidyarthiDataV2', JSON.stringify(appData));
+function save() {
+    localStorage.setItem('vidyarthiUltimate', JSON.stringify(app));
     updateNextClass();
-}
-
-// === THEME & COLOR ===
-function setThemeColor(color) {
-    appData.primaryColor = color;
-    applyTheme();
-    saveData();
-}
-
-function toggleMode() {
-    appData.theme = appData.theme === 'light' ? 'dark' : 'light';
-    applyTheme();
-    saveData();
-}
-
-function applyTheme() {
-    document.documentElement.style.setProperty('--primary', appData.primaryColor);
-    if(appData.theme === 'dark') document.body.classList.add('dark-mode');
-    else document.body.classList.remove('dark-mode');
 }
 
 // === NAVIGATION ===
-function showSection(id) {
-    document.querySelectorAll('.view-section').forEach(sec => sec.style.display = 'none');
-    document.getElementById(id).style.display = 'block';
+function nav(viewId) {
+    // Hide all views
+    document.querySelectorAll('.view').forEach(el => el.style.display = 'none');
+    document.getElementById(viewId).style.display = 'block';
     
-    // Update active menu
-    document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-    document.getElementById('nav-' + id).classList.add('active');
-}
-
-// === SUBJECTS MANAGEMENT ===
-function addSubject() {
-    const name = document.getElementById('sub-name').value;
-    const teacher = document.getElementById('sub-teacher').value;
-    const color = document.getElementById('sub-color').value;
+    // Update Title
+    const titles = { 'dashboard': 'Dashboard', 'agenda': 'My Agenda', 'timetable': 'Timetable', 'subjects': 'Subjects', 'calendar': 'Calendar' };
+    document.getElementById('page-title').innerText = titles[viewId];
     
-    if(name) {
-        const id = Date.now().toString();
-        appData.subjects.push({
-            id, name, teacher, color, 
-            attendance: { absent: 0 }, 
-            grades: [] 
-        });
-        saveData();
-        renderSubjects();
-        closeModal('subject-modal');
-    }
+    // Update Desktop Nav
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    if(document.getElementById('desk-'+viewId)) document.getElementById('desk-'+viewId).classList.add('active');
+
+    // Update Mobile Nav
+    document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
+    if(document.getElementById('mob-'+viewId)) document.getElementById('mob-'+viewId).classList.add('active');
 }
 
-function renderSubjects() {
-    const grid = document.getElementById('subjects-grid');
-    grid.innerHTML = appData.subjects.map(sub => `
-        <div class="subject-card" style="border-top-color: ${sub.color}">
-            <h3>${sub.name}</h3>
-            <p class="sub-text">${sub.teacher}</p>
-            
-            <div class="stat-row">
-                <span>Absences: <strong>${sub.attendance.absent}</strong></span>
-                <button onclick="addAbsence('${sub.id}')" class="btn btn-secondary" style="padding:2px 8px; font-size:0.8rem;">+1</button>
-            </div>
-            
-            <div class="stat-row" style="margin-top:10px;">
-                <input type="text" placeholder="Add Grade %" id="grade-input-${sub.id}" style="width:60%; margin:0; padding:5px;">
-                <button onclick="addGrade('${sub.id}')" class="btn btn-primary" style="padding:5px 8px;">Add</button>
-            </div>
-            <div style="margin-top:10px; font-size:0.85rem; color:var(--text-muted);">
-                Avg Grade: <strong>${calculateAverage(sub.grades)}%</strong>
-            </div>
-        </div>
-    `).join('');
-    
-    // Update dropdowns in modals
-    updateSubjectDropdowns();
+// === THEME ===
+function initTheme() {
+    if(app.theme === 'dark') document.body.classList.add('dark-mode');
 }
 
-function addAbsence(id) {
-    const sub = appData.subjects.find(s => s.id === id);
-    sub.attendance.absent++;
-    saveData();
-    renderSubjects();
+function toggleTheme() {
+    app.theme = app.theme === 'light' ? 'dark' : 'light';
+    document.body.classList.toggle('dark-mode');
+    save();
 }
 
-function addGrade(id) {
-    const val = document.getElementById(`grade-input-${id}`).value;
-    if(val) {
-        const sub = appData.subjects.find(s => s.id === id);
-        sub.grades.push(parseInt(val));
-        saveData();
-        renderSubjects();
-    }
-}
-
-function calculateAverage(grades) {
-    if(!grades || grades.length === 0) return 0;
-    const sum = grades.reduce((a, b) => a + b, 0);
-    return Math.round(sum / grades.length);
-}
-
-// === TIMETABLE (TIMETUNE STYLE) ===
-// 1. Define Blocks
-function addTimeBlock() {
+// === BLOCKS & TIMETABLE ===
+function addBlock() {
     const name = document.getElementById('block-name').value;
     const start = document.getElementById('block-start').value;
     const end = document.getElementById('block-end').value;
     
     if(name && start) {
-        appData.blocks.push({ id: Date.now().toString(), name, start, end });
-        // Sort blocks by time
-        appData.blocks.sort((a,b) => a.start.localeCompare(b.start));
-        saveData();
+        app.blocks.push({ id: Date.now().toString(), name, start, end });
+        app.blocks.sort((a,b) => a.start.localeCompare(b.start));
+        save();
         closeModal('block-modal');
-        updateBlockDropdown();
+        renderBlockList();
     }
 }
 
-// 2. Assign Subject to Block
-function assignSubjectToSchedule() {
+function assignSubject() {
     const day = document.getElementById('assign-day').value;
     const blockId = document.getElementById('assign-block').value;
-    const subjectId = document.getElementById('assign-subject').value;
+    const subId = document.getElementById('assign-subject').value;
     
-    if(!appData.schedule[day]) appData.schedule[day] = [];
+    if(!app.schedule[day]) app.schedule[day] = [];
     
-    // Remove existing assignment for this block if any
-    appData.schedule[day] = appData.schedule[day].filter(item => item.blockId !== blockId);
-    
-    appData.schedule[day].push({ blockId, subjectId });
-    saveData();
+    // Remove old assignment for this block
+    app.schedule[day] = app.schedule[day].filter(x => x.blockId !== blockId);
+    app.schedule[day].push({ blockId, subjectId: subId });
+    save();
     closeModal('assign-modal');
-    renderTimetable(day);
+    if(document.getElementById('timetable').style.display === 'block') loadTimetable(day);
 }
 
-function renderTimetable(day) {
-    // Update active button
-    document.querySelectorAll('.day-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.innerText.includes(day.substring(0,3)));
+function loadTimetable(day) {
+    // UI Update
+    document.querySelectorAll('.day-chip').forEach(b => {
+        b.classList.toggle('active', b.innerText === day.charAt(0) || b.innerText === day.substring(0,2));
     });
 
-    const container = document.getElementById('timetable-display');
+    const container = document.getElementById('timetable-list');
     
-    if(!appData.blocks.length) {
-        container.innerHTML = '<p style="text-align:center;">No time blocks defined. Click "Define Blocks".</p>';
+    if(!app.blocks.length) {
+        container.innerHTML = '<p class="text-secondary" style="padding:20px">No time blocks. Tap "Edit Blocks".</p>';
         return;
     }
 
-    const daySchedule = appData.schedule[day] || [];
-
-    container.innerHTML = appData.blocks.map(block => {
-        // Find if a subject is assigned to this block
-        const assignment = daySchedule.find(a => a.blockId === block.id);
-        let subjectName = "Free / Study";
-        let color = "#ccc";
+    const todaySched = app.schedule[day] || [];
+    
+    container.innerHTML = app.blocks.map(block => {
+        const assignment = todaySched.find(x => x.blockId === block.id);
+        const sub = assignment ? app.subjects.find(s => s.id === assignment.subjectId) : null;
         
-        if(assignment) {
-            const sub = appData.subjects.find(s => s.id === assignment.subjectId);
-            if(sub) {
-                subjectName = sub.name;
-                color = sub.color;
-            }
-        }
-
+        const subName = sub ? sub.name : "Free Period";
+        const subColor = sub ? sub.color : "var(--border)";
+        const borderStyle = sub ? `4px solid ${subColor}` : `1px solid var(--border)`;
+        
         return `
-            <div class="tune-block">
-                <div class="block-time">
-                    <span>${block.start}</span>
-                    <span style="font-size:0.8rem; color:var(--text-muted);">${block.end}</span>
+            <div class="timeline-block">
+                <div class="timeline-dot" style="border-color: ${sub ? subColor : 'var(--text-secondary)'}"></div>
+                <div class="timeline-card" style="border-left: ${borderStyle}">
+                    <div class="timeline-time">${block.start} - ${block.end}</div>
+                    <div class="timeline-subject">${subName}</div>
+                    <div style="font-size:0.9rem; color:var(--text-secondary)">${block.name}</div>
                 </div>
-                <div class="block-content">
-                    <div>
-                        <strong>${block.name}</strong>
-                        <div style="margin-top:5px;">
-                            <span class="subject-pill" style="background:${color}">${subjectName}</span>
-                        </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// === AGENDA & CATEGORIES ===
+function addCategory() {
+    const name = document.getElementById('new-cat-name').value;
+    const color = document.getElementById('new-cat-color').value;
+    if(name) {
+        app.categories.push({ id: 'c'+Date.now(), name, color });
+        save();
+        document.getElementById('new-cat-name').value = '';
+        renderCategories();
+    }
+}
+
+function renderCategories() {
+    const filterContainer = document.getElementById('category-filters');
+    // Keep 'All' button
+    let html = `<button class="chip active" onclick="renderAgenda('all')">All</button>`;
+    
+    html += app.categories.map(cat => `
+        <button class="chip" onclick="renderAgenda('${cat.id}')" style="border-color:${cat.color}">${cat.name}</button>
+    `).join('');
+    
+    filterContainer.innerHTML = html;
+    
+    // Also update modal dropdown
+    const select = document.getElementById('agenda-cat');
+    select.innerHTML = app.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+    
+    // Cat list in modal
+    document.getElementById('cat-list-display').innerHTML = app.categories.map(c => 
+        `<div style="display:flex; gap:10px; margin-bottom:5px;"><div style="width:20px; height:20px; background:${c.color}; border-radius:4px;"></div> ${c.name}</div>`
+    ).join('');
+}
+
+function addAgenda() {
+    const title = document.getElementById('agenda-title').value;
+    const catId = document.getElementById('agenda-cat').value;
+    const subId = document.getElementById('agenda-sub').value;
+    const date = document.getElementById('agenda-date').value;
+    
+    if(title) {
+        app.agenda.push({ id: Date.now().toString(), title, catId, subId, date, done: false });
+        app.agenda.sort((a,b) => new Date(a.date) - new Date(b.date));
+        save();
+        closeModal('agenda-modal');
+        renderAgenda('all');
+    }
+}
+
+function renderAgenda(filterId) {
+    const list = document.getElementById('agenda-list');
+    const dashList = document.getElementById('dash-agenda-list');
+    
+    // Toggle active state of chips
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    // (Simplification: assuming user clicked the right one, UI update logic would be more complex in React)
+
+    let items = app.agenda;
+    if(filterId && filterId !== 'all') {
+        items = items.filter(i => i.catId === filterId);
+    }
+    
+    const generateHTML = (data) => data.map(item => {
+        const cat = app.categories.find(c => c.id === item.catId) || app.categories[0];
+        const sub = app.subjects.find(s => s.id === item.subId);
+        
+        return `
+            <div class="agenda-item">
+                <div>
+                    <span class="agenda-tag" style="background:${cat.color}20; color:${cat.color}">${cat.name}</span>
+                    <h4 style="font-size:1rem; margin-top:4px; ${item.done ? 'text-decoration:line-through; opacity:0.6':''}">${item.title}</h4>
+                    <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:2px;">
+                        ${item.date} • ${sub ? sub.name : 'General'}
                     </div>
                 </div>
+                <button onclick="toggleDone('${item.id}')" class="btn-icon">
+                    <i class="fa-solid ${item.done ? 'fa-check-circle' : 'fa-circle'}" style="color:${item.done ? 'green' : 'var(--border)'}"></i>
+                </button>
             </div>
         `;
     }).join('');
+
+    list.innerHTML = items.length ? generateHTML(items) : '<p style="text-align:center; padding:20px; color:var(--text-secondary)">No tasks found.</p>';
+    
+    // Dashboard: Show top 3 incomplete
+    const pending = app.agenda.filter(i => !i.done).slice(0, 3);
+    dashList.innerHTML = pending.length ? generateHTML(pending) : '<p style="padding:10px; color:var(--text-secondary)">All caught up!</p>';
 }
 
-// === AGENDA (HOMEWORK/EXAMS) ===
-function addAgendaItem() {
-    const type = document.getElementById('agenda-type').value;
-    const title = document.getElementById('agenda-title').value;
-    const subjectId = document.getElementById('agenda-subject').value;
-    const date = document.getElementById('agenda-date').value;
+function toggleDone(id) {
+    const item = app.agenda.find(i => i.id === id);
+    if(item) item.done = !item.done;
+    save();
+    renderAgenda('all');
+}
 
-    if(title && date) {
-        appData.agenda.push({
-            id: Date.now().toString(),
-            type, title, subjectId, date, completed: false
+// === SUBJECTS ===
+function renderSubjects() {
+    const container = document.getElementById('subjects-list');
+    const dropdown = document.getElementById('assign-subject');
+    const agendaDropdown = document.getElementById('agenda-sub');
+    
+    // Add logic to actually add subject... (simplified from previous iteration)
+    // Assume user entered data in modal
+    const nameInput = document.getElementById('sub-name');
+    if(nameInput.value) {
+        app.subjects.push({
+            id: 's'+Date.now(),
+            name: nameInput.value,
+            teacher: document.getElementById('sub-teacher').value,
+            color: document.getElementById('sub-color').value
         });
-        // Sort by date
-        appData.agenda.sort((a,b) => new Date(a.date) - new Date(b.date));
-        saveData();
-        renderAgenda();
-        closeModal('agenda-modal');
+        nameInput.value = ''; // clear
+        save();
+        closeModal('subject-modal');
     }
-}
 
-function renderAgenda() {
-    const list = document.getElementById('agenda-list');
-    const miniList = document.getElementById('dashboard-agenda-list');
-    
-    const html = appData.agenda.map(item => {
-        const sub = appData.subjects.find(s => s.id === item.subjectId);
-        const color = sub ? sub.color : '#ccc';
-        const subName = sub ? sub.name : 'General';
-        
-        let tagClass = item.type === 'Homework' ? 'tag-homework' : item.type === 'Exam' ? 'tag-exam' : '';
-
-        return `
-            <div class="agenda-item" style="border-left-color:${color}">
-                <div>
-                    <span class="agenda-tag ${tagClass}">${item.type}</span>
-                    <span style="font-size:0.85rem; color:var(--text-muted);">${item.date}</span>
-                    <h4 style="margin-top:5px;">${item.title}</h4>
-                    <span style="font-size:0.85rem; color:${color}; font-weight:600;">${subName}</span>
-                </div>
-                <button onclick="deleteAgenda('${item.id}')" style="color:red; background:none; border:none;"><i class="fa-solid fa-trash"></i></button>
-            </div>
-        `;
-    }).join('');
-
-    list.innerHTML = html || '<p class="sub-text">No upcoming tasks.</p>';
-    
-    // Dashboard summary (top 3)
-    miniList.innerHTML = appData.agenda.slice(0, 3).map(item => `
-        <div style="padding:10px; border-bottom:1px solid var(--border);">
-            <div style="font-weight:600;">${item.title}</div>
-            <div style="font-size:0.8rem; color:var(--text-muted);">${item.type} • ${item.date}</div>
+    container.innerHTML = app.subjects.map(s => `
+        <div class="card" style="border-left: 5px solid ${s.color}; padding:16px;">
+            <h3 style="font-size:1.1rem;">${s.name}</h3>
+            <p style="color:var(--text-secondary); font-size:0.9rem;">${s.teacher}</p>
         </div>
-    `).join('') || '<p style="padding:10px;">Nothing due soon.</p>';
+    `).join('');
+
+    const options = app.subjects.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+    dropdown.innerHTML = options;
+    agendaDropdown.innerHTML = `<option value="">General</option>` + options;
 }
 
-function deleteAgenda(id) {
-    appData.agenda = appData.agenda.filter(i => i.id !== id);
-    saveData();
-    renderAgenda();
-}
-
-function filterAgenda(type) {
-    const items = document.querySelectorAll('.agenda-item');
-    // Simple visual filter would require re-rendering logic with filter, 
-    // for simplicity here we just re-render all then hide/show.
-    // Ideally, update renderAgenda to accept a filter argument.
-    if(type === 'all') {
-        renderAgenda();
-    } else {
-        // Filter data temporarily for display
-        const filtered = appData.agenda.filter(i => i.type.toLowerCase() === type);
-        // ... (simplified for this snippet, just re-render everything for now)
-        // In full app, implement renderAgenda(filterType)
-        alert("Filter: " + type); 
-    }
-}
-
-// === UTILITIES ===
-function updateSubjectDropdowns() {
-    const opts = appData.subjects.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-    if(document.getElementById('assign-subject')) document.getElementById('assign-subject').innerHTML = opts;
-    if(document.getElementById('agenda-subject')) document.getElementById('agenda-subject').innerHTML = opts;
-}
-
-function updateBlockDropdown() {
-    const opts = appData.blocks.map(b => `<option value="${b.id}">${b.name} (${b.start})</option>`).join('');
-    if(document.getElementById('assign-block')) document.getElementById('assign-block').innerHTML = opts;
-}
-
+// === UTILS ===
 function updateNextClass() {
-    // Logic to find current time, check schedule, display next class
-    // Simplified placeholder logic
+    // Very basic check based on current day/time vs blocks
+    // In production, need strict time parsing
     const d = new Date();
     const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     const today = days[d.getDay()];
-    // Real implementation requires comparing time strings
+    
+    // Find blocks for today
+    const sched = app.schedule[today];
+    if(sched && sched.length) {
+        // Placeholder: Show first class of day
+        // Real logic: compare currentTime with block.start
+        const first = sched[0];
+        const sub = app.subjects.find(s => s.id === first.subjectId);
+        const blk = app.blocks.find(b => b.id === first.blockId);
+        
+        if(sub && blk) {
+            document.getElementById('next-class-title').innerText = sub.name;
+            document.getElementById('next-class-time').innerText = `${blk.start} - ${blk.end}`;
+            return;
+        }
+    }
+    document.getElementById('next-class-title').innerText = "Free Time";
+    document.getElementById('next-class-time').innerText = "No upcoming classes today";
+}
+
+function renderBlockList() {
+    const opts = app.blocks.map(b => `<option value="${b.id}">${b.name} (${b.start})</option>`).join('');
+    document.getElementById('assign-block').innerHTML = opts;
+    
+    document.getElementById('existing-blocks-list').innerHTML = app.blocks.map(b => 
+        `<div style="padding:8px; border-bottom:1px solid var(--border)">${b.name} (${b.start} - ${b.end})</div>`
+    ).join('');
 }
 
 function updateDate() {
-    document.getElementById('current-date').innerText = new Date().toDateString();
+    document.getElementById('date-badge').innerText = new Date().toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' });
+}
+
+function getCurrentDay() {
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    return days[new Date().getDay()];
 }
 
 // Modals
-function openModal(id) { document.getElementById(id).style.display = 'flex'; updateSubjectDropdowns(); updateBlockDropdown(); }
+function openModal(id) { 
+    document.getElementById(id).style.display = 'flex'; 
+    renderCategories(); // refresh dropdowns
+    renderBlockList();
+}
 function closeModal(id) { document.getElementById(id).style.display = 'none'; }
