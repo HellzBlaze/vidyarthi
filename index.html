@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi | Ultimate</title>
+    <title>Vidyarthi | Life OS</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,25 +15,28 @@
     
     <aside class="sidebar">
         <div class="brand">
-            <div class="logo-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-            <span>Vidyarthi</span>
+            <div class="logo-icon"><i class="fa-solid fa-infinity"></i></div>
+            <div class="brand-text">
+                <span>Vidyarthi</span>
+                <small>Life OS</small>
+            </div>
         </div>
         
         <nav class="nav-links">
             <button onclick="nav('dashboard')" class="nav-btn active" id="desk-dashboard">
-                <i class="fa-solid fa-house"></i> Dashboard
+                <i class="fa-solid fa-grid-2"></i> Dashboard
             </button>
-            <button onclick="nav('agenda')" class="nav-btn" id="desk-agenda">
-                <i class="fa-solid fa-layer-group"></i> Agenda
-            </button>
-            <button onclick="nav('timetable')" class="nav-btn" id="desk-timetable">
-                <i class="fa-regular fa-calendar-days"></i> Timetable
-            </button>
-            <button onclick="nav('subjects')" class="nav-btn" id="desk-subjects">
-                <i class="fa-solid fa-book"></i> Subjects
+            <button onclick="nav('planner')" class="nav-btn" id="desk-planner">
+                <i class="fa-solid fa-timeline"></i> Routine
             </button>
             <button onclick="nav('calendar')" class="nav-btn" id="desk-calendar">
-                <i class="fa-brands fa-google"></i> Calendar
+                <i class="fa-regular fa-calendar"></i> Calendar
+            </button>
+            <button onclick="nav('agenda')" class="nav-btn" id="desk-agenda">
+                <i class="fa-solid fa-check-double"></i> Tasks
+            </button>
+            <button onclick="nav('areas')" class="nav-btn" id="desk-areas">
+                <i class="fa-solid fa-shapes"></i> Areas & Subs
             </button>
         </nav>
 
@@ -47,111 +50,136 @@
     <main class="content-area">
         
         <header class="mobile-header">
-            <h1 id="page-title">Dashboard</h1>
-            <div id="date-badge" class="date-badge">Loading...</div>
-        </header>
+            <div>
+                <h1 id="page-title">Dashboard</h1>
+                <p id="current-date-header" class="subtitle">Loading date...</p>
+            </div>
+            </header>
 
         <section id="dashboard" class="view active">
             <div class="grid-2">
                 <div class="card hero-card">
-                    <div class="card-label">HAPPENING NOW</div>
-                    <h2 id="next-class-title">Free Time</h2>
-                    <p id="next-class-time">No classes scheduled right now</p>
+                    <div class="card-header-sm">HAPPENING NOW</div>
+                    <div class="hero-content">
+                        <h2 id="now-activity">Free Time</h2>
+                        <p id="now-time">No active block</p>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="now-progress" style="width: 0%"></div>
+                    </div>
                 </div>
 
-                <div class="card">
-                    <h3>Quick Actions</h3>
-                    <div class="action-buttons">
-                        <button onclick="openModal('agenda-modal')" class="btn-action">
-                            <i class="fa-solid fa-plus"></i> Task
-                        </button>
-                        <button onclick="openModal('assign-modal')" class="btn-action">
-                            <i class="fa-solid fa-calendar-plus"></i> Class
-                        </button>
+                <div class="card stats-card">
+                    <div class="stat-item">
+                        <span class="stat-num" id="stat-tasks">0</span>
+                        <span class="stat-label">Tasks Pending</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-num" id="stat-events">0</span>
+                        <span class="stat-label">Events Today</span>
                     </div>
                 </div>
             </div>
 
             <div class="section-title">
-                <h3>Agenda Overview</h3>
+                <h3>Today's Flow</h3>
+                <button onclick="nav('planner')" class="btn-link">Edit Routine</button>
             </div>
-            <div id="dash-agenda-list" class="list-vertical">
+            <div id="dashboard-timeline" class="mini-timeline-scroll">
                 </div>
+
+            <div class="section-title" style="margin-top:20px;">
+                <h3>Priority Tasks</h3>
+            </div>
+            <div id="dash-task-list" class="list-vertical"></div>
+        </section>
+
+        <section id="planner" class="view" style="display:none;">
+            <div class="header-actions">
+                <div class="day-selector-wrapper">
+                    <button class="day-pill active" onclick="loadRoutine('Monday')">Mon</button>
+                    <button class="day-pill" onclick="loadRoutine('Tuesday')">Tue</button>
+                    <button class="day-pill" onclick="loadRoutine('Wednesday')">Wed</button>
+                    <button class="day-pill" onclick="loadRoutine('Thursday')">Thu</button>
+                    <button class="day-pill" onclick="loadRoutine('Friday')">Fri</button>
+                    <button class="day-pill" onclick="loadRoutine('Saturday')">Sat</button>
+                    <button class="day-pill" onclick="loadRoutine('Sunday')">Sun</button>
+                </div>
+                <button onclick="openModal('block-modal')" class="btn-icon-soft"><i class="fa-solid fa-plus"></i></button>
+            </div>
+
+            <div id="planner-container" class="planner-layout">
+                </div>
+        </section>
+
+        <section id="calendar" class="view" style="display:none;">
+            <div class="calendar-header">
+                <button onclick="changeMonth(-1)" class="btn-icon"><i class="fa-solid fa-chevron-left"></i></button>
+                <h2 id="cal-month-year">January 2026</h2>
+                <button onclick="changeMonth(1)" class="btn-icon"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            
+            <div class="calendar-grid-header">
+                <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+            </div>
+            <div id="calendar-grid" class="calendar-grid">
+                </div>
+
+            <div class="selected-date-info" id="cal-selected-info" style="display:none;">
+                <h3 id="cal-selected-date">Selected Date</h3>
+                <div id="cal-events-list" class="list-vertical"></div>
+                <button onclick="openModal('agenda-modal')" class="btn-full-secondary">Add Event / Task</button>
+            </div>
         </section>
 
         <section id="agenda" class="view" style="display:none;">
             <div class="header-actions">
-                <div class="scroll-chips" id="category-filters">
+                <div class="scroll-chips" id="agenda-filters">
                     <button class="chip active" onclick="renderAgenda('all')">All</button>
-                    </div>
-                <button onclick="openModal('category-modal')" class="btn-icon"><i class="fa-solid fa-gear"></i></button>
-            </div>
-            
-            <div id="agenda-list" class="list-vertical">
+                    <button class="chip" onclick="renderAgenda('academic')">Academics</button>
+                    <button class="chip" onclick="renderAgenda('personal')">Personal</button>
                 </div>
-            
-            <button class="fab" onclick="openModal('agenda-modal')">
-                <i class="fa-solid fa-plus"></i>
-            </button>
+            </div>
+            <div id="agenda-list" class="list-vertical"></div>
+            <button class="fab" onclick="openModal('agenda-modal')"><i class="fa-solid fa-plus"></i></button>
         </section>
 
-        <section id="timetable" class="view" style="display:none;">
-            <div class="header-actions">
-                <button onclick="openModal('block-modal')" class="btn-text">Edit Blocks</button>
-                <button onclick="openModal('assign-modal')" class="btn-primary">Assign Subject</button>
+        <section id="areas" class="view" style="display:none;">
+            <div class="header-actions" style="justify-content:space-between;">
+                <p class="subtitle">Manage Subjects, Hobbies & Work</p>
+                <button onclick="openModal('area-modal')" class="btn-primary">New Area</button>
             </div>
-
-            <div class="day-selector">
-                <button class="day-chip active" onclick="loadTimetable('Monday')">M</button>
-                <button class="day-chip" onclick="loadTimetable('Tuesday')">T</button>
-                <button class="day-chip" onclick="loadTimetable('Wednesday')">W</button>
-                <button class="day-chip" onclick="loadTimetable('Thursday')">T</button>
-                <button class="day-chip" onclick="loadTimetable('Friday')">F</button>
-                <button class="day-chip" onclick="loadTimetable('Saturday')">S</button>
-            </div>
-
-            <div id="timetable-list" class="timeline-container">
-                </div>
-        </section>
-
-        <section id="subjects" class="view" style="display:none;">
-            <div class="header-actions" style="justify-content: flex-end;">
-                <button onclick="openModal('subject-modal')" class="btn-primary">+ Add Subject</button>
-            </div>
-            <div id="subjects-list" class="grid-2"></div>
-        </section>
-
-         <section id="calendar" class="view" style="display:none;">
-            <div class="card-full">
-                <iframe src="https://calendar.google.com/calendar/embed?src=en.indian%23holiday%40group.v.calendar.google.com&ctz=Asia%2FKolkata" style="border: 0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
-            </div>
+            <div id="areas-grid" class="grid-2"></div>
         </section>
 
     </main>
 
     <nav class="bottom-nav">
-        <button onclick="nav('dashboard')" id="mob-dashboard" class="active"><i class="fa-solid fa-house"></i></button>
-        <button onclick="nav('timetable')" id="mob-timetable"><i class="fa-regular fa-calendar-days"></i></button>
+        <button onclick="nav('dashboard')" id="mob-dashboard"><i class="fa-solid fa-grid-2"></i></button>
+        <button onclick="nav('planner')" id="mob-planner"><i class="fa-solid fa-timeline"></i></button>
         <button onclick="openModal('agenda-modal')" class="nav-main-action"><i class="fa-solid fa-plus"></i></button>
-        <button onclick="nav('agenda')" id="mob-agenda"><i class="fa-solid fa-layer-group"></i></button>
-        <button onclick="nav('subjects')" id="mob-subjects"><i class="fa-solid fa-book"></i></button>
+        <button onclick="nav('calendar')" id="mob-calendar"><i class="fa-regular fa-calendar"></i></button>
+        <button onclick="nav('agenda')" id="mob-agenda"><i class="fa-solid fa-check-double"></i></button>
     </nav>
 
 </div>
 
-<div id="subject-modal" class="modal-overlay">
+<div id="area-modal" class="modal-overlay">
     <div class="modal-sheet">
         <div class="modal-header">
-            <h3>New Subject</h3>
-            <button onclick="closeModal('subject-modal')">Done</button>
+            <h3>New Life Area</h3>
+            <button onclick="closeModal('area-modal')">Close</button>
         </div>
         <div class="modal-body">
-            <input type="text" id="sub-name" placeholder="Subject Name (e.g. Math)">
-            <input type="text" id="sub-teacher" placeholder="Teacher Name">
-            <label>Color Code</label>
-            <div class="color-picker-row">
-                <input type="color" id="sub-color" value="#4f46e5">
+            <input type="text" id="area-name" placeholder="Name (e.g. Physics, Gym, Freelance)">
+            <label>Type</label>
+            <div class="segment-control">
+                <button class="seg-btn active" id="type-academic" onclick="setAreaType('academic')">Academic</button>
+                <button class="seg-btn" id="type-personal" onclick="setAreaType('personal')">Personal</button>
             </div>
+            <label>Color Tag</label>
+            <input type="color" id="area-color" value="#4f46e5" style="height:40px; width:100%;">
+            <button onclick="addArea()" class="btn-full-primary">Save Area</button>
         </div>
     </div>
 </div>
@@ -159,41 +187,20 @@
 <div id="block-modal" class="modal-overlay">
     <div class="modal-sheet">
         <div class="modal-header">
-            <h3>Define Time Slot</h3>
-            <button onclick="closeModal('block-modal')">Done</button>
+            <h3>Add to Routine</h3>
+            <button onclick="closeModal('block-modal')">Close</button>
         </div>
         <div class="modal-body">
-            <p class="hint">Create a slot like "Period 1" or "Lunch". You only do this once.</p>
-            <input type="text" id="block-name" placeholder="Name (e.g. 1st Period)">
+            <p class="hint">Adding to: <span id="current-day-label" style="font-weight:700;">Monday</span></p>
+            <input type="text" id="block-name" placeholder="Activity Name (e.g. Math Class, Morning Run)">
             <div class="row">
                 <input type="time" id="block-start">
-                <span style="padding:0 10px">to</span>
+                <span>to</span>
                 <input type="time" id="block-end">
             </div>
-            <button onclick="addBlock()" class="btn-full-primary">Save Block</button>
-            <div id="existing-blocks-list" style="margin-top:20px;"></div>
-        </div>
-    </div>
-</div>
-
-<div id="assign-modal" class="modal-overlay">
-    <div class="modal-sheet">
-        <div class="modal-header">
-            <h3>Assign Class</h3>
-            <button onclick="closeModal('assign-modal')">Close</button>
-        </div>
-        <div class="modal-body">
-            <select id="assign-day">
-                <option value="Monday">Monday</option>
-                <option value="Tuesday">Tuesday</option>
-                <option value="Wednesday">Wednesday</option>
-                <option value="Thursday">Thursday</option>
-                <option value="Friday">Friday</option>
-                <option value="Saturday">Saturday</option>
-            </select>
-            <select id="assign-block"></select>
-            <select id="assign-subject"></select>
-            <button onclick="assignSubject()" class="btn-full-primary">Assign</button>
+            <label>Link to Area (Optional)</label>
+            <select id="block-area"></select>
+            <button onclick="addRoutineBlock()" class="btn-full-primary">Add Block</button>
         </div>
     </div>
 </div>
@@ -201,34 +208,22 @@
 <div id="agenda-modal" class="modal-overlay">
     <div class="modal-sheet">
         <div class="modal-header">
-            <h3>New Task</h3>
+            <h3>New Item</h3>
             <button onclick="closeModal('agenda-modal')">Cancel</button>
         </div>
         <div class="modal-body">
-            <input type="text" id="agenda-title" placeholder="What needs to be done?">
+            <input type="text" id="task-title" placeholder="What do you need to do?">
             <div class="row">
-                <select id="agenda-cat"></select>
-                <select id="agenda-sub"></select>
+                <select id="task-type">
+                    <option value="task">Task</option>
+                    <option value="event">Event</option>
+                    <option value="exam">Exam/Deadline</option>
+                </select>
+                <select id="task-area"></select>
             </div>
-            <input type="date" id="agenda-date">
-            <button onclick="addAgenda()" class="btn-full-primary">Add Task</button>
-        </div>
-    </div>
-</div>
-
-<div id="category-modal" class="modal-overlay">
-    <div class="modal-sheet">
-        <div class="modal-header">
-            <h3>Categories</h3>
-            <button onclick="closeModal('category-modal')">Done</button>
-        </div>
-        <div class="modal-body">
-            <div class="row">
-                <input type="text" id="new-cat-name" placeholder="New Category Name">
-                <input type="color" id="new-cat-color" value="#ff0000" style="width:50px">
-                <button onclick="addCategory()" class="btn-primary">Add</button>
-            </div>
-            <div id="cat-list-display" class="list-vertical" style="margin-top:15px"></div>
+            <input type="date" id="task-date">
+            <input type="time" id="task-time" placeholder="Optional">
+            <button onclick="addTask()" class="btn-full-primary">Save</button>
         </div>
     </div>
 </div>
