@@ -10,6 +10,7 @@
             --primary-dark: #3a0ca3;
             --secondary: #7209b7;
             --accent: #4cc9f0;
+            --danger: #ef233c;
             --bg: #f8f9fa;
             --card-bg: #ffffff;
             --text: #2b2d42;
@@ -17,7 +18,7 @@
             --border: #e9ecef;
             --radius: 16px;
             --shadow: 0 4px 20px rgba(0,0,0,0.05);
-            --nav-height: 70px; /* For mobile bottom bar */
+            --nav-height: 70px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -31,7 +32,7 @@
             overflow: hidden; 
         }
 
-        /* --- SIDEBAR (Desktop) --- */
+        /* --- SIDEBAR --- */
         .sidebar { 
             width: 260px; 
             background: var(--card-bg); 
@@ -87,7 +88,7 @@
         h2 { font-size: 2rem; font-weight: 800; color: var(--text); }
 
         /* --- SECTIONS & CARDS --- */
-        .section { display: none; animation: fadeIn 0.3s ease; padding-bottom: 80px; } /* Padding for mobile FAB/Nav */
+        .section { display: none; animation: fadeIn 0.3s ease; padding-bottom: 80px; }
         .section.active { display: block; }
         
         .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
@@ -99,12 +100,12 @@
             border-radius: var(--radius); 
             box-shadow: var(--shadow); 
             border: 1px solid var(--border);
+            margin-bottom: 20px;
         }
 
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .card-title { font-weight: 700; font-size: 1.1rem; }
 
-        /* Stats */
         .stat-card { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; }
         .stat-value { font-size: 3rem; font-weight: 800; line-height: 1; margin: 10px 0; }
         .stat-label { opacity: 0.9; font-weight: 500; }
@@ -123,6 +124,7 @@
             transition: transform 0.1s;
         }
         .btn:active { transform: scale(0.98); }
+        .btn-danger { background: var(--danger); width: 100%; margin-top: 10px; }
 
         /* Task List */
         .task-list { display: flex; flex-direction: column; gap: 10px; }
@@ -142,12 +144,12 @@
             grid-template-columns: 80px repeat(5, minmax(100px, 1fr)); 
             gap: 2px; 
             background: var(--border); 
-            min-width: 600px; /* Forces scroll on small screens */
+            min-width: 600px;
         }
         .tt-cell { background: white; padding: 12px; font-size: 0.9rem; min-height: 60px; display: flex; align-items: center; justify-content: center; text-align: center; }
         .tt-header { background: #f1f5f9; font-weight: 700; color: var(--text-light); }
         
-        /* Floating Action Button (FAB) */
+        /* FAB */
         .fab { 
             position: fixed; bottom: 40px; right: 40px; 
             width: 64px; height: 64px; 
@@ -162,7 +164,6 @@
         @media (max-width: 768px) {
             body { flex-direction: column; height: 100vh; }
             
-            /* Hide Desktop Sidebar */
             .sidebar { 
                 position: fixed; bottom: 0; left: 0; width: 100%; height: var(--nav-height);
                 flex-direction: row; padding: 0; border-top: 1px solid var(--border); border-right: none;
@@ -170,31 +171,22 @@
             }
             .sidebar .logo { display: none; }
             
-            /* Bottom Nav Items */
             .nav-btn { 
                 flex-direction: column; justify-content: center; align-items: center; 
                 gap: 4px; padding: 8px; margin: 0; font-size: 0.7rem; border-radius: 0; height: 100%;
                 color: #94a3b8;
             }
-            .nav-btn span:first-child { font-size: 1.4rem; } /* Icon size */
+            .nav-btn span:first-child { font-size: 1.4rem; } 
             .nav-btn.active { background: transparent; color: var(--primary); box-shadow: none; }
             
-            /* Main Content Adjustments */
             .main-content { padding: 20px; margin-bottom: var(--nav-height); }
             h2 { font-size: 1.75rem; }
             
-            /* Stack Grids */
             .dashboard-grid, .dashboard-grid.two-col { grid-template-columns: 1fr; }
-            
-            /* Input stacking */
             .input-group { flex-direction: column; }
             .input-group input, .input-group select, .input-group button { width: 100%; flex: auto; }
             
-            /* Move FAB up slightly to avoid bottom nav */
             .fab { bottom: calc(var(--nav-height) + 20px); right: 20px; width: 56px; height: 56px; }
-            
-            /* Hide non-critical UI elements on mobile */
-            .desktop-only { display: none; }
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -204,26 +196,14 @@
 
     <nav class="sidebar">
         <div class="logo">🎓 Vidyarthi</div>
-        
-        <button class="nav-btn active" onclick="showSection('dashboard')">
-            <span>🏠</span> <span>Home</span>
-        </button>
-        <button class="nav-btn" onclick="showSection('planner')">
-            <span>📅</span> <span>Planner</span>
-        </button>
-        <button class="nav-btn" onclick="showSection('timetable')">
-            <span>🏫</span> <span>Classes</span>
-        </button>
-        <button class="nav-btn" onclick="showSection('grades')">
-            <span>📊</span> <span>Results</span>
-        </button>
-        <button class="nav-btn" onclick="showSection('personal')">
-            <span>🧘</span> <span>Life</span>
-        </button>
+        <button class="nav-btn active" onclick="showSection('dashboard')"><span>🏠</span> <span>Home</span></button>
+        <button class="nav-btn" onclick="showSection('planner')"><span>📅</span> <span>Planner</span></button>
+        <button class="nav-btn" onclick="showSection('timetable')"><span>🏫</span> <span>Classes</span></button>
+        <button class="nav-btn" onclick="showSection('grades')"><span>📊</span> <span>Results</span></button>
+        <button class="nav-btn" onclick="showSection('personal')"><span>🧘</span> <span>Life</span></button>
     </nav>
 
     <main class="main-content">
-        
         <div class="header">
             <div class="greeting" id="greeting">Good Morning</div>
             <h2 id="page-title">Dashboard</h2>
@@ -250,12 +230,8 @@
                 </div>
 
                 <div class="card" style="grid-column: 1 / -1;">
-                    <div class="card-header">
-                        <span class="card-title">Today's Agenda</span>
-                    </div>
-                    <div id="dashboard-tasks" class="task-list">
-                        <div style="color: var(--text-light); text-align: center; padding: 20px;">No tasks for today! 🎉</div>
-                    </div>
+                    <div class="card-header"><span class="card-title">Today's Agenda</span></div>
+                    <div id="dashboard-tasks" class="task-list"></div>
                 </div>
             </div>
         </section>
@@ -273,7 +249,6 @@
                     <button class="btn" onclick="addTask()">Add</button>
                 </div>
             </div>
-
             <div style="margin-top: 20px;">
                 <h3 style="margin-bottom: 15px;">Upcoming Tasks</h3>
                 <div id="task-list-container" class="task-list"></div>
@@ -282,42 +257,18 @@
 
         <section id="timetable" class="section">
             <div class="card">
-                <div class="card-header">
-                    <span class="card-title">Weekly Schedule</span>
-                    <small style="color: var(--text-light)">Scroll to see more ➡</small>
-                </div>
+                <div class="card-header"><span class="card-title">Weekly Schedule</span><small style="color: var(--text-light)">Scroll ➡</small></div>
                 <div class="tt-container">
                     <div class="timetable-grid">
-                        <div class="tt-cell tt-header">Time</div>
-                        <div class="tt-cell tt-header">Mon</div>
-                        <div class="tt-cell tt-header">Tue</div>
-                        <div class="tt-cell tt-header">Wed</div>
-                        <div class="tt-cell tt-header">Thu</div>
-                        <div class="tt-cell tt-header">Fri</div>
-
+                        <div class="tt-cell tt-header">Time</div><div class="tt-cell tt-header">Mon</div><div class="tt-cell tt-header">Tue</div><div class="tt-cell tt-header">Wed</div><div class="tt-cell tt-header">Thu</div><div class="tt-cell tt-header">Fri</div>
                         <div class="tt-cell tt-header">09:00</div>
-                        <div class="tt-cell" style="background: #e0e7ff; color: var(--primary);"><b>Maths</b><br>Rm 101</div>
-                        <div class="tt-cell">Physics</div>
-                        <div class="tt-cell">Maths</div>
-                        <div class="tt-cell">History</div>
-                        <div class="tt-cell">Art</div>
-
+                        <div class="tt-cell" style="background: #e0e7ff; color: var(--primary);"><b>Maths</b><br>Rm 101</div><div class="tt-cell">Physics</div><div class="tt-cell">Maths</div><div class="tt-cell">History</div><div class="tt-cell">Art</div>
                         <div class="tt-cell tt-header">10:00</div>
-                        <div class="tt-cell">English</div>
-                        <div class="tt-cell" style="background: #e0e7ff; color: var(--primary);"><b>Chem</b><br>Lab</div>
-                        <div class="tt-cell">English</div>
-                        <div class="tt-cell">PE</div>
-                        <div class="tt-cell">Bio</div>
-                        
+                        <div class="tt-cell">English</div><div class="tt-cell" style="background: #e0e7ff; color: var(--primary);"><b>Chem</b><br>Lab</div><div class="tt-cell">English</div><div class="tt-cell">PE</div><div class="tt-cell">Bio</div>
                         <div class="tt-cell tt-header">11:00</div>
                         <div class="tt-cell" colspan="5" style="background: #f1f5f9; letter-spacing: 2px;">BREAK</div>
-
-                         <div class="tt-cell tt-header">11:30</div>
-                        <div class="tt-cell">CS</div>
-                        <div class="tt-cell">Maths</div>
-                        <div class="tt-cell">Physics</div>
-                        <div class="tt-cell">Library</div>
-                        <div class="tt-cell">CS</div>
+                        <div class="tt-cell tt-header">11:30</div>
+                        <div class="tt-cell">CS</div><div class="tt-cell">Maths</div><div class="tt-cell">Physics</div><div class="tt-cell">Library</div><div class="tt-cell">CS</div>
                     </div>
                 </div>
             </div>
@@ -327,54 +278,21 @@
             <div class="dashboard-grid two-col">
                 <div class="card">
                     <div class="card-header"><span class="card-title">Performance</span></div>
-                    
                     <div style="margin-bottom: 20px;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                            <strong>Mathematics</strong>
-                            <span style="color: var(--primary);">92%</span>
-                        </div>
-                        <div style="background: #e9ecef; height: 8px; border-radius: 4px;">
-                            <div style="width: 92%; height: 100%; background: var(--primary); border-radius: 4px;"></div>
-                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><strong>Mathematics</strong><span style="color: var(--primary);">92%</span></div>
+                        <div style="background: #e9ecef; height: 8px; border-radius: 4px;"><div style="width: 92%; height: 100%; background: var(--primary); border-radius: 4px;"></div></div>
                     </div>
-
-                    <div style="margin-bottom: 20px;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                            <strong>Science</strong>
-                            <span style="color: #7209b7;">88%</span>
-                        </div>
-                        <div style="background: #e9ecef; height: 8px; border-radius: 4px;">
-                            <div style="width: 88%; height: 100%; background: #7209b7; border-radius: 4px;"></div>
-                        </div>
-                    </div>
-
                     <div>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                            <strong>History</strong>
-                            <span style="color: #4cc9f0;">75%</span>
-                        </div>
-                        <div style="background: #e9ecef; height: 8px; border-radius: 4px;">
-                            <div style="width: 75%; height: 100%; background: #4cc9f0; border-radius: 4px;"></div>
-                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><strong>History</strong><span style="color: #4cc9f0;">75%</span></div>
+                        <div style="background: #e9ecef; height: 8px; border-radius: 4px;"><div style="width: 75%; height: 100%; background: #4cc9f0; border-radius: 4px;"></div></div>
                     </div>
                 </div>
-
                 <div class="card">
                     <div class="card-header"><span class="card-title">Recent Grades</span></div>
                     <div style="display: flex; flex-direction: column; gap: 15px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f8f9fa; padding-bottom: 10px;">
-                            <div>
-                                <div style="font-weight: 600;">Calculus Quiz</div>
-                                <div style="font-size: 0.8rem; color: var(--text-light);">Jan 15</div>
-                            </div>
+                            <div><div style="font-weight: 600;">Calculus Quiz</div><div style="font-size: 0.8rem; color: var(--text-light);">Jan 15</div></div>
                             <div style="font-weight: 800; font-size: 1.2rem; color: #10b981;">A</div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f8f9fa; padding-bottom: 10px;">
-                            <div>
-                                <div style="font-weight: 600;">History Essay</div>
-                                <div style="font-size: 0.8rem; color: var(--text-light);">Jan 12</div>
-                            </div>
-                            <div style="font-weight: 800; font-size: 1.2rem; color: #f59e0b;">B+</div>
                         </div>
                     </div>
                 </div>
@@ -386,65 +304,58 @@
                 <div class="card">
                     <div class="card-header"><span class="card-title">Habit Tracker</span></div>
                     <div style="display: flex; gap: 10px; text-align: center;">
-                        <div style="flex: 1; padding: 15px; background: #f8f9fa; border-radius: 12px; cursor: pointer;" onclick="this.style.background='#d1fae5'">
-                            <div style="font-size: 1.5rem;">💧</div>
-                            <small>Water</small>
-                        </div>
-                        <div style="flex: 1; padding: 15px; background: #f8f9fa; border-radius: 12px; cursor: pointer;" onclick="this.style.background='#dbeafe'">
-                            <div style="font-size: 1.5rem;">📖</div>
-                            <small>Read</small>
-                        </div>
-                        <div style="flex: 1; padding: 15px; background: #f8f9fa; border-radius: 12px; cursor: pointer;" onclick="this.style.background='#fae8ff'">
-                            <div style="font-size: 1.5rem;">🏃</div>
-                            <small>Run</small>
-                        </div>
+                        <div style="flex: 1; padding: 15px; background: #f8f9fa; border-radius: 12px; cursor: pointer;" onclick="this.style.background='#d1fae5'"><div style="font-size: 1.5rem;">💧</div><small>Water</small></div>
+                        <div style="flex: 1; padding: 15px; background: #f8f9fa; border-radius: 12px; cursor: pointer;" onclick="this.style.background='#dbeafe'"><div style="font-size: 1.5rem;">📖</div><small>Read</small></div>
+                        <div style="flex: 1; padding: 15px; background: #f8f9fa; border-radius: 12px; cursor: pointer;" onclick="this.style.background='#fae8ff'"><div style="font-size: 1.5rem;">🏃</div><small>Run</small></div>
                     </div>
                 </div>
-
                 <div class="card">
                     <div class="card-header"><span class="card-title">Private To-Do</span></div>
                     <div id="personal-task-list" class="task-list"></div>
                 </div>
+                
+                <div class="card" style="border: 1px solid #ffccd5; background: #fff5f5;">
+                    <div class="card-header">
+                        <span class="card-title" style="color: var(--danger);">Danger Zone</span>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--text); margin-bottom: 10px;">
+                        Clearing data will remove all your tasks. The classes and grades (demo data) will reset to their default state.
+                    </p>
+                    <button class="btn btn-danger" onclick="clearAllData()">🗑️ Reset All Data</button>
+                </div>
             </div>
         </section>
-
     </main>
 
     <button class="fab" onclick="showSection('planner'); document.getElementById('task-desc').focus()">+</button>
 
     <script>
         // --- LOGIC ---
-
-        // 1. Navigation
         function showSection(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            
             document.getElementById(id).classList.add('active');
             
-            // Highlight both desktop and mobile buttons matching the ID
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 if(btn.onclick.toString().includes(id)) btn.classList.add('active');
             });
 
-            // Update Header Title (Capitalize)
-            const titleMap = {
-                'dashboard': 'Dashboard',
-                'planner': 'Planner',
-                'timetable': 'Class Schedule',
-                'grades': 'My Results',
-                'personal': 'Private Life'
-            };
+            const titleMap = { 'dashboard': 'Dashboard', 'planner': 'Planner', 'timetable': 'Class Schedule', 'grades': 'My Results', 'personal': 'Private Life' };
             document.getElementById('page-title').innerText = titleMap[id];
-            
             refreshUI();
         }
 
-        // 2. Data Management
-        let tasks = JSON.parse(localStorage.getItem('vidyarthiTasks')) || [
-            { id: 1, desc: "Complete Math Worksheet Ex 5.2", type: "academic", date: new Date().toISOString().split('T')[0], done: false },
-            { id: 2, desc: "Grocery Shopping", type: "personal", date: "2024-02-20", done: false }
-        ];
+        // Initialize tasks or default demo data if null
+        let tasks = JSON.parse(localStorage.getItem('vidyarthiTasks'));
+        
+        // If no tasks exist (first time load), add demo data
+        if (!tasks) {
+            tasks = [
+                { id: 1, desc: "Welcome! Add your first task.", type: "academic", date: new Date().toISOString().split('T')[0], done: false },
+                { id: 2, desc: "Try the 'Reset' button in Life tab", type: "personal", date: "2024-12-31", done: false }
+            ];
+            localStorage.setItem('vidyarthiTasks', JSON.stringify(tasks));
+        }
 
         function saveTasks() {
             localStorage.setItem('vidyarthiTasks', JSON.stringify(tasks));
@@ -464,10 +375,8 @@
                 date: date || new Date().toISOString().split('T')[0],
                 done: false
             });
-            
             saveTasks();
             document.getElementById('task-desc').value = '';
-            // Toast notification could go here
         }
 
         function toggleTask(id) {
@@ -482,7 +391,15 @@
             }
         }
 
-        // 3. Render
+        // --- NEW CLEAR FUNCTION ---
+        function clearAllData() {
+            if(confirm("Are you sure? This will delete ALL your tasks permanently.")) {
+                // Set to empty array so demo data doesn't come back immediately
+                localStorage.setItem('vidyarthiTasks', JSON.stringify([])); 
+                location.reload();
+            }
+        }
+
         function refreshUI() {
             const plannerList = document.getElementById('task-list-container');
             const personalList = document.getElementById('personal-task-list');
@@ -495,7 +412,6 @@
             let pending = 0;
             const today = new Date().toISOString().split('T')[0];
 
-            // Sort: Pending first, then by date
             tasks.sort((a,b) => (a.done === b.done) ? 0 : a.done ? 1 : -1);
 
             tasks.forEach(task => {
@@ -524,7 +440,7 @@
             if(dashList.innerHTML === '') dashList.innerHTML = '<div style="text-align:center; color: #adb5bd; padding: 20px;">No tasks due today! 🌟</div>';
         }
 
-        // 4. Init
+        // Init
         const d = new Date();
         const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
         const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -536,12 +452,9 @@
         const hour = d.getHours();
         const greeting = hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : "Good Evening";
         document.getElementById('greeting').innerText = greeting + ", Student!";
-
-        // Set default date picker to today
         document.getElementById('task-date').valueAsDate = new Date();
 
         refreshUI();
-
     </script>
 </body>
 </html>
