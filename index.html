@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - Ultimate</title>
+    <title>Vidyarthi - Ultimate Fixed</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -46,9 +46,9 @@
         h2 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; }
 
         /* --- COMPONENTS --- */
-        .section { display: none; animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 80px; }
+        .section { display: none; animation: slideUp 0.2s ease-out; padding-bottom: 80px; }
         .section.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .card { background: var(--card-bg); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 15px; position: relative; }
         
@@ -56,14 +56,14 @@
         .btn:active { transform: scale(0.98); }
         .btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; }
         .btn-ghost { background: transparent; color: var(--text-light); border: 1px solid var(--border); }
+        .btn-icon { background: transparent; border: none; font-size: 1.1rem; cursor: pointer; color: var(--text-light); padding: 5px; }
         
         input, select { padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; }
         input:focus, select:focus { border-color: var(--primary); background: var(--card-bg); }
 
-        /* --- AGENDA (SCHOOL PLANNER EXACT) --- */
+        /* --- AGENDA (School Planner Style) --- */
         .agenda-header { font-size: 0.8rem; font-weight: 800; color: var(--text-light); margin: 25px 0 10px 0; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
         .agenda-card { background: var(--card-bg); border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); display: flex; margin-bottom: 10px; position: relative; overflow: hidden; border: 1px solid var(--border); transition: transform 0.1s; }
-        .agenda-card:active { transform: scale(0.99); }
         .color-strip { width: 6px; flex-shrink: 0; }
         .agenda-content { flex: 1; padding: 12px 15px; }
         .agenda-subject { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 3px; }
@@ -74,32 +74,41 @@
         .agenda-card.done .agenda-title { text-decoration: line-through; opacity: 0.5; }
         .agenda-card.done .checkbox-circle { background: var(--success); border-color: var(--success); }
 
-        /* --- SUBJECT & GRADES --- */
-        .subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
-        .subject-card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid var(--border); text-align: center; cursor: pointer; transition: 0.2s; box-shadow: var(--shadow); }
+        /* --- SCHOOL HUB --- */
+        .subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        .subject-card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid var(--border); text-align: center; cursor: pointer; transition: 0.2s; box-shadow: var(--shadow); position: relative; }
         .subject-card:hover { border-color: var(--primary); transform: translateY(-2px); }
-        .grade-badge { background: var(--bg); padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; display: inline-block; margin-top: 5px; }
-        .grade-a { color: var(--success); } .grade-b { color: var(--primary); } .grade-c { color: var(--warning); } .grade-f { color: var(--danger); }
+        .subject-actions { position: absolute; top: 5px; right: 5px; display: flex; gap: 5px; }
+        
+        .grade-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+        .grade-badge { background: var(--bg); padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; display: inline-block; }
 
-        /* --- EMOJI & COLOR PICKER --- */
-        .picker-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 10px; max-height: 150px; overflow-y: auto; }
-        .emoji-btn { font-size: 1.5rem; background: var(--bg); border: none; border-radius: 8px; cursor: pointer; padding: 5px; }
-        .emoji-btn:hover { background: var(--border); }
-        .color-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
-        .color-btn.selected { border-color: var(--text); transform: scale(1.1); }
+        /* --- SETTINGS LIST --- */
+        .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border); }
+        .color-preview { width: 20px; height: 20px; border-radius: 50%; display: inline-block; margin-right: 10px; vertical-align: middle; }
 
         /* --- TIMELINE --- */
         .timeline-container { position: relative; padding-left: 20px; margin-top: 20px; }
         .timeline-container::before { content: ''; position: absolute; left: 29px; top: 0; bottom: 0; width: 2px; background: var(--border); z-index: 0; }
         .timeline-block { position: relative; margin-bottom: 15px; display: flex; align-items: flex-start; z-index: 1; }
+        .time-col { width: 50px; font-size: 0.8rem; color: var(--text-light); text-align: right; padding-right: 15px; padding-top: 10px; font-weight: 600; }
         .icon-col { width: 36px; height: 36px; border-radius: 50%; background: var(--card-bg); border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-right: 15px; z-index: 2; }
         .timeline-block.active .icon-col { background: var(--primary); color: white; box-shadow: 0 0 0 5px rgba(79, 70, 229, 0.2); }
-
-        /* --- MODALS --- */
+        
+        /* --- MODALS & PICKERS --- */
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(2px); }
         .modal-content { background: var(--card-bg); width: 90%; max-width: 450px; border-radius: 20px; padding: 25px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
 
-        /* --- FAB --- */
+        .picker-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 10px; }
+        .color-swatch { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+        .color-swatch.selected { border-color: var(--text); transform: scale(1.1); }
+        
+        /* Emoji Popup */
+        #emoji-popup { display: none; position: absolute; background: var(--card-bg); box-shadow: 0 5px 20px rgba(0,0,0,0.2); border-radius: 12px; padding: 10px; z-index: 2000; width: 280px; max-height: 200px; overflow-y: auto; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+        .emoji-btn { font-size: 1.5rem; background: none; border: none; cursor: pointer; padding: 5px; border-radius: 5px; }
+        .emoji-btn:hover { background: var(--border); }
+
+        /* FAB */
         .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4); cursor: pointer; border: none; z-index: 500; transition: transform 0.2s; }
         .fab:active { transform: scale(0.9); }
 
@@ -149,7 +158,7 @@
         <section id="tasks" class="section">
             <div id="agenda-container"></div>
             <div style="text-align: center; color: var(--text-light); margin-top: 20px; font-size: 0.8rem;">
-                Tap + to add Homework, Exams, or Reminders
+                Manage categories in Settings ⚙️
             </div>
             <div style="height: 60px;"></div>
         </section>
@@ -172,13 +181,14 @@
 
         <section id="timeline" class="section">
             <div class="card">
+                <h3 style="margin-bottom: 15px;">Add Routine Block</h3>
                 <div style="display: flex; gap: 5px; margin-bottom: 10px;">
                     <input type="time" id="tl-start">
                     <input type="time" id="tl-end">
                 </div>
                 <div style="display: flex; gap: 10px;">
                     <input type="text" id="tl-name" placeholder="Activity name..." style="flex:1;">
-                    <button class="btn-ghost" onclick="toggleEmojiPicker(this, 'tl-name')" style="font-size: 1.2rem;">😊</button>
+                    <button class="btn-ghost" onclick="showEmojiPicker(this, 'tl-name')" style="font-size: 1.2rem;">😊</button>
                     <button class="btn" onclick="addBlock()">+</button>
                 </div>
             </div>
@@ -186,17 +196,19 @@
         </section>
 
         <section id="settings" class="section">
-            <div class="card">
-                <h3>Data Management</h3>
-                <div style="display: flex; gap: 10px; margin-top: 15px;">
-                    <button class="btn-ghost" onclick="exportData()" style="flex:1;">Backup Data ⬇️</button>
-                    <button class="btn-ghost" onclick="document.getElementById('file-input').click()" style="flex:1;">Restore ⬆️</button>
-                    <input type="file" id="file-input" style="display:none" onchange="importData(this)">
-                </div>
-            </div>
             
             <div class="card">
-                <h3>Focus Timer Settings</h3>
+                <h3>Agenda Categories</h3>
+                <div id="settings-cat-list"></div>
+                <div style="margin-top: 10px; display: flex; gap: 5px; border-top: 1px dashed var(--border); padding-top: 10px;">
+                    <input type="text" id="new-cat-name" placeholder="Category Name">
+                    <input type="color" id="new-cat-color" value="#4f46e5" style="width: 50px; padding: 0; border: none;">
+                    <button class="btn" onclick="addCategory()">+</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Focus Timer</h3>
                 <div style="margin-top: 10px;">
                     Duration: <input type="number" id="focus-dur" value="25" style="width: 60px; display: inline-block;"> mins
                     <button class="btn-sm" onclick="saveSettings()">Save</button>
@@ -204,8 +216,14 @@
             </div>
 
             <div class="card">
-                <button class="btn-ghost" onclick="toggleTheme()" style="width: 100%; margin-bottom: 10px;">Toggle Dark Mode 🌗</button>
-                <button class="btn-ghost" onclick="resetApp()" style="width: 100%; color: var(--danger); border-color: var(--danger);">Factory Reset</button>
+                <h3>Data</h3>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="btn-ghost" onclick="exportData()" style="flex:1;">Backup ⬇️</button>
+                    <button class="btn-ghost" onclick="document.getElementById('file-input').click()" style="flex:1;">Restore ⬆️</button>
+                    <input type="file" id="file-input" style="display:none" onchange="importData(this)">
+                </div>
+                <button class="btn-ghost" onclick="toggleTheme()" style="width: 100%; margin-top: 10px;">Toggle Dark Mode 🌗</button>
+                <button class="btn-ghost" onclick="resetApp()" style="width: 100%; color: var(--danger); margin-top: 10px;">Factory Reset</button>
             </div>
         </section>
 
@@ -217,16 +235,11 @@
             <label style="font-size: 0.8rem; color: var(--text-light);">Subject</label>
             <select id="t-sub" style="margin-bottom: 10px;"></select>
             
-            <label style="font-size: 0.8rem; color: var(--text-light);">Task Info</label>
-            <input type="text" id="t-desc" placeholder="Description (e.g. Chapter 1)" style="margin-bottom: 10px;">
+            <label style="font-size: 0.8rem; color: var(--text-light);">Description</label>
+            <input type="text" id="t-desc" placeholder="e.g. Chapter 1 Exercises" style="margin-bottom: 10px;">
             
             <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                <select id="t-type">
-                    <option value="Homework">Homework</option>
-                    <option value="Exam">Exam</option>
-                    <option value="Project">Project</option>
-                    <option value="Reminder">Reminder</option>
-                </select>
+                <select id="t-cat"></select>
                 <input type="date" id="t-date">
             </div>
 
@@ -244,178 +257,200 @@
 
     <div id="modal-subject" class="modal">
         <div class="modal-content">
-            <h3 style="margin-bottom: 15px;">Manage Subject</h3>
+            <h3 style="margin-bottom: 15px;" id="s-modal-title">Manage Subject</h3>
             <input type="hidden" id="s-id">
-            <input type="text" id="s-name" placeholder="Subject Name (e.g. Math)" style="margin-bottom: 10px;">
+            <input type="text" id="s-name" placeholder="Subject Name" style="margin-bottom: 10px;">
             <input type="text" id="s-room" placeholder="Room / Teacher" style="margin-bottom: 10px;">
             
             <label style="font-size: 0.8rem; color: var(--text-light);">Color Code</label>
-            <div id="color-picker" class="picker-grid" style="margin-bottom: 15px;">
-                </div>
-            <input type="color" id="s-color-custom" style="width: 100%; height: 40px; margin-bottom: 20px;">
+            <div id="color-picker" class="picker-grid" style="margin-bottom: 15px;"></div>
+            <input type="hidden" id="s-color">
 
             <div style="display: flex; gap: 10px;">
                 <button class="btn-ghost" onclick="closeModal('modal-subject')" style="flex:1;">Cancel</button>
-                <button class="btn" onclick="saveSubject()" style="flex:1;">Save Subject</button>
+                <button class="btn" onclick="saveSubject()" style="flex:1;">Save</button>
             </div>
         </div>
     </div>
 
     <div id="modal-grade" class="modal">
         <div class="modal-content">
-            <h3 id="grade-modal-title">Add Grade</h3>
+            <h3 id="grade-modal-title">Grade</h3>
+            <input type="hidden" id="g-id">
             <input type="hidden" id="g-sub-id">
-            <input type="text" id="g-title" placeholder="Exam Name (e.g. Midterm)" style="margin-bottom: 10px;">
+            <input type="text" id="g-title" placeholder="Exam Name" style="margin-bottom: 10px;">
             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                 <input type="number" id="g-score" placeholder="Score">
                 <span style="align-self:center;">/</span>
                 <input type="number" id="g-total" placeholder="Total" value="100">
             </div>
-            <button class="btn" onclick="saveGrade()" style="width: 100%;">Add Grade</button>
+            <button class="btn" onclick="saveGrade()" style="width: 100%;">Save Grade</button>
             <button class="btn-ghost" onclick="closeModal('modal-grade')" style="width: 100%; margin-top: 10px;">Close</button>
         </div>
     </div>
 
-    <div id="emoji-popup" style="display: none; position: absolute; background: var(--card-bg); box-shadow: 0 5px 20px rgba(0,0,0,0.2); border-radius: 12px; padding: 10px; z-index: 2000; width: 250px;">
-        <div class="picker-grid" id="emoji-grid"></div>
-    </div>
+    <div id="emoji-popup" style="display:none;"></div>
 
     <button class="fab" onclick="openTaskModal()">+</button>
 
     <script>
         // --- 1. DATA STORE ---
         let db = {
-            subjects: JSON.parse(localStorage.getItem('vUltSub')) || [
-                { id: 1, name: "Math", room: "Rm 101", color: "#4f46e5", attendance: {p:0, a:0, l:0} },
-                { id: 2, name: "Science", room: "Lab A", color: "#10b981", attendance: {p:0, a:0, l:0} },
-                { id: 3, name: "English", room: "Rm 204", color: "#f59e0b", attendance: {p:0, a:0, l:0} }
+            subjects: JSON.parse(localStorage.getItem('vFixSub')) || [],
+            tasks: JSON.parse(localStorage.getItem('vFixTasks')) || [],
+            categories: JSON.parse(localStorage.getItem('vFixCats')) || [
+                {id: 1, name: 'Homework', color: '#4f46e5'}, 
+                {id: 2, name: 'Exam', color: '#ef4444'},
+                {id: 3, name: 'Other', color: '#10b981'}
             ],
-            tasks: JSON.parse(localStorage.getItem('vUltTasks')) || [],
-            grades: JSON.parse(localStorage.getItem('vUltGrades')) || [],
-            timeline: JSON.parse(localStorage.getItem('vUltTime')) || [],
-            settings: JSON.parse(localStorage.getItem('vUltSet')) || { theme: 'light', focus: 25 }
+            grades: JSON.parse(localStorage.getItem('vFixGrades')) || [],
+            timeline: JSON.parse(localStorage.getItem('vFixTime')) || [],
+            settings: JSON.parse(localStorage.getItem('vFixSet')) || { theme: 'light', focus: 25 }
         };
 
         const colors = ["#4f46e5", "#ef4444", "#f59e0b", "#10b981", "#3b82f6", "#8b5cf6", "#ec4899", "#6366f1", "#14b8a6", "#f43f5e"];
         const emojis = ["📚","🏫","📝","🎒","🧠","💡","🎨","⚽","🎵","🚌","💤","🍽️","🚿","🎮","💻","🧪","📐","🧘","☕","📅","🏃","💊","🏠","🧹","🛒","🎁","✈️","🐶","🍔","✏️"];
 
-        // --- 2. INIT ---
+        // --- 2. INIT & CLOCK ---
         function init() {
             if(db.settings.theme === 'dark') document.body.setAttribute('data-theme', 'dark');
             document.getElementById('focus-dur').value = db.settings.focus;
             renderAll();
-            setInterval(() => {
-                updateClock();
-                checkTimeline();
-            }, 1000);
+            setInterval(updateClock, 1000);
+            setInterval(checkTimeline, 1000); // Timeline auto-update
         }
 
-        // --- 3. NAVIGATION ---
-        function nav(id) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            // Highlight Btn
-            const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.onclick.toString().includes(id));
-            if(btn) btn.classList.add('active');
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+        }
+
+        function checkTimeline() {
+            const now = new Date();
+            const cur = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+            let found = false;
             
-            document.querySelector('.fab').style.display = (id === 'tasks') ? 'flex' : 'none';
-            document.getElementById('page-title').innerText = id === 'dashboard' ? 'Dashboard' : id.charAt(0).toUpperCase() + id.slice(1);
+            // Only update DOM if changes needed? For simplicity, we just check status
+            // A full re-render every second is heavy, so we do it via DOM updates or check if block changed
+            const activeBlock = db.timeline.find(b => cur >= b.start && cur < b.end);
+            
+            if(activeBlock) {
+                document.getElementById('now-title').innerText = activeBlock.name;
+                document.getElementById('now-icon').innerText = activeBlock.icon || '⏱️';
+                document.getElementById('now-end').innerText = activeBlock.end;
+                found = true;
+            } else {
+                document.getElementById('now-title').innerText = "Free Time";
+                document.getElementById('now-icon').innerText = "☕";
+                document.getElementById('now-end').innerText = "--:--";
+            }
+            // Highlight active block in list
+            document.querySelectorAll('.timeline-block').forEach(el => {
+                const start = el.dataset.start;
+                const end = el.dataset.end;
+                if(cur >= start && cur < end) el.classList.add('active');
+                else el.classList.remove('active');
+            });
         }
 
-        function schoolTab(tab) {
-            document.getElementById('view-subjects').style.display = tab === 'sub' ? 'block' : 'none';
-            document.getElementById('view-grades').style.display = tab === 'grd' ? 'block' : 'none';
-            document.getElementById('tab-sub').className = tab === 'sub' ? 'btn btn-sm' : 'btn-ghost btn-sm';
-            document.getElementById('tab-grd').className = tab === 'grd' ? 'btn btn-sm' : 'btn-ghost btn-sm';
-        }
-
-        // --- 4. RENDERERS ---
+        // --- 3. RENDERERS ---
 
         function renderAll() {
             renderSubjects();
             renderTasks();
             renderTimeline();
             renderGrades();
+            renderSettings();
         }
 
-        // --- SUBJECTS & GRADES ---
+        // --- SUBJECTS ---
         function renderSubjects() {
             const list = document.getElementById('subject-list');
+            const subSelect = document.getElementById('t-sub');
             list.innerHTML = '';
-            const tSub = document.getElementById('t-sub');
-            tSub.innerHTML = '';
+            subSelect.innerHTML = '';
 
             db.subjects.forEach(s => {
-                // Populate Dropdown
-                tSub.innerHTML += `<option value="${s.id}">${s.name}</option>`;
-                
-                // Subject Card
+                subSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`;
                 list.innerHTML += `
-                    <div class="subject-card" style="border-top: 5px solid ${s.color}" onclick="editSubject(${s.id})">
-                        <div style="font-weight:800; font-size:1.1rem; color:${s.color}">${s.name}</div>
-                        <div style="font-size:0.8rem; color:var(--text-light);">${s.room}</div>
-                        <div style="margin-top:10px; font-size:0.8rem;">
-                            Attendance: <span style="color:var(--success)">${s.attendance.p}</span> / <span style="color:var(--danger)">${s.attendance.a}</span>
+                    <div class="subject-card" style="border-top: 5px solid ${s.color}">
+                        <div class="subject-actions">
+                            <button class="btn-icon" onclick="editSubject(${s.id})">✏️</button>
+                            <button class="btn-icon" onclick="delSubject(${s.id})">🗑️</button>
                         </div>
+                        <div style="font-weight:800; font-size:1.1rem; color:${s.color}; margin-top:5px;">${s.name}</div>
+                        <div style="font-size:0.8rem; color:var(--text-light);">${s.room}</div>
                     </div>`;
             });
+            if(db.subjects.length === 0) list.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-light);">No subjects added yet.</div>`;
         }
 
-        function renderGrades() {
-            const list = document.getElementById('grades-list');
-            list.innerHTML = '';
-
-            db.subjects.forEach(s => {
-                // Filter grades for this subject
-                const sGrades = db.grades.filter(g => g.subId == s.id);
-                let total = 0, max = 0;
-                sGrades.forEach(g => { total += parseFloat(g.score); max += parseFloat(g.total); });
-                
-                let percent = max > 0 ? Math.round((total/max)*100) : 0;
-                let letter = getGradeLetter(percent);
-
-                let gradesHtml = sGrades.map(g => `
-                    <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border); font-size:0.9rem;">
-                        <span>${g.title}</span>
-                        <span>${g.score}/${g.total}</span>
-                        <button onclick="delGrade(${g.id})" style="border:none; background:none; color:var(--text-light); cursor:pointer;">&times;</button>
-                    </div>
-                `).join('');
-
-                list.innerHTML += `
-                    <div class="card">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <h3 style="color:${s.color}">${s.name}</h3>
-                            <div class="grade-badge ${letter === 'A' ? 'grade-a' : letter === 'B' ? 'grade-b' : letter === 'F' ? 'grade-f' : 'grade-c'}">
-                                ${percent}% (${letter})
-                            </div>
-                        </div>
-                        <div style="margin: 10px 0;">${gradesHtml}</div>
-                        
-                        <div style="display:flex; gap:5px; margin-top:10px; padding-top:10px; border-top:1px dashed var(--border);">
-                            <button class="btn-sm btn-ghost" onclick="addGradeModal(${s.id}, '${s.name}')">+ Grade</button>
-                            <div style="flex:1"></div>
-                            <button class="btn-sm" style="background:#d1fae5; color:#065f46" onclick="att(${s.id}, 'p')">P</button>
-                            <button class="btn-sm" style="background:#fee2e2; color:#991b1b" onclick="att(${s.id}, 'a')">A</button>
-                            <button class="btn-sm" style="background:#fef3c7; color:#92400e" onclick="att(${s.id}, 'l')">L</button>
-                        </div>
-                    </div>
-                `;
+        function openSubjectModal(id = null) {
+            const modal = document.getElementById('modal-subject');
+            const pGrid = document.getElementById('color-picker');
+            pGrid.innerHTML = '';
+            
+            // Populate Color Picker
+            colors.forEach(c => {
+                pGrid.innerHTML += `<div class="color-swatch" style="background:${c}" onclick="pickColor('${c}', this)"></div>`;
             });
+
+            if (id) {
+                const s = db.subjects.find(x => x.id === id);
+                document.getElementById('s-id').value = s.id;
+                document.getElementById('s-name').value = s.name;
+                document.getElementById('s-room').value = s.room;
+                document.getElementById('s-color').value = s.color;
+                document.getElementById('s-modal-title').innerText = "Edit Subject";
+            } else {
+                document.getElementById('s-id').value = '';
+                document.getElementById('s-name').value = '';
+                document.getElementById('s-room').value = '';
+                document.getElementById('s-color').value = colors[0];
+                document.getElementById('s-modal-title').innerText = "New Subject";
+            }
+            modal.style.display = 'flex';
         }
 
-        function getGradeLetter(p) {
-            if(p >= 90) return 'A'; if(p >= 80) return 'B'; if(p >= 70) return 'C'; if(p >= 60) return 'D'; return 'F';
+        function pickColor(c, el) {
+            document.getElementById('s-color').value = c;
+            document.querySelectorAll('.color-swatch').forEach(x => x.classList.remove('selected'));
+            el.classList.add('selected');
         }
 
-        // --- TASKS (AGENDA) ---
+        function saveSubject() {
+            const id = document.getElementById('s-id').value;
+            const name = document.getElementById('s-name').value;
+            const room = document.getElementById('s-room').value;
+            const color = document.getElementById('s-color').value;
+            if(!name) return alert("Name required");
+
+            if(id) {
+                const s = db.subjects.find(x => x.id == id);
+                s.name = name; s.room = room; s.color = color;
+            } else {
+                db.subjects.push({ id: Date.now(), name, room, color });
+            }
+            closeModal('modal-subject'); saveAll();
+        }
+
+        function editSubject(id) { openSubjectModal(id); }
+        function delSubject(id) { if(confirm("Delete subject?")) { db.subjects = db.subjects.filter(x => x.id !== id); saveAll(); } }
+
+        // --- AGENDA & CATEGORIES ---
         function renderTasks() {
             const container = document.getElementById('agenda-container');
             const dash = document.getElementById('dash-agenda');
-            container.innerHTML = ''; dash.innerHTML = '';
+            const typeSelect = document.getElementById('t-cat');
+            
+            container.innerHTML = ''; dash.innerHTML = ''; typeSelect.innerHTML = '';
 
-            // Grouping Logic
+            // Populate Category Select
+            db.categories.forEach(c => {
+                typeSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+            });
+
+            // Grouping
             const groups = { overdue: [], today: [], tomorrow: [], future: [], done: [] };
             const todayStr = new Date().toISOString().split('T')[0];
             const tomorrow = new Date(new Date().setDate(new Date().getDate()+1)).toISOString().split('T')[0];
@@ -430,16 +465,17 @@
                 else groups.future.push(t);
             });
 
-            // Render Groups
             const renderGroup = (title, list, isDash) => {
                 if(list.length === 0) return;
                 const html = `<div class="agenda-header">${title}</div>` + list.map(t => {
-                    const sub = db.subjects.find(s => s.id == t.subId) || {name:'Unknown', color:'#ccc'};
+                    const sub = db.subjects.find(s => s.id == t.subId) || {name: 'General', color: '#6b7280'};
+                    const cat = db.categories.find(c => c.name === t.type) || {color: '#ccc'};
+                    
                     return `
                     <div class="agenda-card">
-                        <div class="color-strip" style="background:${sub.color}"></div>
+                        <div class="color-strip" style="background:${cat.color}"></div>
                         <div class="agenda-content">
-                            <div class="agenda-subject" style="color:${sub.color}">${sub.name} • ${t.type}</div>
+                            <div class="agenda-subject" style="color:${cat.color}">${sub.name} • ${t.type}</div>
                             <div class="agenda-title">${t.desc}</div>
                             <div class="agenda-meta">
                                 📅 ${t.date} ${t.time ? '🔔 '+t.time : ''}
@@ -449,7 +485,6 @@
                         <button onclick="delTask(${t.id})" style="position:absolute; right:55px; top:10px; border:none; background:none; color:#ccc;">&times;</button>
                     </div>`;
                 }).join('');
-                
                 container.innerHTML += html;
                 if(isDash) dash.innerHTML += html;
             };
@@ -459,61 +494,34 @@
             renderGroup("Tomorrow", groups.tomorrow, false);
             renderGroup("Upcoming", groups.future, false);
             renderGroup("Completed", groups.done, false);
-            
+
             if(dash.innerHTML === '') dash.innerHTML = '<div style="text-align:center; color:var(--text-light); padding:10px;">No tasks due today.</div>';
         }
 
-        // --- TIMELINE ---
-        function renderTimeline() {
-            const list = document.getElementById('timeline-list');
+        function renderSettings() {
+            const list = document.getElementById('settings-cat-list');
             list.innerHTML = '';
-            db.timeline.sort((a,b) => a.start.localeCompare(b.start));
-
-            const now = new Date();
-            const cur = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
-            let found = false;
-
-            db.timeline.forEach(b => {
-                const active = (cur >= b.start && cur < b.end);
-                if(active) {
-                    found = true;
-                    document.getElementById('now-title').innerText = b.name;
-                    document.getElementById('now-icon').innerText = b.icon || '⏱️';
-                    document.getElementById('now-end').innerText = b.end;
-                }
+            db.categories.forEach(c => {
                 list.innerHTML += `
-                    <div class="timeline-block ${active ? 'active' : ''}">
-                        <div class="time-col">${b.start}</div>
-                        <div class="icon-col">${b.icon || '•'}</div>
-                        <div class="info-col" style="display:flex; justify-content:space-between;">
-                            <div>
-                                <div style="font-weight:700;">${b.name}</div>
-                                <div style="font-size:0.8rem; color:var(--text-light);">${b.start} - ${b.end}</div>
-                            </div>
-                            <button onclick="delBlock(${b.id})" style="border:none; background:none; color:var(--text-light);">&times;</button>
-                        </div>
-                    </div>`;
+                <div class="setting-item">
+                    <div><span class="color-preview" style="background:${c.color}"></span>${c.name}</div>
+                    <button class="btn-icon" onclick="delCategory(${c.id})">&times;</button>
+                </div>`;
             });
-            if(!found) {
-                document.getElementById('now-title').innerText = "Free Time";
-                document.getElementById('now-icon').innerText = "☕";
-                document.getElementById('now-end').innerText = "--:--";
+        }
+
+        function addCategory() {
+            const name = document.getElementById('new-cat-name').value;
+            const color = document.getElementById('new-cat-color').value;
+            if(name) {
+                db.categories.push({ id: Date.now(), name, color });
+                document.getElementById('new-cat-name').value = '';
+                saveAll();
             }
         }
+        function delCategory(id) { if(confirm("Delete category?")) { db.categories = db.categories.filter(x=>x.id!==id); saveAll(); } }
 
-        // --- CRUD OPERATIONS ---
-        
-        function saveAll() {
-            localStorage.setItem('vUltSub', JSON.stringify(db.subjects));
-            localStorage.setItem('vUltTasks', JSON.stringify(db.tasks));
-            localStorage.setItem('vUltGrades', JSON.stringify(db.grades));
-            localStorage.setItem('vUltTime', JSON.stringify(db.timeline));
-            localStorage.setItem('vUltSet', JSON.stringify(db.settings));
-            renderAll();
-        }
-
-        // Task
-        function openTaskModal() { document.getElementById('t-date').value = new Date().toISOString().split('T')[0]; document.getElementById('modal-task').style.display='flex'; }
+        function openTaskModal() { document.getElementById('t-date').value = new Date().toISOString().split('T')[0]; document.getElementById('modal-task').style.display = 'flex'; }
         function addTask() {
             db.tasks.push({
                 id: Date.now(),
@@ -527,96 +535,180 @@
             closeModal('modal-task'); saveAll();
         }
         function toggleTask(id) { const t = db.tasks.find(x=>x.id==id); if(t) t.done=!t.done; saveAll(); }
-        function delTask(id) { if(confirm('Delete?')) { db.tasks=db.tasks.filter(x=>x.id!==id); saveAll(); } }
+        function delTask(id) { if(confirm("Delete task?")) { db.tasks=db.tasks.filter(x=>x.id!==id); saveAll(); } }
 
-        // Subject
-        function openSubjectModal() {
-            // Setup Color Picker
-            const grid = document.getElementById('color-picker');
-            grid.innerHTML = '';
-            colors.forEach(c => grid.innerHTML += `<div class="color-btn" style="background:${c}" onclick="pickColor('${c}', this)"></div>`);
-            document.getElementById('modal-subject').style.display='flex';
-        }
-        function pickColor(c, el) { 
-            document.getElementById('s-color-custom').value = c; 
-            document.querySelectorAll('.color-btn').forEach(b=>b.classList.remove('selected'));
-            el.classList.add('selected');
-        }
-        function saveSubject() {
-            db.subjects.push({
-                id: Date.now(),
-                name: document.getElementById('s-name').value,
-                room: document.getElementById('s-room').value,
-                color: document.getElementById('s-color-custom').value,
-                attendance: {p:0, a:0, l:0}
+        // --- GRADES ---
+        function renderGrades() {
+            const list = document.getElementById('grades-list');
+            list.innerHTML = '';
+            db.subjects.forEach(s => {
+                const sGrades = db.grades.filter(g => g.subId == s.id);
+                let total = 0, max = 0;
+                sGrades.forEach(g => { total += parseFloat(g.score); max += parseFloat(g.total); });
+                let pct = max > 0 ? Math.round((total/max)*100) : 0;
+                
+                let gradesHtml = sGrades.map(g => `
+                    <div class="grade-row">
+                        <span>${g.title}</span>
+                        <div>
+                            <span style="font-weight:bold; margin-right:10px;">${g.score}/${g.total}</span>
+                            <button class="btn-icon" onclick="editGrade(${g.id})">✏️</button>
+                            <button class="btn-icon" onclick="delGrade(${g.id})">&times;</button>
+                        </div>
+                    </div>`).join('');
+
+                list.innerHTML += `
+                    <div class="card">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <h3 style="color:${s.color}">${s.name}</h3>
+                            <div class="grade-badge" style="color:${s.color}">${pct}%</div>
+                        </div>
+                        <div style="margin:10px 0;">${gradesHtml}</div>
+                        <button class="btn-sm btn-ghost" onclick="openGradeModal(null, ${s.id})">+ Add Grade</button>
+                    </div>`;
             });
-            closeModal('modal-subject'); saveAll();
         }
-        function att(id, type) { const s = db.subjects.find(x=>x.id==id); s.attendance[type]++; saveAll(); }
 
-        // Grade
-        function addGradeModal(sid, sname) {
-            document.getElementById('g-sub-id').value = sid;
-            document.getElementById('grade-modal-title').innerText = "Add Grade: " + sname;
+        function openGradeModal(id, subId) {
+            if(id) {
+                const g = db.grades.find(x => x.id == id);
+                document.getElementById('g-id').value = g.id;
+                document.getElementById('g-sub-id').value = g.subId;
+                document.getElementById('g-title').value = g.title;
+                document.getElementById('g-score').value = g.score;
+                document.getElementById('g-total').value = g.total;
+                document.getElementById('grade-modal-title').innerText = "Edit Grade";
+            } else {
+                document.getElementById('g-id').value = '';
+                document.getElementById('g-sub-id').value = subId;
+                document.getElementById('g-title').value = '';
+                document.getElementById('g-score').value = '';
+                document.getElementById('grade-modal-title').innerText = "Add Grade";
+            }
             document.getElementById('modal-grade').style.display = 'flex';
         }
+
         function saveGrade() {
-            db.grades.push({
-                id: Date.now(),
-                subId: document.getElementById('g-sub-id').value,
-                title: document.getElementById('g-title').value,
-                score: document.getElementById('g-score').value,
-                total: document.getElementById('g-total').value
-            });
+            const id = document.getElementById('g-id').value;
+            const subId = document.getElementById('g-sub-id').value;
+            const title = document.getElementById('g-title').value;
+            const score = document.getElementById('g-score').value;
+            const total = document.getElementById('g-total').value;
+
+            if(id) {
+                const g = db.grades.find(x => x.id == id);
+                g.title = title; g.score = score; g.total = total;
+            } else {
+                db.grades.push({ id: Date.now(), subId, title, score, total });
+            }
             closeModal('modal-grade'); saveAll();
         }
-        function delGrade(id) { db.grades=db.grades.filter(x=>x.id!==id); saveAll(); }
+        function editGrade(id) { openGradeModal(id); }
+        function delGrade(id) { if(confirm("Delete grade?")) { db.grades = db.grades.filter(x => x.id !== id); saveAll(); } }
 
-        // Timeline
+        // --- TIMELINE ---
+        function renderTimeline() {
+            const list = document.getElementById('timeline-list');
+            list.innerHTML = '';
+            db.timeline.sort((a,b) => a.start.localeCompare(b.start));
+            
+            db.timeline.forEach(b => {
+                list.innerHTML += `
+                    <div class="timeline-block" data-start="${b.start}" data-end="${b.end}">
+                        <div class="time-col">${b.start}</div>
+                        <div class="icon-col">${b.icon || '•'}</div>
+                        <div class="info-col" style="display:flex; justify-content:space-between;">
+                            <div>
+                                <div style="font-weight:700;">${b.name}</div>
+                                <div style="font-size:0.8rem; color:var(--text-light);">${b.start} - ${b.end}</div>
+                            </div>
+                            <button onclick="delBlock(${b.id})" class="btn-icon">&times;</button>
+                        </div>
+                    </div>`;
+            });
+            checkTimeline(); // Force check to set active class immediately
+        }
+
         function addBlock() {
             const name = document.getElementById('tl-name').value;
             const icon = document.getElementById('tl-name').dataset.emoji || '⏱️';
-            db.timeline.push({
-                id: Date.now(),
-                start: document.getElementById('tl-start').value,
-                end: document.getElementById('tl-end').value,
-                name: name,
-                icon: icon
-            });
-            saveAll();
+            const start = document.getElementById('tl-start').value;
+            const end = document.getElementById('tl-end').value;
+            
+            if(name && start && end) {
+                db.timeline.push({ id: Date.now(), name, start, end, icon });
+                document.getElementById('tl-name').value = '';
+                saveAll();
+            }
         }
-        function delBlock(id) { db.timeline = db.timeline.filter(x=>x.id!==id); saveAll(); }
+        function delBlock(id) { db.timeline = db.timeline.filter(x => x.id !== id); saveAll(); }
 
         // --- UTILS ---
-        function closeModal(id) { document.getElementById(id).style.display='none'; }
+        function saveAll() {
+            localStorage.setItem('vFixSub', JSON.stringify(db.subjects));
+            localStorage.setItem('vFixTasks', JSON.stringify(db.tasks));
+            localStorage.setItem('vFixCats', JSON.stringify(db.categories));
+            localStorage.setItem('vFixGrades', JSON.stringify(db.grades));
+            localStorage.setItem('vFixTime', JSON.stringify(db.timeline));
+            localStorage.setItem('vFixSet', JSON.stringify(db.settings));
+            renderAll();
+        }
+
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         
-        // Emoji Picker
-        function toggleEmojiPicker(btn, inputId) {
+        function showEmojiPicker(btn, inputId) {
             const pop = document.getElementById('emoji-popup');
-            const rect = btn.getBoundingClientRect();
-            pop.style.top = (rect.bottom + window.scrollY) + 'px';
-            pop.style.left = (rect.left - 100) + 'px';
-            pop.style.display = 'block';
+            pop.innerHTML = '';
+            pop.style.display = 'grid';
+            pop.style.top = (btn.getBoundingClientRect().bottom + window.scrollY) + 'px';
+            pop.style.left = (btn.getBoundingClientRect().left - 100) + 'px';
             
-            const grid = document.getElementById('emoji-grid');
-            grid.innerHTML = '';
             emojis.forEach(e => {
-                grid.innerHTML += `<button class="emoji-btn" onclick="insertEmoji('${e}', '${inputId}')">${e}</button>`;
+                const b = document.createElement('button');
+                b.className = 'emoji-btn';
+                b.innerText = e;
+                b.onclick = () => {
+                    const input = document.getElementById(inputId);
+                    input.value = e + " " + input.value;
+                    input.dataset.emoji = e;
+                    pop.style.display = 'none';
+                };
+                pop.appendChild(b);
             });
         }
-        function insertEmoji(e, inputId) {
-            const input = document.getElementById(inputId);
-            input.value = e + " " + input.value;
-            input.dataset.emoji = e;
-            document.getElementById('emoji-popup').style.display='none';
-        }
-        // Close picker when clicking outside
+        
+        // Hide picker on outside click
         window.onclick = function(event) {
             if (!event.target.matches('.btn-ghost') && !event.target.matches('.emoji-btn')) {
                 document.getElementById('emoji-popup').style.display = "none";
             }
+        };
+
+        function nav(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.onclick.toString().includes(id));
+            if(btn) btn.classList.add('active');
+            
+            document.querySelector('.fab').style.display = id === 'tasks' ? 'flex' : 'none';
+            document.getElementById('page-title').innerText = id === 'dashboard' ? 'Dashboard' : id.charAt(0).toUpperCase() + id.slice(1);
         }
 
+        function schoolTab(t) {
+            document.getElementById('view-subjects').style.display = t === 'sub' ? 'block' : 'none';
+            document.getElementById('view-grades').style.display = t === 'grd' ? 'block' : 'none';
+            document.getElementById('tab-sub').className = t === 'sub' ? 'btn btn-sm' : 'btn-ghost btn-sm';
+            document.getElementById('tab-grd').className = t === 'grd' ? 'btn btn-sm' : 'btn-ghost btn-sm';
+        }
+
+        function toggleTheme() {
+            db.settings.theme = db.settings.theme === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', db.settings.theme);
+            if(db.settings.theme === 'light') document.body.removeAttribute('data-theme');
+            saveAll();
+        }
+        
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
             const dlAnchorElem = document.createElement('a');
@@ -631,23 +723,14 @@
             reader.onload = function(e) {
                 db = JSON.parse(e.target.result);
                 saveAll();
-                alert("Restored Successfully!");
+                alert("Data Restored!");
             };
             reader.readAsText(file);
         }
 
-        function toggleTheme() {
-            db.settings.theme = db.settings.theme === 'dark' ? 'light' : 'dark';
-            document.body.setAttribute('data-theme', db.settings.theme);
-            if(db.settings.theme === 'light') document.body.removeAttribute('data-theme');
-            saveAll();
-        }
-
         function resetApp() { if(confirm("Factory Reset?")) { localStorage.clear(); location.reload(); } }
-        function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); }
-        function checkTimeline() { /* Alarm logic same as before, simplified for space */ }
 
-        // Run
+        // Start
         init();
         nav('dashboard');
 
