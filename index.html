@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - Agenda Edition</title>
+    <title>Vidyarthi - Early Release</title>
     <style>
         :root {
             --primary: #6366f1;
@@ -17,18 +17,18 @@
             --shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05);
             
             /* Agenda Colors */
-            --color-hw: #3b82f6; /* Blue for Homework */
-            --color-exam: #ef4444; /* Red for Exam */
-            --color-other: #10b981; /* Green for Other */
+            --color-hw: #3b82f6; 
+            --color-exam: #ef4444; 
+            --color-other: #10b981; 
         }
 
         [data-theme="dark"] {
-            --bg: #111827;
-            --card-bg: #1f2937;
-            --text: #f9fafb;
-            --text-light: #9ca3af;
-            --border: #374151;
-            --primary-soft: #312e81;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --text-light: #94a3b8;
+            --border: #334155;
+            --primary-soft: #1e3a8a;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
@@ -43,15 +43,18 @@
         .nav-btn {
             background: none; border: none; width: 45px; height: 45px; border-radius: 12px; 
             color: var(--text-light); font-size: 1.4rem; margin-bottom: 15px; cursor: pointer; 
-            display: flex; align-items: center; justify-content: center; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center; transition: 0.2s; position: relative;
         }
         .nav-btn:hover { background: var(--bg); color: var(--primary); }
         .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.4); }
+        
+        /* Notification Dot */
+        .perm-dot { position: absolute; top: 0; right: 0; width: 10px; height: 10px; background: #ef4444; border-radius: 50%; display: none; }
 
         /* --- MAIN CONTENT --- */
         .main-content { flex: 1; padding: 20px; overflow-y: auto; scroll-behavior: smooth; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        h2 { font-size: 1.8rem; font-weight: 800; }
+        h2 { font-size: 1.5rem; font-weight: 800; }
 
         /* --- UI ELEMENTS --- */
         .section { display: none; animation: slideUp 0.2s ease; padding-bottom: 80px; }
@@ -59,57 +62,49 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .card { background: var(--card-bg); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 20px; }
-        .btn { padding: 12px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
+        .btn { padding: 12px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         input, select { padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; }
 
         /* --- TIMETUNE STYLE TIMELINE --- */
         .timeline-container { position: relative; padding-left: 20px; margin-top: 20px; }
         .timeline-container::before { content: ''; position: absolute; left: 29px; top: 0; bottom: 0; width: 2px; background: var(--border); z-index: 0; }
+        
         .timeline-block { position: relative; margin-bottom: 15px; display: flex; align-items: flex-start; z-index: 1; }
         .time-col { width: 50px; font-size: 0.8rem; color: var(--text-light); text-align: right; padding-right: 15px; padding-top: 10px; font-weight: 600; }
-        .icon-col { width: 36px; height: 36px; border-radius: 50%; background: var(--card-bg); border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-right: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex-shrink: 0; }
+        .icon-col { width: 36px; height: 36px; border-radius: 50%; background: var(--card-bg); border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-right: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex-shrink: 0; position: relative; }
         .info-col { flex: 1; background: var(--card-bg); padding: 12px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+        
         .timeline-block.active .icon-col { background: var(--primary); color: white; animation: pulse 2s infinite; }
+        .alarm-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; font-size: 0.6rem; padding: 2px 4px; border-radius: 6px; font-weight: bold; }
+        
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); } 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); } }
 
-        /* --- SCHOOL PLANNER AGENDA STYLES (EXACT) --- */
-        .agenda-header {
-            font-size: 0.85rem; font-weight: 800; color: var(--text-light); margin: 25px 0 10px 0;
-            text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px;
-        }
+        /* --- AGENDA STYLES --- */
+        .agenda-header { font-size: 0.85rem; font-weight: 800; color: var(--text-light); margin: 25px 0 10px 0; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px; }
         .agenda-header::after { content: ''; height: 1px; flex: 1; background: var(--border); }
 
-        .agenda-card {
-            background: var(--card-bg); border-radius: 4px; /* More boxy like School Planner */
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; margin-bottom: 8px;
-            position: relative; overflow: hidden; transition: transform 0.1s; border: 1px solid var(--border);
-        }
-        .agenda-card:active { transform: scale(0.99); }
+        .agenda-card { background: var(--card-bg); border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; margin-bottom: 8px; position: relative; overflow: hidden; border: 1px solid var(--border); }
         
         .color-strip { width: 6px; flex-shrink: 0; }
         .type-hw { background-color: var(--color-hw); }
         .type-exam { background-color: var(--color-exam); }
         .type-other { background-color: var(--color-other); }
 
-        .agenda-content { flex: 1; padding: 12px 15px; display: flex; flex-direction: column; justify-content: center; }
+        .agenda-content { flex: 1; padding: 12px 15px; }
         .agenda-subject { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-light); margin-bottom: 2px; }
         .agenda-title { font-size: 1rem; font-weight: 600; color: var(--text); }
-        .agenda-date { font-size: 0.8rem; color: var(--text-light); margin-top: 4px; display: flex; align-items: center; gap: 5px; }
+        .agenda-meta { font-size: 0.8rem; color: var(--text-light); margin-top: 4px; display: flex; align-items: center; gap: 8px; }
+        .agenda-check { width: 50px; display: flex; align-items: center; justify-content: center; border-left: 1px solid var(--border); cursor: pointer; }
+        .checkbox-circle { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--text-light); }
         
-        .agenda-check {
-            width: 50px; display: flex; align-items: center; justify-content: center;
-            border-left: 1px solid var(--border); cursor: pointer;
-        }
-        .checkbox-circle {
-            width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--text-light);
-        }
         .agenda-card.done .agenda-title { text-decoration: line-through; opacity: 0.6; }
         .agenda-card.done .checkbox-circle { background: var(--text-light); border-color: var(--text-light); }
 
-        /* --- FAB --- */
+        /* --- MODALS & FAB --- */
         .fab { position: fixed; bottom: 30px; right: 30px; width: 56px; height: 56px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); cursor: pointer; border: none; z-index: 500; }
-
-        /* --- MOBILE --- */
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; }
+        
+        /* Mobile */
         @media (max-width: 768px) {
             body { flex-direction: column; height: 100vh; }
             .sidebar { position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; flex-direction: row; padding: 0; border-top: 1px solid var(--border); border-right: none; justify-content: space-around; }
@@ -122,13 +117,11 @@
 <body>
 
     <nav class="sidebar">
-        <div style="font-weight: 800; color: var(--primary); margin-bottom: 20px; font-size: 1.2rem;">V</div>
+        <div style="font-weight: 800; color: var(--primary); margin-bottom: 20px; font-size: 1.5rem; text-align: center;">V</div>
         <button class="nav-btn active" onclick="nav('dashboard')" title="Dashboard">🏠</button>
         <button class="nav-btn" onclick="nav('tasks')" title="Agenda">📅</button>
         <button class="nav-btn" onclick="nav('timeline')" title="Timeline">⏱️</button>
-        <button class="nav-btn" onclick="nav('focus')" title="Focus">🍅</button>
-        <div style="flex:1"></div>
-        <button class="nav-btn" onclick="toggleTheme()">🌗</button>
+        <button class="nav-btn" onclick="nav('settings')" title="Settings">⚙️<div id="perm-badge" class="perm-dot"></div></button>
     </nav>
 
     <main class="main-content">
@@ -152,32 +145,16 @@
                 </h3>
                 <div id="dash-agenda"></div>
             </div>
+            
+            <div style="margin-top: 20px; font-size: 0.8rem; color: var(--text-light); text-align: center;">
+                <i>Vidyarthi - Early Release v1.2</i>
+            </div>
         </section>
 
         <section id="tasks" class="section">
-            <div id="agenda-container">
-                </div>
-            <div style="height: 60px;"></div> </section>
-
-        <div id="task-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
-            <div class="card" style="width: 90%; max-width: 400px; padding: 25px;">
-                <h3 style="margin-bottom: 15px;">New Task</h3>
-                <input type="text" id="t-subject" placeholder="Subject (e.g. Math)" style="margin-bottom: 10px;">
-                <input type="text" id="t-desc" placeholder="Description (e.g. Chapter 5 Ex)" style="margin-bottom: 10px;">
-                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                    <select id="t-type">
-                        <option value="Homework">Homework</option>
-                        <option value="Exam">Exam</option>
-                        <option value="Other">Other</option>
-                    </select>
-                    <input type="date" id="t-date">
-                </div>
-                <div style="display: flex; gap: 10px; margin-top: 15px;">
-                    <button class="btn" style="flex:1; background: var(--border); color: var(--text);" onclick="closeModal()">Cancel</button>
-                    <button class="btn" style="flex:1;" onclick="addTask()">Save</button>
-                </div>
-            </div>
-        </div>
+            <div id="agenda-container"></div>
+            <div style="height: 60px;"></div>
+        </section>
 
         <section id="timeline" class="section">
             <div class="card">
@@ -186,45 +163,182 @@
                     <input type="time" id="tl-start">
                     <input type="time" id="tl-end">
                 </div>
-                <div style="display: flex; gap: 5px;">
+                <div style="display: flex; gap: 10px; align-items: center;">
                     <input type="text" id="tl-name" placeholder="Activity name..." style="flex:2;">
+                    <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; border: 1px solid var(--border); padding: 8px; border-radius: 8px;">
+                        <input type="checkbox" id="tl-notify"> 🔔
+                    </label>
                     <button class="btn" onclick="addBlock()" style="padding: 0 15px;">+</button>
                 </div>
             </div>
             <div class="timeline-container" id="timeline-list"></div>
         </section>
 
-        <section id="focus" class="section">
-            <div class="card" style="text-align: center; padding: 50px 20px;">
-                <h3>FOCUS TIMER</h3>
-                <div style="font-size: 4rem; font-weight: 800; color: var(--primary); margin: 20px 0;" id="timer-display">25:00</div>
-                <button class="btn" onclick="toggleTimer()" id="timer-btn" style="width: 150px;">Start</button>
+        <section id="settings" class="section">
+            <div class="card">
+                <h3 style="margin-bottom: 15px;">App Settings</h3>
+                
+                <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border);">
+                    <div style="margin-bottom: 10px; font-weight: 600;">Notifications & Alarms</div>
+                    <button id="btn-perm" class="btn" onclick="requestPermission()" style="width: 100%;">
+                        Enable Alarms 🔔
+                    </button>
+                    <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px;">
+                        Required for Agenda and Timeline alerts. Keep this tab open to hear sound.
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <div style="margin-bottom: 10px; font-weight: 600;">Appearance</div>
+                    <button class="btn" onclick="toggleTheme()" style="background: var(--bg); color: var(--text); width: 100%;">
+                        Toggle Dark Mode 🌗
+                    </button>
+                </div>
+
+                <button onclick="resetData()" style="color: #ef4444; background: none; border: none; font-size: 0.9rem; width: 100%; cursor: pointer;">Factory Reset App</button>
             </div>
         </section>
 
     </main>
 
+    <div id="task-modal" class="modal">
+        <div class="card" style="width: 90%; max-width: 400px; padding: 25px;">
+            <h3 style="margin-bottom: 15px;">New Task</h3>
+            <input type="text" id="t-subject" placeholder="Subject (e.g. Math)" style="margin-bottom: 10px;">
+            <input type="text" id="t-desc" placeholder="Description (e.g. Chapter 5 Ex)" style="margin-bottom: 10px;">
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <select id="t-type">
+                    <option value="Homework">Homework</option>
+                    <option value="Exam">Exam</option>
+                    <option value="Other">Other</option>
+                </select>
+                <input type="date" id="t-date">
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; border: 1px solid var(--border); padding: 8px; border-radius: 8px;">
+                <span>🔔 Alarm:</span>
+                <input type="time" id="t-time" style="border: none; background: transparent; padding: 0;">
+                <small style="color: var(--text-light);">(Optional)</small>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="btn" style="flex:1; background: var(--border); color: var(--text);" onclick="closeModal()">Cancel</button>
+                <button class="btn" style="flex:1;" onclick="addTask()">Save</button>
+            </div>
+        </div>
+    </div>
+
     <button class="fab" onclick="openModal()">+</button>
 
     <script>
-        // --- STATE ---
-        let tasks = JSON.parse(localStorage.getItem('vAgTasks')) || [
-            { id: 1, subject: 'MATH', desc: 'Algebra Worksheet', type: 'Homework', date: new Date().toISOString().split('T')[0], done: false },
-            { id: 2, subject: 'HISTORY', desc: 'WWII Essay', type: 'Exam', date: new Date(Date.now() + 86400000).toISOString().split('T')[0], done: false }
+        // --- 1. STATE & DATA ---
+        let tasks = JSON.parse(localStorage.getItem('erTasks')) || [
+            { id: 1, subject: 'MATH', desc: 'Worksheet 5', type: 'Homework', date: new Date().toISOString().split('T')[0], time: '', done: false },
+            { id: 2, subject: 'PHYSICS', desc: 'Lab Report', type: 'Exam', date: new Date(Date.now() + 86400000).toISOString().split('T')[0], time: '', done: false }
         ];
         
-        let timeline = JSON.parse(localStorage.getItem('vAgTimeline')) || [
-            { id: 1, name: "Morning Routine", start: "07:00", end: "08:00", icon: "🚿" },
-            { id: 2, name: "School", start: "08:30", end: "15:00", icon: "🚌" }
+        let timeline = JSON.parse(localStorage.getItem('erTimeline')) || [
+            { id: 1, name: "Morning Routine", start: "07:00", end: "08:00", icon: "🚿", notify: true },
+            { id: 2, name: "School", start: "08:30", end: "15:00", icon: "🚌", notify: false }
         ];
 
-        // --- INIT ---
+        // Beep Sound (Base64 MP3) - Short generic beep
+        const beepSound = new Audio("data:audio/wav;base64,UklGRl9vT1NEZnNjAAAAAAAAAAAAAABBAAAAAAAAAAAAAAAA//8AAH9/AAABAAAA//8AAP//AAAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA");
+        // Using a cleaner beep sound logic in JS if this fails, but browsers handle base64 audio well.
+        // Actually, let's use a function to generate a beep using AudioContext for cleaner reliability without external files.
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // --- 2. INITIALIZATION ---
         const todayStr = new Date().toISOString().split('T')[0];
         checkTheme();
+        updatePermUI();
         renderAll();
-        setInterval(updateClock, 1000);
+        
+        // Master Clock Loop (Every 5 seconds is enough for minute precision)
+        setInterval(() => {
+            updateClock();
+            checkAlarms();
+        }, 5000);
 
-        // --- NAV ---
+        // --- 3. ALARM SYSTEM ---
+        function playAlarm() {
+            // Oscillators are better for offline single-file apps than base64 mp3 strings which can be huge
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
+            oscillator.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.5);
+            gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.5);
+        }
+
+        function sendNotification(title, body) {
+            if (Notification.permission === 'granted') {
+                playAlarm();
+                new Notification(title, { body: body, icon: '' });
+            } else {
+                // Fallback if no permission but page is open
+                console.log("Alarm triggered but no permission:", title);
+            }
+        }
+
+        function requestPermission() {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    playAlarm(); // Test sound
+                    alert("Alarms Enabled! 🔔");
+                }
+                updatePermUI();
+            });
+        }
+
+        function updatePermUI() {
+            const btn = document.getElementById('btn-perm');
+            const dot = document.getElementById('perm-badge');
+            if (Notification.permission === 'granted') {
+                btn.innerText = "Alarms Active ✅";
+                btn.style.background = "var(--color-other)";
+                dot.style.display = 'none';
+            } else {
+                btn.innerText = "Enable Alarms 🔔";
+                btn.style.background = "var(--primary)";
+                dot.style.display = 'block';
+            }
+        }
+
+        // Variable to prevent multiple alerts in the same minute
+        let lastAlertMinute = ""; 
+
+        function checkAlarms() {
+            const now = new Date();
+            const currentMinute = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+            const currentDate = now.toISOString().split('T')[0];
+
+            if (currentMinute === lastAlertMinute) return; // Already checked this minute
+            lastAlertMinute = currentMinute;
+
+            // 1. Check Timeline
+            timeline.forEach(block => {
+                if (block.notify && block.start === currentMinute) {
+                    sendNotification(`Timeline: ${block.name}`, `Starting now until ${block.end}`);
+                }
+            });
+
+            // 2. Check Tasks (Must be today and match time)
+            tasks.forEach(task => {
+                if (!task.done && task.date === currentDate && task.time === currentMinute) {
+                    sendNotification(`Agenda: ${task.subject}`, task.desc);
+                }
+            });
+        }
+
+        // --- 4. NAVIGATION ---
         function nav(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -233,25 +347,21 @@
             const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.onclick.toString().includes(id));
             if(btn) btn.classList.add('active');
             
-            // Hide FAB on dashboard/timeline, show on Tasks
             document.querySelector('.fab').style.display = (id === 'tasks') ? 'flex' : 'none';
-            document.getElementById('page-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
+            document.getElementById('page-title').innerText = id === 'settings' ? 'Settings' : 'Vidyarthi';
+            if(id==='dashboard') document.getElementById('page-title').innerText = 'Dashboard';
+            if(id==='tasks') document.getElementById('page-title').innerText = 'Agenda';
+            if(id==='timeline') document.getElementById('page-title').innerText = 'Timeline';
         }
 
-        // --- AGENDA LOGIC (SCHOOL PLANNER EXACT) ---
+        // --- 5. AGENDA LOGIC ---
         function renderTasks() {
             const container = document.getElementById('agenda-container');
             const dash = document.getElementById('dash-agenda');
             container.innerHTML = '';
             dash.innerHTML = '';
             
-            // Helper Dates
-            const now = new Date();
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
-            const nextWeek = new Date(today); nextWeek.setDate(nextWeek.getDate() + 7);
-
-            // Buckets
+            // Sort buckets
             const groups = {
                 overdue: { title: "OVERDUE", items: [] },
                 today: { title: "TODAY", items: [] },
@@ -261,17 +371,22 @@
                 done: { title: "COMPLETED", items: [] }
             };
 
-            tasks.sort((a,b) => a.date.localeCompare(b.date));
+            tasks.sort((a,b) => {
+                // Sort by date then time
+                if(a.date !== b.date) return a.date.localeCompare(b.date);
+                return (a.time || '00:00').localeCompare(b.time || '00:00');
+            });
+
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+            const nextWeek = new Date(today); nextWeek.setDate(nextWeek.getDate() + 7);
 
             tasks.forEach(t => {
+                if (t.done) { groups.done.items.push(t); return; }
                 const tDate = new Date(t.date);
-                // Reset time for accurate comparison
-                const tDateOnly = new Date(tDate.getUTCFullYear(), tDate.getUTCMonth(), tDate.getUTCDate()); 
-                
-                if (t.done) {
-                    groups.done.items.push(t);
-                    return;
-                }
+                // Reset time for comparisons
+                const tDateOnly = new Date(tDate.getUTCFullYear(), tDate.getUTCMonth(), tDate.getUTCDate());
 
                 if (t.date < todayStr) groups.overdue.items.push(t);
                 else if (t.date === todayStr) groups.today.items.push(t);
@@ -282,12 +397,10 @@
 
             document.getElementById('today-count').innerText = groups.today.items.length;
 
-            // Render Groups
             for (const [key, grp] of Object.entries(groups)) {
                 if (grp.items.length > 0) {
                     const headerHtml = `<div class="agenda-header" style="color:${key==='overdue'?'var(--color-exam)':''};">${grp.title}</div>`;
                     container.innerHTML += headerHtml;
-                    
                     if (key === 'overdue' || key === 'today') dash.innerHTML += headerHtml;
 
                     grp.items.forEach(t => {
@@ -298,17 +411,18 @@
                         const html = `
                             <div class="agenda-card ${t.done ? 'done' : ''}">
                                 <div class="color-strip ${typeClass}"></div>
-                                <div class="agenda-content" onclick="editTask(${t.id})">
+                                <div class="agenda-content">
                                     <div class="agenda-subject" style="color: ${t.type === 'Exam' ? 'var(--color-exam)' : ''}">${t.subject}</div>
                                     <div class="agenda-title">${t.desc}</div>
-                                    <div class="agenda-date">
+                                    <div class="agenda-meta">
                                         <span style="font-size:0.9rem;">${t.type === 'Exam' ? '❗' : '📌'}</span> ${t.date}
+                                        ${t.time ? `<span style="background:var(--bg); padding:2px 6px; border-radius:4px; font-weight:bold;">🔔 ${t.time}</span>` : ''}
                                     </div>
                                 </div>
                                 <div class="agenda-check" onclick="toggleTask(${t.id})">
                                     <div class="checkbox-circle"></div>
                                 </div>
-                                <button onclick="deleteTask(${t.id})" style="position:absolute; right:55px; top:10px; background:none; border:none; color:#ccc; z-index:10;">&times;</button>
+                                <button onclick="deleteTask(${t.id})" style="position:absolute; right:55px; top:10px; background:none; border:none; color:#ccc;">&times;</button>
                             </div>
                         `;
                         container.innerHTML += html;
@@ -316,13 +430,13 @@
                     });
                 }
             }
-
-            if(dash.innerHTML === '') dash.innerHTML = '<div style="text-align:center; padding:20px; color:#aaa;">No tasks for today.</div>';
+            if(dash.innerHTML === '') dash.innerHTML = '<div style="text-align:center; padding:20px; color:#aaa;">No tasks due today.</div>';
         }
 
         // --- TASK CRUD ---
         function openModal() {
             document.getElementById('t-date').value = todayStr;
+            document.getElementById('t-time').value = ""; 
             document.getElementById('task-modal').style.display = 'flex';
         }
         function closeModal() { document.getElementById('task-modal').style.display = 'none'; }
@@ -332,15 +446,15 @@
             const desc = document.getElementById('t-desc').value;
             const type = document.getElementById('t-type').value;
             const date = document.getElementById('t-date').value;
+            const time = document.getElementById('t-time').value; // Get Alarm Time
 
             if(!subj || !desc) return alert("Subject and Description required.");
 
-            tasks.push({ id: Date.now(), subject: subj, desc, type, date, done: false });
-            localStorage.setItem('vAgTasks', JSON.stringify(tasks));
+            tasks.push({ id: Date.now(), subject: subj, desc, type, date, time, done: false });
+            localStorage.setItem('erTasks', JSON.stringify(tasks));
             closeModal();
             renderTasks();
             
-            // Clear
             document.getElementById('t-subject').value = '';
             document.getElementById('t-desc').value = '';
         }
@@ -348,18 +462,18 @@
         function toggleTask(id) {
             const t = tasks.find(x => x.id === id);
             if(t) t.done = !t.done;
-            localStorage.setItem('vAgTasks', JSON.stringify(tasks));
+            localStorage.setItem('erTasks', JSON.stringify(tasks));
             renderTasks();
         }
         function deleteTask(id) {
             if(confirm("Delete task?")) {
                 tasks = tasks.filter(x => x.id !== id);
-                localStorage.setItem('vAgTasks', JSON.stringify(tasks));
+                localStorage.setItem('erTasks', JSON.stringify(tasks));
                 renderTasks();
             }
         }
 
-        // --- TIMELINE LOGIC (TIMETUNE) ---
+        // --- TIMELINE LOGIC ---
         function renderTimeline() {
             const container = document.getElementById('timeline-list');
             container.innerHTML = '';
@@ -380,7 +494,10 @@
                 container.innerHTML += `
                     <div class="timeline-block ${isActive ? 'active' : ''}">
                         <div class="time-col">${b.start}</div>
-                        <div class="icon-col">${b.icon}</div>
+                        <div class="icon-col">
+                            ${b.icon}
+                            ${b.notify ? '<div class="alarm-badge">🔔</div>' : ''}
+                        </div>
                         <div class="info-col" style="display:flex; justify-content:space-between;">
                             <div>
                                 <div style="font-weight:700;">${b.name}</div>
@@ -402,14 +519,19 @@
             const start = document.getElementById('tl-start').value;
             const end = document.getElementById('tl-end').value;
             const name = document.getElementById('tl-name').value;
+            const notify = document.getElementById('tl-notify').checked;
+
             if(!start || !end || !name) return;
-            timeline.push({id: Date.now(), name, start, end, icon: '⏱️'});
-            localStorage.setItem('vAgTimeline', JSON.stringify(timeline));
+            timeline.push({id: Date.now(), name, start, end, icon: '⏱️', notify: notify});
+            localStorage.setItem('erTimeline', JSON.stringify(timeline));
             renderTimeline();
+            
+            document.getElementById('tl-name').value = '';
+            document.getElementById('tl-notify').checked = false;
         }
         function delBlock(id) {
             timeline = timeline.filter(x => x.id !== id);
-            localStorage.setItem('vAgTimeline', JSON.stringify(timeline));
+            localStorage.setItem('erTimeline', JSON.stringify(timeline));
             renderTimeline();
         }
 
@@ -417,24 +539,25 @@
         function updateClock() {
             const d = new Date();
             document.getElementById('clock').innerText = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-            if(d.getSeconds()===0) renderTimeline();
-        }
-        function toggleTimer() {
-            alert("Timer started! (Simple Alert for Demo)"); 
         }
         function toggleTheme() {
             if(document.body.getAttribute('data-theme')==='dark') {
-                document.body.removeAttribute('data-theme'); localStorage.setItem('vAgTheme', 'light');
+                document.body.removeAttribute('data-theme'); localStorage.setItem('erTheme', 'light');
             } else {
-                document.body.setAttribute('data-theme', 'dark'); localStorage.setItem('vAgTheme', 'dark');
+                document.body.setAttribute('data-theme', 'dark'); localStorage.setItem('erTheme', 'dark');
             }
         }
         function checkTheme() {
-            if(localStorage.getItem('vAgTheme')==='dark') document.body.setAttribute('data-theme', 'dark');
+            if(localStorage.getItem('erTheme')==='dark') document.body.setAttribute('data-theme', 'dark');
+        }
+        function resetData() {
+            if(confirm("Factory Reset: Wipe all tasks and timeline data?")) {
+                localStorage.clear();
+                location.reload();
+            }
         }
         function renderAll() { renderTasks(); renderTimeline(); }
         
-        // Default Nav
         nav('dashboard');
 
     </script>
