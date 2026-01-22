@@ -3,610 +3,508 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - Ultimate Fixed</title>
+    <title>Vidyarthi - Platinum</title>
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-soft: #e0e7ff;
-            --bg: #f3f4f6;
-            --card-bg: #ffffff;
-            --text: #1f2937;
-            --text-light: #6b7280;
-            --border: #e5e7eb;
-            --radius: 16px;
-            --shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05);
-            --danger: #ef4444;
+            --primary: #6366f1;
+            --primary-light: #e0e7ff;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 18px;
+            --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+            
+            /* Status Colors */
             --success: #10b981;
+            --danger: #ef4444;
             --warning: #f59e0b;
+            --info: #3b82f6;
         }
 
         [data-theme="dark"] {
-            --bg: #0f172a;
-            --card-bg: #1e293b;
-            --text: #f8fafc;
-            --text-light: #94a3b8;
+            --bg: #0b0f19;
+            --surface: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
             --border: #334155;
-            --primary: #6366f1;
-            --primary-soft: #1e3a8a;
+            --primary: #818cf8;
+            --primary-light: #312e81;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         
         body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: background 0.3s; }
 
         /* --- LAYOUT --- */
-        .sidebar { width: 75px; background: var(--card-bg); display: flex; flex-direction: column; border-right: 1px solid var(--border); z-index: 100; align-items: center; padding-top: 20px; }
-        .main-content { flex: 1; padding: 20px; overflow-y: auto; scroll-behavior: smooth; position: relative; }
+        .sidebar { width: 80px; background: var(--surface); display: flex; flex-direction: column; border-right: 1px solid var(--border); z-index: 100; align-items: center; padding-top: 25px; }
+        .main-content { flex: 1; padding: 25px; overflow-y: auto; scroll-behavior: smooth; position: relative; max-width: 800px; margin: 0 auto; width: 100%; }
         
-        .nav-btn { background: none; border: none; width: 50px; height: 50px; border-radius: 14px; color: var(--text-light); font-size: 1.5rem; margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; position: relative; }
-        .nav-btn:hover { background: var(--bg); color: var(--primary); }
-        .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4); }
+        /* --- NAVIGATION --- */
+        .brand { font-weight: 900; color: var(--primary); font-size: 1.8rem; margin-bottom: 30px; letter-spacing: -1px; }
+        .nav-item { 
+            width: 50px; height: 50px; border-radius: 16px; color: var(--text-muted); font-size: 1.5rem; 
+            margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); position: relative; border: none; background: transparent;
+        }
+        .nav-item:hover { background: var(--bg); color: var(--primary); transform: translateY(-2px); }
+        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.5); }
 
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        h2 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; }
-
-        /* --- COMPONENTS --- */
-        .section { display: none; animation: slideUp 0.2s ease-out; padding-bottom: 80px; }
+        /* --- UI COMPONENTS --- */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; }
+        h2, h3 { font-weight: 700; }
+        
+        .section { display: none; animation: fadeScale 0.3s ease-out; padding-bottom: 100px; }
         .section.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeScale { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-        .card { background: var(--card-bg); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 15px; position: relative; }
+        .card { background: var(--surface); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 15px; position: relative; overflow: hidden; }
         
-        .btn { padding: 12px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; transition: transform 0.1s; }
-        .btn:active { transform: scale(0.98); }
-        .btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; }
-        .btn-ghost { background: transparent; color: var(--text-light); border: 1px solid var(--border); }
-        .btn-icon { background: transparent; border: none; font-size: 1.1rem; cursor: pointer; color: var(--text-light); padding: 5px; }
+        .btn { padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.95rem; }
+        .btn:active { transform: scale(0.96); }
+        .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+        .btn-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: none; background: transparent; cursor: pointer; color: var(--text-muted); }
+        .btn-icon:hover { background: var(--bg); color: var(--text); }
+
+        input, select { padding: 12px 15px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; transition: 0.2s; }
+        input:focus { border-color: var(--primary); background: var(--surface); box-shadow: 0 0 0 3px var(--primary-light); }
+
+        /* --- 💎 NEW TIMELINE DESIGN --- */
+        .timeline-wrapper { position: relative; padding: 10px 0 10px 20px; }
+        /* The continuous line */
+        .timeline-line { 
+            position: absolute; left: 45px; top: 0; bottom: 0; width: 2px; 
+            background: linear-gradient(to bottom, var(--border) 50%, transparent 100%); z-index: 0; 
+        }
+
+        .tl-item { display: flex; margin-bottom: 25px; position: relative; z-index: 1; }
         
-        input, select { padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; }
-        input:focus, select:focus { border-color: var(--primary); background: var(--card-bg); }
-
-        /* --- AGENDA (School Planner Style) --- */
-        .agenda-header { font-size: 0.8rem; font-weight: 800; color: var(--text-light); margin: 25px 0 10px 0; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
-        .agenda-card { background: var(--card-bg); border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); display: flex; margin-bottom: 10px; position: relative; overflow: hidden; border: 1px solid var(--border); transition: transform 0.1s; }
-        .color-strip { width: 6px; flex-shrink: 0; }
-        .agenda-content { flex: 1; padding: 12px 15px; }
-        .agenda-subject { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 3px; }
-        .agenda-title { font-size: 1rem; font-weight: 600; color: var(--text); }
-        .agenda-meta { font-size: 0.8rem; color: var(--text-light); margin-top: 5px; display: flex; align-items: center; gap: 8px; }
-        .agenda-check { width: 50px; display: flex; align-items: center; justify-content: center; border-left: 1px solid var(--border); cursor: pointer; background: var(--bg); }
-        .checkbox-circle { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--text-light); transition: 0.2s; }
-        .agenda-card.done .agenda-title { text-decoration: line-through; opacity: 0.5; }
-        .agenda-card.done .checkbox-circle { background: var(--success); border-color: var(--success); }
-
-        /* --- SCHOOL HUB --- */
-        .subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-        .subject-card { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid var(--border); text-align: center; cursor: pointer; transition: 0.2s; box-shadow: var(--shadow); position: relative; }
-        .subject-card:hover { border-color: var(--primary); transform: translateY(-2px); }
-        .subject-actions { position: absolute; top: 5px; right: 5px; display: flex; gap: 5px; }
+        .tl-time { 
+            width: 50px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); 
+            text-align: right; padding-right: 15px; padding-top: 14px; 
+        }
         
-        .grade-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
-        .grade-badge { background: var(--bg); padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; display: inline-block; }
+        .tl-node { 
+            width: 40px; height: 40px; border-radius: 50%; background: var(--surface); 
+            border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; 
+            font-size: 1.2rem; margin-right: 15px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
 
-        /* --- SETTINGS LIST --- */
-        .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border); }
-        .color-preview { width: 20px; height: 20px; border-radius: 50%; display: inline-block; margin-right: 10px; vertical-align: middle; }
+        .tl-card { 
+            flex: 1; background: var(--surface); padding: 15px; border-radius: 16px; 
+            border: 1px solid var(--border); box-shadow: var(--shadow); position: relative;
+            transition: 0.2s;
+        }
 
-        /* --- TIMELINE --- */
-        .timeline-container { position: relative; padding-left: 20px; margin-top: 20px; }
-        .timeline-container::before { content: ''; position: absolute; left: 29px; top: 0; bottom: 0; width: 2px; background: var(--border); z-index: 0; }
-        .timeline-block { position: relative; margin-bottom: 15px; display: flex; align-items: flex-start; z-index: 1; }
-        .time-col { width: 50px; font-size: 0.8rem; color: var(--text-light); text-align: right; padding-right: 15px; padding-top: 10px; font-weight: 600; }
-        .icon-col { width: 36px; height: 36px; border-radius: 50%; background: var(--card-bg); border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-right: 15px; z-index: 2; }
-        .timeline-block.active .icon-col { background: var(--primary); color: white; box-shadow: 0 0 0 5px rgba(79, 70, 229, 0.2); }
+        /* Active State */
+        .tl-item.active .tl-node { 
+            background: var(--primary); color: white; border-color: var(--primary); 
+            box-shadow: 0 0 0 6px var(--primary-light); transform: scale(1.1);
+        }
+        .tl-item.active .tl-card { 
+            border-color: var(--primary); background: linear-gradient(to right, var(--primary-light), var(--surface) 50%);
+        }
+        .live-badge { 
+            position: absolute; top: -10px; right: 10px; background: var(--danger); color: white; 
+            font-size: 0.65rem; padding: 4px 8px; border-radius: 10px; font-weight: 800; 
+            text-transform: uppercase; animation: pulseRed 2s infinite; 
+        }
+
+        @keyframes pulseRed { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        /* --- 🎓 NEW SCHOOL HUB DESIGN --- */
+        .gpa-hero { 
+            background: linear-gradient(135deg, var(--primary), #4f46e5); color: white; padding: 25px; 
+            border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+        }
+        .sub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
         
-        /* --- MODALS & PICKERS --- */
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(2px); }
-        .modal-content { background: var(--card-bg); width: 90%; max-width: 450px; border-radius: 20px; padding: 25px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
-
-        .picker-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 10px; }
-        .color-swatch { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
-        .color-swatch.selected { border-color: var(--text); transform: scale(1.1); }
+        .sub-card { 
+            background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px; 
+            cursor: pointer; transition: 0.2s; position: relative; overflow: hidden;
+        }
+        .sub-card:hover { transform: translateY(-3px); border-color: var(--primary); }
+        .sub-stripe { height: 6px; width: 100%; position: absolute; top: 0; left: 0; }
         
-        /* Emoji Popup */
-        #emoji-popup { display: none; position: absolute; background: var(--card-bg); box-shadow: 0 5px 20px rgba(0,0,0,0.2); border-radius: 12px; padding: 10px; z-index: 2000; width: 280px; max-height: 200px; overflow-y: auto; grid-template-columns: repeat(6, 1fr); gap: 5px; }
-        .emoji-btn { font-size: 1.5rem; background: none; border: none; cursor: pointer; padding: 5px; border-radius: 5px; }
-        .emoji-btn:hover { background: var(--border); }
+        .att-ring { width: 40px; height: 40px; border-radius: 50%; background: conic-gradient(var(--success) 0%, var(--bg) 0%); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; }
+        
+        /* Detail View (Overlay) */
+        .detail-view { display: none; margin-top: 20px; animation: slideUp 0.2s; }
+        .detail-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .back-btn { background: var(--bg); border: none; font-size: 1.5rem; cursor: pointer; padding: 5px 10px; border-radius: 8px; }
 
-        /* FAB */
-        .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4); cursor: pointer; border: none; z-index: 500; transition: transform 0.2s; }
-        .fab:active { transform: scale(0.9); }
+        /* --- AGENDA --- */
+        .agenda-group { margin-bottom: 20px; }
+        .agenda-label { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; padding-left: 5px; }
+        
+        .task-row { 
+            background: var(--surface); padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border); 
+            display: flex; align-items: center; margin-bottom: 8px; transition: 0.2s; 
+        }
+        .task-row.done { opacity: 0.6; background: var(--bg); }
+        .task-row.done .task-title { text-decoration: line-through; }
+        .task-check { 
+            width: 24px; height: 24px; border: 2px solid var(--border); border-radius: 8px; 
+            margin-right: 15px; display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; transition: 0.2s; flex-shrink: 0;
+        }
+        .task-row.done .task-check { background: var(--success); border-color: var(--success); color: white; }
 
+        /* --- MODALS --- */
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(4px); }
+        .modal-box { background: var(--surface); width: 90%; max-width: 420px; border-radius: 24px; padding: 25px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-height: 90vh; overflow-y: auto; }
+        
+        /* Floating Action Button */
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 64px; height: 64px; background: var(--text); color: var(--bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer; border: none; z-index: 500; transition: transform 0.2s; }
+        .fab:hover { transform: scale(1.05); }
+
+        /* Mobile */
         @media (max-width: 768px) {
-            body { flex-direction: column; height: 100vh; }
-            .sidebar { position: fixed; bottom: 0; left: 0; width: 100%; height: 65px; flex-direction: row; padding: 0; border-top: 1px solid var(--border); border-right: none; justify-content: space-around; }
-            .nav-btn { width: auto; height: 100%; margin: 0; flex: 1; border-radius: 0; margin-bottom: 0; }
-            .main-content { padding: 15px; margin-bottom: 65px; }
-            .fab { bottom: 85px; right: 20px; }
+            body { flex-direction: column; }
+            .sidebar { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; flex-direction: row; padding: 0; justify-content: space-evenly; border-top: 1px solid var(--border); border-right: none; }
+            .brand { display: none; }
+            .nav-item { margin: 0; width: auto; height: 100%; flex: 1; border-radius: 0; }
+            .main-content { padding: 15px; margin-bottom: 70px; }
+            .fab { bottom: 90px; right: 20px; }
+            .timeline-line { left: 45px; }
         }
     </style>
 </head>
 <body>
 
     <nav class="sidebar">
-        <div style="font-weight: 900; color: var(--primary); margin-bottom: 20px; font-size: 1.5rem;">V</div>
-        <button class="nav-btn active" onclick="nav('dashboard')" title="Dashboard">🏠</button>
-        <button class="nav-btn" onclick="nav('tasks')" title="Agenda">📅</button>
-        <button class="nav-btn" onclick="nav('school')" title="School">🎒</button>
-        <button class="nav-btn" onclick="nav('timeline')" title="Timeline">⏱️</button>
-        <button class="nav-btn" onclick="nav('settings')" title="Settings">⚙️</button>
+        <div class="brand">V</div>
+        <button class="nav-item active" onclick="nav('dashboard')" title="Home">🏠</button>
+        <button class="nav-item" onclick="nav('school')" title="School">🎓</button>
+        <button class="nav-item" onclick="nav('timeline')" title="Timeline">⏱️</button>
+        <button class="nav-item" onclick="nav('agenda')" title="Tasks">✅</button>
+        <button class="nav-item" onclick="nav('settings')" title="Settings">⚙️</button>
     </nav>
 
     <main class="main-content">
         
         <div class="header">
-            <h2 id="page-title">Dashboard</h2>
-            <div id="clock" style="font-weight: 600; color: var(--primary);">00:00</div>
+            <h1 id="page-title">Dashboard</h1>
+            <div id="clock" style="font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums;">00:00</div>
         </div>
 
         <section id="dashboard" class="section active">
-            <div class="card" style="background: linear-gradient(135deg, var(--primary), #818cf8); color: white; border: none; padding: 25px; display: flex; justify-content: space-between; align-items: center;">
+            <div class="gpa-hero">
                 <div>
-                    <div style="font-size: 0.9rem; opacity: 0.9;">HAPPENING NOW</div>
-                    <div style="font-size: 2rem; font-weight: 800; margin: 5px 0;" id="now-title">Free Time</div>
-                    <div style="font-size: 0.9rem;">Until <span id="now-end">--:--</span></div>
+                    <div style="opacity: 0.9; font-size: 0.9rem;">ACADEMIC PERFORMANCE</div>
+                    <div style="font-size: 2.5rem; font-weight: 800; margin-top: 5px;" id="dash-gpa">0%</div>
+                    <div style="font-size: 0.9rem; opacity: 0.9;" id="dash-grade">Grade: -</div>
                 </div>
-                <div style="font-size: 3rem; opacity: 0.8;" id="now-icon">☕</div>
+                <div style="font-size: 3rem;">📊</div>
             </div>
 
             <div class="card">
-                <h3 style="margin-bottom: 10px;">Due Today</h3>
-                <div id="dash-agenda"></div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <h3>Happening Now</h3>
+                    <div style="font-size:0.8rem; color:var(--text-muted);" id="now-time-range">--:--</div>
+                </div>
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <div style="width:50px; height:50px; background:var(--primary-light); color:var(--primary); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.5rem;" id="now-icon">☕</div>
+                    <div>
+                        <div style="font-size:1.2rem; font-weight:700;" id="now-title">Free Time</div>
+                        <div style="font-size:0.9rem; color:var(--text-muted);">Stay focused!</div>
+                    </div>
+                </div>
             </div>
-        </section>
-
-        <section id="tasks" class="section">
-            <div id="agenda-container"></div>
-            <div style="text-align: center; color: var(--text-light); margin-top: 20px; font-size: 0.8rem;">
-                Manage categories in Settings ⚙️
-            </div>
-            <div style="height: 60px;"></div>
         </section>
 
         <section id="school" class="section">
-            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                <button class="btn-sm btn" id="tab-sub" onclick="schoolTab('sub')">Subjects</button>
-                <button class="btn-sm btn-ghost" id="tab-grd" onclick="schoolTab('grd')">Grades</button>
+            
+            <div id="school-grid">
+                <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 15px;">
+                    <h3 style="margin:0">My Subjects</h3>
+                    <button class="btn btn-sm" onclick="openSubjectModal()">+ Add Subject</button>
+                </div>
+                <div class="sub-grid" id="subject-list">
+                    </div>
             </div>
 
-            <div id="view-subjects">
-                <div class="subject-grid" id="subject-list"></div>
-                <button class="btn" onclick="openSubjectModal()" style="width: 100%; margin-top: 20px;">+ Add New Subject</button>
-            </div>
+            <div id="school-detail" class="detail-view">
+                <div class="detail-header">
+                    <button class="back-btn" onclick="closeDetailView()">←</button>
+                    <div>
+                        <h2 id="det-name">Mathematics</h2>
+                        <div style="color:var(--text-muted);" id="det-room">Room 101</div>
+                    </div>
+                </div>
 
-            <div id="view-grades" style="display: none;">
-                <div id="grades-list"></div>
+                <div class="card">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                        <h3>Attendance</h3>
+                        <div style="font-weight:700; font-size:1.2rem;" id="det-att-pct">100%</div>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn" style="flex:1; background:#dcfce7; color:#166534;" onclick="updateAtt('p')">Present 👍</button>
+                        <button class="btn" style="flex:1; background:#fee2e2; color:#991b1b;" onclick="updateAtt('a')">Absent 👎</button>
+                    </div>
+                    <div style="text-align:center; margin-top:10px; font-size:0.8rem; color:var(--text-muted);" id="det-att-stats">0 Pres / 0 Abs</div>
+                </div>
+
+                <div class="card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <h3>Grades</h3>
+                        <button class="btn-ghost btn-sm" onclick="openGradeModal()">+ Add</button>
+                    </div>
+                    <div id="det-grades-list"></div>
+                </div>
+                
+                <button class="btn-ghost" style="width:100%; color:var(--danger); border-color:var(--border);" onclick="deleteSubject()">Delete Subject</button>
             </div>
         </section>
 
         <section id="timeline" class="section">
             <div class="card">
-                <h3 style="margin-bottom: 15px;">Add Routine Block</h3>
-                <div style="display: flex; gap: 5px; margin-bottom: 10px;">
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
                     <input type="time" id="tl-start">
                     <input type="time" id="tl-end">
                 </div>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="tl-name" placeholder="Activity name..." style="flex:1;">
-                    <button class="btn-ghost" onclick="showEmojiPicker(this, 'tl-name')" style="font-size: 1.2rem;">😊</button>
-                    <button class="btn" onclick="addBlock()">+</button>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="tl-name" placeholder="Activity name">
+                    <button class="btn-icon" style="background:var(--bg); width:45px;" onclick="document.getElementById('emoji-picker').style.display='grid'">😊</button>
+                    <button class="btn" onclick="addBlock()">Add</button>
                 </div>
+                <div id="emoji-picker" style="display:none; grid-template-columns:repeat(8,1fr); gap:5px; margin-top:10px; max-height:100px; overflow-y:auto; background:var(--bg); padding:10px; border-radius:10px;"></div>
             </div>
-            <div class="timeline-container" id="timeline-list"></div>
+
+            <div class="timeline-wrapper">
+                <div class="timeline-line"></div>
+                <div id="timeline-list">
+                    </div>
+            </div>
+        </section>
+
+        <section id="agenda" class="section">
+            <div id="agenda-list"></div>
+            <div style="height: 60px;"></div>
         </section>
 
         <section id="settings" class="section">
-            
             <div class="card">
-                <h3>Agenda Categories</h3>
-                <div id="settings-cat-list"></div>
-                <div style="margin-top: 10px; display: flex; gap: 5px; border-top: 1px dashed var(--border); padding-top: 10px;">
-                    <input type="text" id="new-cat-name" placeholder="Category Name">
-                    <input type="color" id="new-cat-color" value="#4f46e5" style="width: 50px; padding: 0; border: none;">
-                    <button class="btn" onclick="addCategory()">+</button>
+                <h3>Settings</h3>
+                <div style="margin-top:15px;">
+                    <button class="btn-ghost" style="width:100%; margin-bottom:10px; justify-content: space-between;" onclick="toggleTheme()">
+                        Dark Mode <span>🌗</span>
+                    </button>
+                    <button class="btn-ghost" style="width:100%; justify-content: space-between; color:var(--danger);" onclick="resetData()">
+                        Reset All Data <span>🗑️</span>
+                    </button>
                 </div>
             </div>
-
-            <div class="card">
-                <h3>Focus Timer</h3>
-                <div style="margin-top: 10px;">
-                    Duration: <input type="number" id="focus-dur" value="25" style="width: 60px; display: inline-block;"> mins
-                    <button class="btn-sm" onclick="saveSettings()">Save</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Data</h3>
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <button class="btn-ghost" onclick="exportData()" style="flex:1;">Backup ⬇️</button>
-                    <button class="btn-ghost" onclick="document.getElementById('file-input').click()" style="flex:1;">Restore ⬆️</button>
-                    <input type="file" id="file-input" style="display:none" onchange="importData(this)">
-                </div>
-                <button class="btn-ghost" onclick="toggleTheme()" style="width: 100%; margin-top: 10px;">Toggle Dark Mode 🌗</button>
-                <button class="btn-ghost" onclick="resetApp()" style="width: 100%; color: var(--danger); margin-top: 10px;">Factory Reset</button>
-            </div>
+            <div style="text-align:center; color:var(--text-muted); font-size:0.8rem; margin-top:20px;">Vidyarthi Platinum v2.0</div>
         </section>
 
     </main>
 
+    <button class="fab" onclick="openTaskModal()">+</button>
+
     <div id="modal-task" class="modal">
-        <div class="modal-content">
-            <h3 style="margin-bottom: 15px;">New Task</h3>
-            <label style="font-size: 0.8rem; color: var(--text-light);">Subject</label>
-            <select id="t-sub" style="margin-bottom: 10px;"></select>
-            
-            <label style="font-size: 0.8rem; color: var(--text-light);">Description</label>
-            <input type="text" id="t-desc" placeholder="e.g. Chapter 1 Exercises" style="margin-bottom: 10px;">
-            
-            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                <select id="t-cat"></select>
-                <input type="date" id="t-date">
-            </div>
-
-            <div style="display: flex; gap: 10px; align-items: center; border: 1px solid var(--border); padding: 8px; border-radius: 8px; margin-bottom: 20px;">
-                <span>⏰ Time:</span>
-                <input type="time" id="t-time" style="border:none; background:transparent;">
-            </div>
-
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-ghost" onclick="closeModal('modal-task')" style="flex:1;">Cancel</button>
-                <button class="btn" onclick="addTask()" style="flex:1;">Save</button>
+        <div class="modal-box">
+            <h3 style="margin-bottom:15px;">Add Task</h3>
+            <input type="text" id="t-desc" placeholder="What needs to be done?" style="margin-bottom:10px;">
+            <select id="t-sub" style="margin-bottom:10px;"></select>
+            <input type="date" id="t-date" style="margin-bottom:10px;">
+            <div style="display:flex; gap:10px;">
+                <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-task')">Cancel</button>
+                <button class="btn" style="flex:1" onclick="saveTask()">Save</button>
             </div>
         </div>
     </div>
 
-    <div id="modal-subject" class="modal">
-        <div class="modal-content">
-            <h3 style="margin-bottom: 15px;" id="s-modal-title">Manage Subject</h3>
-            <input type="hidden" id="s-id">
-            <input type="text" id="s-name" placeholder="Subject Name" style="margin-bottom: 10px;">
-            <input type="text" id="s-room" placeholder="Room / Teacher" style="margin-bottom: 10px;">
-            
-            <label style="font-size: 0.8rem; color: var(--text-light);">Color Code</label>
-            <div id="color-picker" class="picker-grid" style="margin-bottom: 15px;"></div>
-            <input type="hidden" id="s-color">
-
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-ghost" onclick="closeModal('modal-subject')" style="flex:1;">Cancel</button>
-                <button class="btn" onclick="saveSubject()" style="flex:1;">Save</button>
+    <div id="modal-sub" class="modal">
+        <div class="modal-box">
+            <h3 style="margin-bottom:15px;">New Subject</h3>
+            <input type="text" id="s-name" placeholder="Name (e.g. History)" style="margin-bottom:10px;">
+            <input type="text" id="s-room" placeholder="Room / Teacher" style="margin-bottom:10px;">
+            <div style="margin-bottom:15px;">
+                <label style="font-size:0.8rem; color:var(--text-muted);">Color</label>
+                <div style="display:flex; gap:10px; overflow-x:auto; padding:5px 0;" id="color-row"></div>
+                <input type="hidden" id="s-color" value="#6366f1">
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-sub')">Cancel</button>
+                <button class="btn" style="flex:1" onclick="saveSubject()">Create</button>
             </div>
         </div>
     </div>
 
     <div id="modal-grade" class="modal">
-        <div class="modal-content">
-            <h3 id="grade-modal-title">Grade</h3>
-            <input type="hidden" id="g-id">
-            <input type="hidden" id="g-sub-id">
-            <input type="text" id="g-title" placeholder="Exam Name" style="margin-bottom: 10px;">
-            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <div class="modal-box">
+            <h3 style="margin-bottom:15px;">Record Grade</h3>
+            <input type="text" id="g-name" placeholder="Exam Name" style="margin-bottom:10px;">
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
                 <input type="number" id="g-score" placeholder="Score">
-                <span style="align-self:center;">/</span>
                 <input type="number" id="g-total" placeholder="Total" value="100">
             </div>
-            <button class="btn" onclick="saveGrade()" style="width: 100%;">Save Grade</button>
-            <button class="btn-ghost" onclick="closeModal('modal-grade')" style="width: 100%; margin-top: 10px;">Close</button>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-grade')">Cancel</button>
+                <button class="btn" style="flex:1" onclick="saveGrade()">Save</button>
+            </div>
         </div>
     </div>
 
-    <div id="emoji-popup" style="display:none;"></div>
-
-    <button class="fab" onclick="openTaskModal()">+</button>
-
     <script>
-        // --- 1. DATA STORE ---
+        // --- STORE ---
         let db = {
-            subjects: JSON.parse(localStorage.getItem('vFixSub')) || [],
-            tasks: JSON.parse(localStorage.getItem('vFixTasks')) || [],
-            categories: JSON.parse(localStorage.getItem('vFixCats')) || [
-                {id: 1, name: 'Homework', color: '#4f46e5'}, 
-                {id: 2, name: 'Exam', color: '#ef4444'},
-                {id: 3, name: 'Other', color: '#10b981'}
+            subjects: JSON.parse(localStorage.getItem('vpSubjects')) || [
+                { id: 1, name: 'Math', room: '101', color: '#6366f1', att: {p:0, a:0} },
+                { id: 2, name: 'Physics', room: 'Lab 2', color: '#10b981', att: {p:0, a:0} }
             ],
-            grades: JSON.parse(localStorage.getItem('vFixGrades')) || [],
-            timeline: JSON.parse(localStorage.getItem('vFixTime')) || [],
-            settings: JSON.parse(localStorage.getItem('vFixSet')) || { theme: 'light', focus: 25 }
+            tasks: JSON.parse(localStorage.getItem('vpTasks')) || [],
+            grades: JSON.parse(localStorage.getItem('vpGrades')) || [],
+            timeline: JSON.parse(localStorage.getItem('vpTimeline')) || [
+                {id: 1, name: 'Morning Routine', start: '07:00', end: '08:00', icon: '🚿'},
+                {id: 2, name: 'School', start: '09:00', end: '15:00', icon: '🏫'}
+            ],
+            settings: JSON.parse(localStorage.getItem('vpSettings')) || { theme: 'light' }
         };
 
-        const colors = ["#4f46e5", "#ef4444", "#f59e0b", "#10b981", "#3b82f6", "#8b5cf6", "#ec4899", "#6366f1", "#14b8a6", "#f43f5e"];
-        const emojis = ["📚","🏫","📝","🎒","🧠","💡","🎨","⚽","🎵","🚌","💤","🍽️","🚿","🎮","💻","🧪","📐","🧘","☕","📅","🏃","💊","🏠","🧹","🛒","🎁","✈️","🐶","🍔","✏️"];
+        let currentSubId = null;
+        const colors = ['#6366f1', '#ef4444', '#f59e0b', '#10b981', '#ec4899', '#8b5cf6'];
+        const emojis = ["🚿","☕","🏫","📚","🥪","🚌","⚽","🎮","💤","📝"];
 
-        // --- 2. INIT & CLOCK ---
+        // --- INIT ---
         function init() {
             if(db.settings.theme === 'dark') document.body.setAttribute('data-theme', 'dark');
-            document.getElementById('focus-dur').value = db.settings.focus;
+            setupPickers();
             renderAll();
             setInterval(updateClock, 1000);
-            setInterval(checkTimeline, 1000); // Timeline auto-update
+            setInterval(checkTimeline, 1000);
         }
 
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-        }
-
-        function checkTimeline() {
-            const now = new Date();
-            const cur = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
-            let found = false;
-            
-            // Only update DOM if changes needed? For simplicity, we just check status
-            // A full re-render every second is heavy, so we do it via DOM updates or check if block changed
-            const activeBlock = db.timeline.find(b => cur >= b.start && cur < b.end);
-            
-            if(activeBlock) {
-                document.getElementById('now-title').innerText = activeBlock.name;
-                document.getElementById('now-icon').innerText = activeBlock.icon || '⏱️';
-                document.getElementById('now-end').innerText = activeBlock.end;
-                found = true;
-            } else {
-                document.getElementById('now-title').innerText = "Free Time";
-                document.getElementById('now-icon').innerText = "☕";
-                document.getElementById('now-end').innerText = "--:--";
-            }
-            // Highlight active block in list
-            document.querySelectorAll('.timeline-block').forEach(el => {
-                const start = el.dataset.start;
-                const end = el.dataset.end;
-                if(cur >= start && cur < end) el.classList.add('active');
-                else el.classList.remove('active');
-            });
-        }
-
-        // --- 3. RENDERERS ---
-
-        function renderAll() {
-            renderSubjects();
-            renderTasks();
-            renderTimeline();
-            renderGrades();
-            renderSettings();
-        }
-
-        // --- SUBJECTS ---
-        function renderSubjects() {
-            const list = document.getElementById('subject-list');
-            const subSelect = document.getElementById('t-sub');
-            list.innerHTML = '';
-            subSelect.innerHTML = '';
-
-            db.subjects.forEach(s => {
-                subSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`;
-                list.innerHTML += `
-                    <div class="subject-card" style="border-top: 5px solid ${s.color}">
-                        <div class="subject-actions">
-                            <button class="btn-icon" onclick="editSubject(${s.id})">✏️</button>
-                            <button class="btn-icon" onclick="delSubject(${s.id})">🗑️</button>
-                        </div>
-                        <div style="font-weight:800; font-size:1.1rem; color:${s.color}; margin-top:5px;">${s.name}</div>
-                        <div style="font-size:0.8rem; color:var(--text-light);">${s.room}</div>
-                    </div>`;
-            });
-            if(db.subjects.length === 0) list.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:var(--text-light);">No subjects added yet.</div>`;
-        }
-
-        function openSubjectModal(id = null) {
-            const modal = document.getElementById('modal-subject');
-            const pGrid = document.getElementById('color-picker');
-            pGrid.innerHTML = '';
-            
-            // Populate Color Picker
+        function setupPickers() {
+            // Colors
+            const row = document.getElementById('color-row');
             colors.forEach(c => {
-                pGrid.innerHTML += `<div class="color-swatch" style="background:${c}" onclick="pickColor('${c}', this)"></div>`;
+                const d = document.createElement('div');
+                d.style.cssText = `width:30px; height:30px; border-radius:50%; background:${c}; cursor:pointer; flex-shrink:0; border:2px solid transparent;`;
+                d.onclick = () => {
+                    document.getElementById('s-color').value = c;
+                    Array.from(row.children).forEach(x => x.style.borderColor = 'transparent');
+                    d.style.borderColor = 'var(--text)';
+                };
+                row.appendChild(d);
             });
-
-            if (id) {
-                const s = db.subjects.find(x => x.id === id);
-                document.getElementById('s-id').value = s.id;
-                document.getElementById('s-name').value = s.name;
-                document.getElementById('s-room').value = s.room;
-                document.getElementById('s-color').value = s.color;
-                document.getElementById('s-modal-title').innerText = "Edit Subject";
-            } else {
-                document.getElementById('s-id').value = '';
-                document.getElementById('s-name').value = '';
-                document.getElementById('s-room').value = '';
-                document.getElementById('s-color').value = colors[0];
-                document.getElementById('s-modal-title').innerText = "New Subject";
-            }
-            modal.style.display = 'flex';
-        }
-
-        function pickColor(c, el) {
-            document.getElementById('s-color').value = c;
-            document.querySelectorAll('.color-swatch').forEach(x => x.classList.remove('selected'));
-            el.classList.add('selected');
-        }
-
-        function saveSubject() {
-            const id = document.getElementById('s-id').value;
-            const name = document.getElementById('s-name').value;
-            const room = document.getElementById('s-room').value;
-            const color = document.getElementById('s-color').value;
-            if(!name) return alert("Name required");
-
-            if(id) {
-                const s = db.subjects.find(x => x.id == id);
-                s.name = name; s.room = room; s.color = color;
-            } else {
-                db.subjects.push({ id: Date.now(), name, room, color });
-            }
-            closeModal('modal-subject'); saveAll();
-        }
-
-        function editSubject(id) { openSubjectModal(id); }
-        function delSubject(id) { if(confirm("Delete subject?")) { db.subjects = db.subjects.filter(x => x.id !== id); saveAll(); } }
-
-        // --- AGENDA & CATEGORIES ---
-        function renderTasks() {
-            const container = document.getElementById('agenda-container');
-            const dash = document.getElementById('dash-agenda');
-            const typeSelect = document.getElementById('t-cat');
-            
-            container.innerHTML = ''; dash.innerHTML = ''; typeSelect.innerHTML = '';
-
-            // Populate Category Select
-            db.categories.forEach(c => {
-                typeSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
-            });
-
-            // Grouping
-            const groups = { overdue: [], today: [], tomorrow: [], future: [], done: [] };
-            const todayStr = new Date().toISOString().split('T')[0];
-            const tomorrow = new Date(new Date().setDate(new Date().getDate()+1)).toISOString().split('T')[0];
-
-            db.tasks.sort((a,b) => a.date.localeCompare(b.date));
-
-            db.tasks.forEach(t => {
-                if(t.done) { groups.done.push(t); return; }
-                if(t.date < todayStr) groups.overdue.push(t);
-                else if(t.date === todayStr) groups.today.push(t);
-                else if(t.date === tomorrow) groups.tomorrow.push(t);
-                else groups.future.push(t);
-            });
-
-            const renderGroup = (title, list, isDash) => {
-                if(list.length === 0) return;
-                const html = `<div class="agenda-header">${title}</div>` + list.map(t => {
-                    const sub = db.subjects.find(s => s.id == t.subId) || {name: 'General', color: '#6b7280'};
-                    const cat = db.categories.find(c => c.name === t.type) || {color: '#ccc'};
-                    
-                    return `
-                    <div class="agenda-card">
-                        <div class="color-strip" style="background:${cat.color}"></div>
-                        <div class="agenda-content">
-                            <div class="agenda-subject" style="color:${cat.color}">${sub.name} • ${t.type}</div>
-                            <div class="agenda-title">${t.desc}</div>
-                            <div class="agenda-meta">
-                                📅 ${t.date} ${t.time ? '🔔 '+t.time : ''}
-                            </div>
-                        </div>
-                        <div class="agenda-check" onclick="toggleTask(${t.id})"><div class="checkbox-circle"></div></div>
-                        <button onclick="delTask(${t.id})" style="position:absolute; right:55px; top:10px; border:none; background:none; color:#ccc;">&times;</button>
-                    </div>`;
-                }).join('');
-                container.innerHTML += html;
-                if(isDash) dash.innerHTML += html;
-            };
-
-            renderGroup("Overdue", groups.overdue, true);
-            renderGroup("Today", groups.today, true);
-            renderGroup("Tomorrow", groups.tomorrow, false);
-            renderGroup("Upcoming", groups.future, false);
-            renderGroup("Completed", groups.done, false);
-
-            if(dash.innerHTML === '') dash.innerHTML = '<div style="text-align:center; color:var(--text-light); padding:10px;">No tasks due today.</div>';
-        }
-
-        function renderSettings() {
-            const list = document.getElementById('settings-cat-list');
-            list.innerHTML = '';
-            db.categories.forEach(c => {
-                list.innerHTML += `
-                <div class="setting-item">
-                    <div><span class="color-preview" style="background:${c.color}"></span>${c.name}</div>
-                    <button class="btn-icon" onclick="delCategory(${c.id})">&times;</button>
-                </div>`;
+            // Emojis
+            const ep = document.getElementById('emoji-picker');
+            emojis.forEach(e => {
+                const b = document.createElement('button');
+                b.innerText = e;
+                b.className = 'btn-icon';
+                b.onclick = () => {
+                    document.getElementById('tl-name').value = e + " " + document.getElementById('tl-name').value;
+                    ep.style.display = 'none';
+                };
+                ep.appendChild(b);
             });
         }
 
-        function addCategory() {
-            const name = document.getElementById('new-cat-name').value;
-            const color = document.getElementById('new-cat-color').value;
-            if(name) {
-                db.categories.push({ id: Date.now(), name, color });
-                document.getElementById('new-cat-name').value = '';
-                saveAll();
-            }
+        // --- RENDERERS ---
+        function renderAll() {
+            renderSchoolGrid();
+            renderTimeline();
+            renderTasks();
+            updateGPA();
         }
-        function delCategory(id) { if(confirm("Delete category?")) { db.categories = db.categories.filter(x=>x.id!==id); saveAll(); } }
 
-        function openTaskModal() { document.getElementById('t-date').value = new Date().toISOString().split('T')[0]; document.getElementById('modal-task').style.display = 'flex'; }
-        function addTask() {
-            db.tasks.push({
-                id: Date.now(),
-                subId: document.getElementById('t-sub').value,
-                desc: document.getElementById('t-desc').value,
-                type: document.getElementById('t-type').value,
-                date: document.getElementById('t-date').value,
-                time: document.getElementById('t-time').value,
-                done: false
-            });
-            closeModal('modal-task'); saveAll();
-        }
-        function toggleTask(id) { const t = db.tasks.find(x=>x.id==id); if(t) t.done=!t.done; saveAll(); }
-        function delTask(id) { if(confirm("Delete task?")) { db.tasks=db.tasks.filter(x=>x.id!==id); saveAll(); } }
+        // SCHOOL
+        function renderSchoolGrid() {
+            const grid = document.getElementById('subject-list');
+            grid.innerHTML = '';
+            const tSub = document.getElementById('t-sub');
+            tSub.innerHTML = '';
 
-        // --- GRADES ---
-        function renderGrades() {
-            const list = document.getElementById('grades-list');
-            list.innerHTML = '';
             db.subjects.forEach(s => {
-                const sGrades = db.grades.filter(g => g.subId == s.id);
-                let total = 0, max = 0;
-                sGrades.forEach(g => { total += parseFloat(g.score); max += parseFloat(g.total); });
-                let pct = max > 0 ? Math.round((total/max)*100) : 0;
+                // Dropdown
+                tSub.innerHTML += `<option value="${s.id}">${s.name}</option>`;
                 
-                let gradesHtml = sGrades.map(g => `
-                    <div class="grade-row">
-                        <span>${g.title}</span>
-                        <div>
-                            <span style="font-weight:bold; margin-right:10px;">${g.score}/${g.total}</span>
-                            <button class="btn-icon" onclick="editGrade(${g.id})">✏️</button>
-                            <button class="btn-icon" onclick="delGrade(${g.id})">&times;</button>
-                        </div>
-                    </div>`).join('');
+                // Attendance Calc
+                const total = s.att.p + s.att.a;
+                const pct = total === 0 ? 0 : Math.round((s.att.p / total) * 100);
+                
+                // Grade Calc
+                const sGrades = db.grades.filter(g => g.subId == s.id);
+                let gTotal = 0, gMax = 0;
+                sGrades.forEach(g => { gTotal += parseFloat(g.score); gMax += parseFloat(g.total); });
+                const gPct = gMax > 0 ? Math.round((gTotal/gMax)*100) : '-';
 
-                list.innerHTML += `
-                    <div class="card">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <h3 style="color:${s.color}">${s.name}</h3>
-                            <div class="grade-badge" style="color:${s.color}">${pct}%</div>
+                grid.innerHTML += `
+                    <div class="sub-card" onclick="openDetailView(${s.id})" style="border-top: 4px solid ${s.color}">
+                        <div style="display:flex; justify-content:space-between; align-items:start;">
+                            <div>
+                                <h3 style="color:${s.color}">${s.name}</h3>
+                                <div style="font-size:0.8rem; color:var(--text-muted);">${s.room}</div>
+                            </div>
+                            <div class="att-ring" style="background:conic-gradient(${s.color} ${pct}%, var(--bg) 0%)">${pct}%</div>
                         </div>
-                        <div style="margin:10px 0;">${gradesHtml}</div>
-                        <button class="btn-sm btn-ghost" onclick="openGradeModal(null, ${s.id})">+ Add Grade</button>
-                    </div>`;
+                        <div style="margin-top:15px; font-weight:700; font-size:1.1rem;">${gPct}% <span style="font-size:0.8rem; font-weight:400; color:var(--text-muted);">Grade</span></div>
+                    </div>
+                `;
             });
         }
 
-        function openGradeModal(id, subId) {
-            if(id) {
-                const g = db.grades.find(x => x.id == id);
-                document.getElementById('g-id').value = g.id;
-                document.getElementById('g-sub-id').value = g.subId;
-                document.getElementById('g-title').value = g.title;
-                document.getElementById('g-score').value = g.score;
-                document.getElementById('g-total').value = g.total;
-                document.getElementById('grade-modal-title').innerText = "Edit Grade";
-            } else {
-                document.getElementById('g-id').value = '';
-                document.getElementById('g-sub-id').value = subId;
-                document.getElementById('g-title').value = '';
-                document.getElementById('g-score').value = '';
-                document.getElementById('grade-modal-title').innerText = "Add Grade";
-            }
-            document.getElementById('modal-grade').style.display = 'flex';
+        function openDetailView(id) {
+            currentSubId = id;
+            const s = db.subjects.find(x => x.id == id);
+            document.getElementById('school-grid').style.display = 'none';
+            document.getElementById('school-detail').style.display = 'block';
+            
+            document.getElementById('det-name').innerText = s.name;
+            document.getElementById('det-name').style.color = s.color;
+            document.getElementById('det-room').innerText = s.room;
+            
+            updateDetailStats();
+            renderDetailGrades();
         }
 
-        function saveGrade() {
-            const id = document.getElementById('g-id').value;
-            const subId = document.getElementById('g-sub-id').value;
-            const title = document.getElementById('g-title').value;
-            const score = document.getElementById('g-score').value;
-            const total = document.getElementById('g-total').value;
-
-            if(id) {
-                const g = db.grades.find(x => x.id == id);
-                g.title = title; g.score = score; g.total = total;
-            } else {
-                db.grades.push({ id: Date.now(), subId, title, score, total });
-            }
-            closeModal('modal-grade'); saveAll();
+        function closeDetailView() {
+            currentSubId = null;
+            document.getElementById('school-detail').style.display = 'none';
+            document.getElementById('school-grid').style.display = 'block';
+            renderSchoolGrid(); // Refresh dashboard
         }
-        function editGrade(id) { openGradeModal(id); }
-        function delGrade(id) { if(confirm("Delete grade?")) { db.grades = db.grades.filter(x => x.id !== id); saveAll(); } }
 
-        // --- TIMELINE ---
+        function updateDetailStats() {
+            const s = db.subjects.find(x => x.id == currentSubId);
+            const total = s.att.p + s.att.a;
+            const pct = total === 0 ? 100 : Math.round((s.att.p / total) * 100);
+            document.getElementById('det-att-pct').innerText = pct + "% Attendance";
+            document.getElementById('det-att-stats').innerText = `${s.att.p} Present • ${s.att.a} Absent`;
+        }
+
+        function renderDetailGrades() {
+            const list = document.getElementById('det-grades-list');
+            list.innerHTML = '';
+            const grads = db.grades.filter(g => g.subId == currentSubId);
+            
+            grads.forEach(g => {
+                list.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border);">
+                        <span>${g.name}</span>
+                        <div style="display:flex; gap:10px;">
+                            <strong>${g.score}/${g.total}</strong>
+                            <button onclick="delGrade(${g.id})" style="color:var(--danger); border:none; background:none; cursor:pointer;">&times;</button>
+                        </div>
+                    </div>
+                `;
+            });
+            if(grads.length === 0) list.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:10px;">No grades yet</div>';
+        }
+
+        function updateAtt(type) {
+            const s = db.subjects.find(x => x.id == currentSubId);
+            if(type === 'p') s.att.p++; else s.att.a++;
+            save(); updateDetailStats();
+        }
+
+        // TIMELINE
         function renderTimeline() {
             const list = document.getElementById('timeline-list');
             list.innerHTML = '';
@@ -614,121 +512,198 @@
             
             db.timeline.forEach(b => {
                 list.innerHTML += `
-                    <div class="timeline-block" data-start="${b.start}" data-end="${b.end}">
-                        <div class="time-col">${b.start}</div>
-                        <div class="icon-col">${b.icon || '•'}</div>
-                        <div class="info-col" style="display:flex; justify-content:space-between;">
-                            <div>
-                                <div style="font-weight:700;">${b.name}</div>
-                                <div style="font-size:0.8rem; color:var(--text-light);">${b.start} - ${b.end}</div>
-                            </div>
-                            <button onclick="delBlock(${b.id})" class="btn-icon">&times;</button>
+                    <div class="tl-item" data-start="${b.start}" data-end="${b.end}">
+                        <div class="tl-time">${b.start}</div>
+                        <div class="tl-node">${b.icon}</div>
+                        <div class="tl-card">
+                            <div class="live-badge" style="display:none;">LIVE</div>
+                            <div style="font-weight:700;">${b.name}</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted);">${b.start} - ${b.end}</div>
+                            <button onclick="delBlock(${b.id})" style="position:absolute; bottom:10px; right:10px; border:none; background:none; color:var(--text-muted); cursor:pointer;">&times;</button>
                         </div>
-                    </div>`;
+                    </div>
+                `;
             });
-            checkTimeline(); // Force check to set active class immediately
+            checkTimeline();
+        }
+
+        function checkTimeline() {
+            const now = new Date();
+            const cur = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+            let found = false;
+
+            document.querySelectorAll('.tl-item').forEach(el => {
+                const s = el.dataset.start;
+                const e = el.dataset.end;
+                if (cur >= s && cur < e) {
+                    el.classList.add('active');
+                    el.querySelector('.live-badge').style.display = 'block';
+                    
+                    const block = db.timeline.find(b => b.start === s);
+                    if(block) {
+                        document.getElementById('now-title').innerText = block.name;
+                        document.getElementById('now-icon').innerText = block.icon;
+                        document.getElementById('now-time-range').innerText = `${s} - ${e}`;
+                    }
+                    found = true;
+                } else {
+                    el.classList.remove('active');
+                    el.querySelector('.live-badge').style.display = 'none';
+                }
+            });
+
+            if(!found) {
+                document.getElementById('now-title').innerText = "Free Time";
+                document.getElementById('now-icon').innerText = "☕";
+                document.getElementById('now-time-range').innerText = "--:--";
+            }
         }
 
         function addBlock() {
             const name = document.getElementById('tl-name').value;
-            const icon = document.getElementById('tl-name').dataset.emoji || '⏱️';
             const start = document.getElementById('tl-start').value;
             const end = document.getElementById('tl-end').value;
-            
             if(name && start && end) {
-                db.timeline.push({ id: Date.now(), name, start, end, icon });
+                db.timeline.push({ id: Date.now(), name, start, end, icon: name.split(" ")[0] || '⏱️' });
                 document.getElementById('tl-name').value = '';
-                saveAll();
+                save(); renderTimeline();
             }
         }
-        function delBlock(id) { db.timeline = db.timeline.filter(x => x.id !== id); saveAll(); }
+
+        // AGENDA
+        function renderTasks() {
+            const list = document.getElementById('agenda-list');
+            list.innerHTML = '';
+            
+            db.tasks.sort((a,b) => a.date.localeCompare(b.date));
+            const buckets = { overdue:[], today:[], upcoming:[] };
+            const today = new Date().toISOString().split('T')[0];
+
+            db.tasks.forEach(t => {
+                if(t.done) return;
+                if(t.date < today) buckets.overdue.push(t);
+                else if(t.date === today) buckets.today.push(t);
+                else buckets.upcoming.push(t);
+            });
+
+            const renderBucket = (title, items) => {
+                if(items.length === 0) return;
+                list.innerHTML += `<div class="agenda-label">${title}</div>`;
+                items.forEach(t => {
+                    const s = db.subjects.find(x => x.id == t.subId);
+                    list.innerHTML += `
+                        <div class="task-row">
+                            <div class="task-check" onclick="toggleTask(${t.id})"></div>
+                            <div style="flex:1;">
+                                <div style="font-size:0.7rem; font-weight:800; color:${s ? s.color : '#ccc'}; text-transform:uppercase;">${s ? s.name : 'General'}</div>
+                                <div class="task-title" style="font-weight:600;">${t.desc}</div>
+                                <div style="font-size:0.8rem; color:var(--text-muted);">📅 ${t.date}</div>
+                            </div>
+                            <button onclick="delTask(${t.id})" style="border:none; background:none; color:#ccc; cursor:pointer;">&times;</button>
+                        </div>
+                    `;
+                });
+            };
+
+            renderBucket('⚠️ Overdue', buckets.overdue);
+            renderBucket('🔥 Today', buckets.today);
+            renderBucket('📅 Upcoming', buckets.upcoming);
+        }
+
+        // --- GPA CALC ---
+        function updateGPA() {
+            let totalScore = 0, maxScore = 0;
+            db.grades.forEach(g => {
+                totalScore += parseFloat(g.score);
+                maxScore += parseFloat(g.total);
+            });
+            const pct = maxScore === 0 ? 0 : Math.round((totalScore / maxScore) * 100);
+            document.getElementById('dash-gpa').innerText = pct + "%";
+            
+            let letter = 'F';
+            if(pct >= 90) letter = 'A';
+            else if(pct >= 80) letter = 'B';
+            else if(pct >= 70) letter = 'C';
+            else if(pct >= 60) letter = 'D';
+            
+            document.getElementById('dash-grade').innerText = `Grade: ${letter}`;
+        }
 
         // --- UTILS ---
-        function saveAll() {
-            localStorage.setItem('vFixSub', JSON.stringify(db.subjects));
-            localStorage.setItem('vFixTasks', JSON.stringify(db.tasks));
-            localStorage.setItem('vFixCats', JSON.stringify(db.categories));
-            localStorage.setItem('vFixGrades', JSON.stringify(db.grades));
-            localStorage.setItem('vFixTime', JSON.stringify(db.timeline));
-            localStorage.setItem('vFixSet', JSON.stringify(db.settings));
+        function save() {
+            localStorage.setItem('vpSubjects', JSON.stringify(db.subjects));
+            localStorage.setItem('vpTasks', JSON.stringify(db.tasks));
+            localStorage.setItem('vpGrades', JSON.stringify(db.grades));
+            localStorage.setItem('vpTimeline', JSON.stringify(db.timeline));
+            localStorage.setItem('vpSettings', JSON.stringify(db.settings));
             renderAll();
         }
 
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        
-        function showEmojiPicker(btn, inputId) {
-            const pop = document.getElementById('emoji-popup');
-            pop.innerHTML = '';
-            pop.style.display = 'grid';
-            pop.style.top = (btn.getBoundingClientRect().bottom + window.scrollY) + 'px';
-            pop.style.left = (btn.getBoundingClientRect().left - 100) + 'px';
-            
-            emojis.forEach(e => {
-                const b = document.createElement('button');
-                b.className = 'emoji-btn';
-                b.innerText = e;
-                b.onclick = () => {
-                    const input = document.getElementById(inputId);
-                    input.value = e + " " + input.value;
-                    input.dataset.emoji = e;
-                    pop.style.display = 'none';
-                };
-                pop.appendChild(b);
-            });
-        }
-        
-        // Hide picker on outside click
-        window.onclick = function(event) {
-            if (!event.target.matches('.btn-ghost') && !event.target.matches('.emoji-btn')) {
-                document.getElementById('emoji-popup').style.display = "none";
-            }
-        };
-
         function nav(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.onclick.toString().includes(id));
+            const btn = Array.from(document.querySelectorAll('.nav-item')).find(b => b.onclick.toString().includes(id));
             if(btn) btn.classList.add('active');
-            
-            document.querySelector('.fab').style.display = id === 'tasks' ? 'flex' : 'none';
-            document.getElementById('page-title').innerText = id === 'dashboard' ? 'Dashboard' : id.charAt(0).toUpperCase() + id.slice(1);
+            document.getElementById('page-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
+            document.querySelector('.fab').style.display = id === 'agenda' ? 'flex' : 'none';
         }
 
-        function schoolTab(t) {
-            document.getElementById('view-subjects').style.display = t === 'sub' ? 'block' : 'none';
-            document.getElementById('view-grades').style.display = t === 'grd' ? 'block' : 'none';
-            document.getElementById('tab-sub').className = t === 'sub' ? 'btn btn-sm' : 'btn-ghost btn-sm';
-            document.getElementById('tab-grd').className = t === 'grd' ? 'btn btn-sm' : 'btn-ghost btn-sm';
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function saveSubject() {
+            const name = document.getElementById('s-name').value;
+            const room = document.getElementById('s-room').value;
+            const color = document.getElementById('s-color').value;
+            if(name) {
+                db.subjects.push({id: Date.now(), name, room, color, att:{p:0, a:0}});
+                save(); closeModal('modal-sub');
+            }
+        }
+        function saveTask() {
+            db.tasks.push({
+                id: Date.now(),
+                desc: document.getElementById('t-desc').value,
+                subId: document.getElementById('t-sub').value,
+                date: document.getElementById('t-date').value,
+                done: false
+            });
+            save(); closeModal('modal-task');
+        }
+        function saveGrade() {
+            db.grades.push({
+                id: Date.now(),
+                subId: currentSubId,
+                name: document.getElementById('g-name').value,
+                score: document.getElementById('g-score').value,
+                total: document.getElementById('g-total').value
+            });
+            save(); closeModal('modal-grade'); renderDetailGrades();
         }
 
+        function toggleTask(id) { const t=db.tasks.find(x=>x.id==id); if(t) t.done=!t.done; save(); }
+        function delTask(id) { db.tasks=db.tasks.filter(x=>x.id!==id); save(); }
+        function delBlock(id) { db.timeline=db.timeline.filter(x=>x.id!==id); save(); }
+        function delGrade(id) { db.grades=db.grades.filter(x=>x.id!==id); save(); renderDetailGrades(); }
+        function deleteSubject() {
+            if(confirm("Delete Subject and all its grades?")) {
+                db.subjects = db.subjects.filter(x=>x.id != currentSubId);
+                db.grades = db.grades.filter(x=>x.subId != currentSubId);
+                db.tasks = db.tasks.filter(x=>x.subId != currentSubId);
+                save(); closeDetailView();
+            }
+        }
+
+        function openTaskModal() { document.getElementById('modal-task').style.display='flex'; }
+        function openSubjectModal() { document.getElementById('modal-sub').style.display='flex'; }
+        function openGradeModal() { document.getElementById('modal-grade').style.display='flex'; }
+        function resetData() { if(confirm("Reset?")) { localStorage.clear(); location.reload(); } }
         function toggleTheme() {
             db.settings.theme = db.settings.theme === 'dark' ? 'light' : 'dark';
             document.body.setAttribute('data-theme', db.settings.theme);
             if(db.settings.theme === 'light') document.body.removeAttribute('data-theme');
-            saveAll();
+            save();
         }
-        
-        function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
-            const dlAnchorElem = document.createElement('a');
-            dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", "vidyarthi_backup.json");
-            dlAnchorElem.click();
-        }
-
-        function importData(input) {
-            const file = input.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                db = JSON.parse(e.target.result);
-                saveAll();
-                alert("Data Restored!");
-            };
-            reader.readAsText(file);
-        }
-
-        function resetApp() { if(confirm("Factory Reset?")) { localStorage.clear(); location.reload(); } }
+        function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([],{hour:'2-digit', minute:'2-digit'}); }
 
         // Start
         init();
