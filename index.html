@@ -3,20 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - TimeTune Style</title>
+    <title>Vidyarthi - Agenda Edition</title>
     <style>
         :root {
-            --primary: #6366f1; /* Indigo */
+            --primary: #6366f1;
             --primary-soft: #e0e7ff;
-            --accent: #f43f5e; /* Rose */
             --bg: #f3f4f6;
             --card-bg: #ffffff;
             --text: #1f2937;
             --text-light: #6b7280;
             --border: #e5e7eb;
             --radius: 16px;
-            --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-            --timeline-line: #d1d5db;
+            --shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05);
+            
+            /* Agenda Colors */
+            --color-hw: #3b82f6; /* Blue for Homework */
+            --color-exam: #ef4444; /* Red for Exam */
+            --color-other: #10b981; /* Green for Other */
         }
 
         [data-theme="dark"] {
@@ -26,7 +29,6 @@
             --text-light: #9ca3af;
             --border: #374151;
             --primary-soft: #312e81;
-            --timeline-line: #4b5563;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
@@ -35,437 +37,406 @@
 
         /* --- SIDEBAR --- */
         .sidebar { 
-            width: 80px; background: var(--card-bg); display: flex; flex-direction: column; 
+            width: 70px; background: var(--card-bg); display: flex; flex-direction: column; 
             border-right: 1px solid var(--border); z-index: 100; align-items: center; padding-top: 20px;
         }
-        
         .nav-btn {
-            background: none; border: none; width: 50px; height: 50px; border-radius: 14px; 
-            color: var(--text-light); font-size: 1.5rem; margin-bottom: 15px; cursor: pointer; 
+            background: none; border: none; width: 45px; height: 45px; border-radius: 12px; 
+            color: var(--text-light); font-size: 1.4rem; margin-bottom: 15px; cursor: pointer; 
             display: flex; align-items: center; justify-content: center; transition: 0.2s;
         }
         .nav-btn:hover { background: var(--bg); color: var(--primary); }
         .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.4); }
 
         /* --- MAIN CONTENT --- */
-        .main-content { flex: 1; padding: 20px 30px; overflow-y: auto; scroll-behavior: smooth; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        h2 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; }
-        
-        /* --- CARDS & UI --- */
-        .section { display: none; animation: slideUp 0.3s ease; padding-bottom: 80px; }
+        .main-content { flex: 1; padding: 20px; overflow-y: auto; scroll-behavior: smooth; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        h2 { font-size: 1.8rem; font-weight: 800; }
+
+        /* --- UI ELEMENTS --- */
+        .section { display: none; animation: slideUp 0.2s ease; padding-bottom: 80px; }
         .section.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .card { background: var(--card-bg); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 20px; }
-        .btn { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
-        input, select { padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); outline: none; width: 100%; }
+        .btn { padding: 12px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
+        input, select { padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; }
 
-        /* --- TIMELINE STYLES (TimeTune Style) --- */
+        /* --- TIMETUNE STYLE TIMELINE --- */
         .timeline-container { position: relative; padding-left: 20px; margin-top: 20px; }
-        .timeline-container::before {
-            content: ''; position: absolute; left: 29px; top: 0; bottom: 0; width: 2px; 
-            background: var(--timeline-line); z-index: 0;
-        }
-
-        .timeline-block { 
-            position: relative; margin-bottom: 20px; display: flex; align-items: flex-start; z-index: 1; 
-            cursor: pointer; transition: transform 0.2s;
-        }
-        .timeline-block:active { transform: scale(0.98); }
-
-        .time-col { width: 60px; font-size: 0.85rem; color: var(--text-light); text-align: right; padding-right: 15px; padding-top: 12px; font-weight: 600; }
-        
-        .icon-col { 
-            width: 40px; height: 40px; border-radius: 50%; background: var(--card-bg); border: 2px solid var(--primary); 
-            display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex-shrink: 0;
-        }
-
-        .info-col { 
-            flex: 1; background: var(--card-bg); padding: 15px; border-radius: 12px; 
-            border: 1px solid var(--border); box-shadow: var(--shadow); 
-        }
-
-        .block-title { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
-        .block-duration { font-size: 0.8rem; color: var(--text-light); }
-        
-        /* Highlight active block */
-        .timeline-block.active .icon-col { background: var(--primary); color: white; border-color: var(--primary); animation: pulse 2s infinite; }
-        .timeline-block.active .info-col { border-color: var(--primary); background: var(--primary-soft); }
-        [data-theme="dark"] .timeline-block.active .info-col { background: #1e1b4b; } /* Dark theme active bg */
-
+        .timeline-container::before { content: ''; position: absolute; left: 29px; top: 0; bottom: 0; width: 2px; background: var(--border); z-index: 0; }
+        .timeline-block { position: relative; margin-bottom: 15px; display: flex; align-items: flex-start; z-index: 1; }
+        .time-col { width: 50px; font-size: 0.8rem; color: var(--text-light); text-align: right; padding-right: 15px; padding-top: 10px; font-weight: 600; }
+        .icon-col { width: 36px; height: 36px; border-radius: 50%; background: var(--card-bg); border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-right: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex-shrink: 0; }
+        .info-col { flex: 1; background: var(--card-bg); padding: 12px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+        .timeline-block.active .icon-col { background: var(--primary); color: white; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); } 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); } }
 
-        /* --- DASHBOARD WIDGETS --- */
-        .now-widget { 
-            background: linear-gradient(135deg, var(--primary), #818cf8); color: white; padding: 25px; 
-            border-radius: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;
+        /* --- SCHOOL PLANNER AGENDA STYLES (EXACT) --- */
+        .agenda-header {
+            font-size: 0.85rem; font-weight: 800; color: var(--text-light); margin: 25px 0 10px 0;
+            text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px;
         }
-        .next-widget { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .agenda-header::after { content: ''; height: 1px; flex: 1; background: var(--border); }
 
-        /* --- TASK LIST --- */
-        .task-item { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); }
-        .task-check { width: 20px; height: 20px; border: 2px solid var(--text-light); border-radius: 6px; margin-right: 12px; cursor: pointer; }
-        .task-check.checked { background: var(--accent); border-color: var(--accent); }
+        .agenda-card {
+            background: var(--card-bg); border-radius: 4px; /* More boxy like School Planner */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; margin-bottom: 8px;
+            position: relative; overflow: hidden; transition: transform 0.1s; border: 1px solid var(--border);
+        }
+        .agenda-card:active { transform: scale(0.99); }
+        
+        .color-strip { width: 6px; flex-shrink: 0; }
+        .type-hw { background-color: var(--color-hw); }
+        .type-exam { background-color: var(--color-exam); }
+        .type-other { background-color: var(--color-other); }
+
+        .agenda-content { flex: 1; padding: 12px 15px; display: flex; flex-direction: column; justify-content: center; }
+        .agenda-subject { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-light); margin-bottom: 2px; }
+        .agenda-title { font-size: 1rem; font-weight: 600; color: var(--text); }
+        .agenda-date { font-size: 0.8rem; color: var(--text-light); margin-top: 4px; display: flex; align-items: center; gap: 5px; }
+        
+        .agenda-check {
+            width: 50px; display: flex; align-items: center; justify-content: center;
+            border-left: 1px solid var(--border); cursor: pointer;
+        }
+        .checkbox-circle {
+            width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--text-light);
+        }
+        .agenda-card.done .agenda-title { text-decoration: line-through; opacity: 0.6; }
+        .agenda-card.done .checkbox-circle { background: var(--text-light); border-color: var(--text-light); }
+
+        /* --- FAB --- */
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 56px; height: 56px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); cursor: pointer; border: none; z-index: 500; }
 
         /* --- MOBILE --- */
         @media (max-width: 768px) {
             body { flex-direction: column; height: 100vh; }
-            .sidebar { 
-                position: fixed; bottom: 0; left: 0; width: 100%; height: 65px;
-                flex-direction: row; padding: 0; border-top: 1px solid var(--border); border-right: none;
-                justify-content: space-around;
-            }
-            .nav-btn { width: auto; height: 100%; margin: 0; border-radius: 0; flex: 1; }
-            .main-content { padding: 15px; margin-bottom: 65px; }
-            .timeline-container::before { left: 19px; } /* Adjust line for mobile */
-            .time-col { width: 40px; font-size: 0.75rem; text-align: left; }
-            .icon-col { width: 32px; height: 32px; font-size: 1rem; margin-right: 10px; }
+            .sidebar { position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; flex-direction: row; padding: 0; border-top: 1px solid var(--border); border-right: none; justify-content: space-around; }
+            .nav-btn { width: auto; height: 100%; margin: 0; flex: 1; border-radius: 0; }
+            .main-content { padding: 15px; margin-bottom: 60px; }
+            .fab { bottom: 80px; right: 20px; }
         }
     </style>
 </head>
 <body>
 
     <nav class="sidebar">
-        <div style="font-weight: 800; color: var(--primary); margin-bottom: 30px; font-size: 1.5rem;">V</div>
+        <div style="font-weight: 800; color: var(--primary); margin-bottom: 20px; font-size: 1.2rem;">V</div>
         <button class="nav-btn active" onclick="nav('dashboard')" title="Dashboard">🏠</button>
+        <button class="nav-btn" onclick="nav('tasks')" title="Agenda">📅</button>
         <button class="nav-btn" onclick="nav('timeline')" title="Timeline">⏱️</button>
-        <button class="nav-btn" onclick="nav('tasks')" title="To-Do">📝</button>
         <button class="nav-btn" onclick="nav('focus')" title="Focus">🍅</button>
         <div style="flex:1"></div>
-        <button class="nav-btn" onclick="toggleTheme()" title="Theme">🌗</button>
+        <button class="nav-btn" onclick="toggleTheme()">🌗</button>
     </nav>
 
     <main class="main-content">
         
         <div class="header">
             <h2 id="page-title">Dashboard</h2>
-            <div style="font-size: 0.9rem; font-weight: 600; color: var(--primary);" id="clock">00:00</div>
+            <div id="clock" style="font-weight: 600; color: var(--primary);">00:00</div>
         </div>
 
         <section id="dashboard" class="section active">
-            
-            <div class="now-widget">
-                <div>
-                    <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 5px;">HAPPENING NOW</div>
-                    <div style="font-size: 1.8rem; font-weight: 800;" id="now-title">Free Time</div>
-                    <div style="font-size: 0.9rem; margin-top: 5px;">Until <span id="now-end">--:--</span></div>
-                </div>
-                <div style="font-size: 3rem;" id="now-icon">☕</div>
+            <div class="card" style="background: linear-gradient(135deg, var(--primary), #818cf8); color: white; border: none; padding: 25px;">
+                <div style="font-size: 0.9rem; opacity: 0.9;">HAPPENING NOW</div>
+                <div style="font-size: 2rem; font-weight: 800; margin: 5px 0;" id="now-title">Free Time</div>
+                <div style="font-size: 0.9rem;">Until <span id="now-end">--:--</span></div>
             </div>
 
-            <div class="next-widget">
-                <div style="font-weight: 700; color: var(--text-light); font-size: 0.8rem; writing-mode: vertical-rl; transform: rotate(180deg);">NEXT</div>
-                <div style="width: 2px; height: 40px; background: var(--border);"></div>
-                <div>
-                    <div style="font-weight: 700;" id="next-title">Nothing planned</div>
-                    <div style="font-size: 0.85rem; color: var(--text-light);" id="next-time">--:--</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3 style="margin-bottom: 15px;">Pending Tasks</h3>
-                <div id="dash-tasks">
-                    </div>
-            </div>
-        </section>
-
-        <section id="timeline" class="section">
-            
-            <div class="card">
-                <h3 style="margin-bottom: 15px;">Add Routine Block</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-                    <input type="time" id="tl-start" required>
-                    <input type="time" id="tl-end" required>
-                </div>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="tl-name" placeholder="Activity (e.g., Math Study)" style="flex: 2;">
-                    <select id="tl-icon" style="flex: 1;">
-                        <option value="📚">📚 Study</option>
-                        <option value="🏃">🏃 Exercise</option>
-                        <option value="🥣">🥣 Eat</option>
-                        <option value="🎮">🎮 Play</option>
-                        <option value="💤">💤 Sleep</option>
-                        <option value="🚌">🚌 Travel</option>
-                        <option value="🚿">🚿 Routine</option>
-                    </select>
-                </div>
-                <button class="btn" onclick="addBlock()" style="width: 100%; margin-top: 10px;">+ Add to Timeline</button>
-            </div>
-
-            <div class="timeline-container" id="timeline-list">
-                </div>
-            
-            <div style="text-align: center; margin-top: 30px;">
-                 <button onclick="clearTimeline()" style="color: var(--text-light); background: none; border: none; font-size: 0.8rem; cursor: pointer;">Clear Timeline</button>
+            <div style="margin-top: 25px;">
+                <h3 style="margin-bottom: 15px; display:flex; justify-content:space-between;">
+                    <span>Due Today</span>
+                    <span id="today-count" style="background:var(--primary); color:white; padding:2px 8px; border-radius:10px; font-size:0.8rem;">0</span>
+                </h3>
+                <div id="dash-agenda"></div>
             </div>
         </section>
 
         <section id="tasks" class="section">
-            <div class="card" style="display: flex; gap: 10px;">
-                <input type="text" id="task-input" placeholder="New Task...">
-                <button class="btn" onclick="addTask()">Add</button>
-            </div>
-            <div class="card" id="task-list">
+            <div id="agenda-container">
                 </div>
+            <div style="height: 60px;"></div> </section>
+
+        <div id="task-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+            <div class="card" style="width: 90%; max-width: 400px; padding: 25px;">
+                <h3 style="margin-bottom: 15px;">New Task</h3>
+                <input type="text" id="t-subject" placeholder="Subject (e.g. Math)" style="margin-bottom: 10px;">
+                <input type="text" id="t-desc" placeholder="Description (e.g. Chapter 5 Ex)" style="margin-bottom: 10px;">
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <select id="t-type">
+                        <option value="Homework">Homework</option>
+                        <option value="Exam">Exam</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input type="date" id="t-date">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button class="btn" style="flex:1; background: var(--border); color: var(--text);" onclick="closeModal()">Cancel</button>
+                    <button class="btn" style="flex:1;" onclick="addTask()">Save</button>
+                </div>
+            </div>
+        </div>
+
+        <section id="timeline" class="section">
+            <div class="card">
+                <h3 style="margin-bottom: 15px;">Edit Routine</h3>
+                <div style="display: flex; gap: 5px; margin-bottom: 10px;">
+                    <input type="time" id="tl-start">
+                    <input type="time" id="tl-end">
+                </div>
+                <div style="display: flex; gap: 5px;">
+                    <input type="text" id="tl-name" placeholder="Activity name..." style="flex:2;">
+                    <button class="btn" onclick="addBlock()" style="padding: 0 15px;">+</button>
+                </div>
+            </div>
+            <div class="timeline-container" id="timeline-list"></div>
         </section>
 
         <section id="focus" class="section">
-            <div class="card" style="text-align: center; padding: 60px 20px;">
-                <h3 style="color: var(--text-light); text-transform: uppercase; letter-spacing: 2px;">Focus Mode</h3>
-                <div style="font-size: 5rem; font-weight: 800; color: var(--primary); margin: 30px 0; font-variant-numeric: tabular-nums;" id="timer-display">25:00</div>
-                
-                <div style="display: flex; justify-content: center; gap: 15px;">
-                    <button class="btn" onclick="toggleTimer()" id="timer-btn" style="min-width: 100px;">Start</button>
-                    <button class="btn" onclick="resetTimer()" style="background: var(--bg); color: var(--text);">Reset</button>
-                </div>
+            <div class="card" style="text-align: center; padding: 50px 20px;">
+                <h3>FOCUS TIMER</h3>
+                <div style="font-size: 4rem; font-weight: 800; color: var(--primary); margin: 20px 0;" id="timer-display">25:00</div>
+                <button class="btn" onclick="toggleTimer()" id="timer-btn" style="width: 150px;">Start</button>
             </div>
         </section>
 
     </main>
 
+    <button class="fab" onclick="openModal()">+</button>
+
     <script>
-        // --- DATA STORE ---
-        // Timeline: Array of { id, name, start, end, icon }
-        let timeline = JSON.parse(localStorage.getItem('vtTimeline')) || [
-            { id: 1, name: "Morning Routine", start: "07:00", end: "08:00", icon: "🚿" },
-            { id: 2, name: "School / Work", start: "09:00", end: "15:00", icon: "🚌" },
-            { id: 3, name: "Homework", start: "16:00", end: "18:00", icon: "📚" }
+        // --- STATE ---
+        let tasks = JSON.parse(localStorage.getItem('vAgTasks')) || [
+            { id: 1, subject: 'MATH', desc: 'Algebra Worksheet', type: 'Homework', date: new Date().toISOString().split('T')[0], done: false },
+            { id: 2, subject: 'HISTORY', desc: 'WWII Essay', type: 'Exam', date: new Date(Date.now() + 86400000).toISOString().split('T')[0], done: false }
         ];
         
-        let tasks = JSON.parse(localStorage.getItem('vtTasks')) || [];
+        let timeline = JSON.parse(localStorage.getItem('vAgTimeline')) || [
+            { id: 1, name: "Morning Routine", start: "07:00", end: "08:00", icon: "🚿" },
+            { id: 2, name: "School", start: "08:30", end: "15:00", icon: "🚌" }
+        ];
 
         // --- INIT ---
-        setInterval(updateClock, 1000);
+        const todayStr = new Date().toISOString().split('T')[0];
         checkTheme();
         renderAll();
+        setInterval(updateClock, 1000);
 
-        // --- NAVIGATION ---
+        // --- NAV ---
         function nav(id) {
-            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             
-            // Highlight Button
             const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.onclick.toString().includes(id));
             if(btn) btn.classList.add('active');
-
-            const titles = {dashboard: 'Dashboard', timeline: 'My Day', tasks: 'Tasks', focus: 'Focus'};
-            document.getElementById('page-title').innerText = titles[id];
-        }
-
-        // --- TIMELINE LOGIC ---
-        function addBlock() {
-            const start = document.getElementById('tl-start').value;
-            const end = document.getElementById('tl-end').value;
-            const name = document.getElementById('tl-name').value;
-            const icon = document.getElementById('tl-icon').value;
-
-            if(!start || !end || !name) return alert("Fill all fields");
-            if(start >= end) return alert("End time must be after start time");
-
-            timeline.push({ id: Date.now(), name, start, end, icon });
-            saveTimeline();
             
-            // Clear inputs
-            document.getElementById('tl-name').value = '';
+            // Hide FAB on dashboard/timeline, show on Tasks
+            document.querySelector('.fab').style.display = (id === 'tasks') ? 'flex' : 'none';
+            document.getElementById('page-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
         }
 
-        function deleteBlock(id) {
-            if(confirm("Remove this block?")) {
-                timeline = timeline.filter(t => t.id !== id);
-                saveTimeline();
-            }
-        }
-
-        function saveTimeline() {
-            localStorage.setItem('vtTimeline', JSON.stringify(timeline));
-            renderTimeline();
-            updateDashboard();
-        }
-
-        function clearTimeline() {
-            if(confirm("Delete entire routine?")) {
-                timeline = [];
-                saveTimeline();
-            }
-        }
-
-        function renderTimeline() {
-            const container = document.getElementById('timeline-list');
+        // --- AGENDA LOGIC (SCHOOL PLANNER EXACT) ---
+        function renderTasks() {
+            const container = document.getElementById('agenda-container');
+            const dash = document.getElementById('dash-agenda');
             container.innerHTML = '';
-
-            // Sort by start time
-            timeline.sort((a, b) => a.start.localeCompare(b.start));
-
+            dash.innerHTML = '';
+            
+            // Helper Dates
             const now = new Date();
-            const currentTime = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+            const nextWeek = new Date(today); nextWeek.setDate(nextWeek.getDate() + 7);
 
-            timeline.forEach(block => {
-                // Check if active
-                const isActive = (currentTime >= block.start && currentTime < block.end);
+            // Buckets
+            const groups = {
+                overdue: { title: "OVERDUE", items: [] },
+                today: { title: "TODAY", items: [] },
+                tomorrow: { title: "TOMORROW", items: [] },
+                week: { title: "NEXT 7 DAYS", items: [] },
+                future: { title: "FUTURE", items: [] },
+                done: { title: "COMPLETED", items: [] }
+            };
+
+            tasks.sort((a,b) => a.date.localeCompare(b.date));
+
+            tasks.forEach(t => {
+                const tDate = new Date(t.date);
+                // Reset time for accurate comparison
+                const tDateOnly = new Date(tDate.getUTCFullYear(), tDate.getUTCMonth(), tDate.getUTCDate()); 
                 
-                const html = `
-                    <div class="timeline-block ${isActive ? 'active' : ''}">
-                        <div class="time-col">${block.start}</div>
-                        <div class="icon-col">${block.icon}</div>
-                        <div class="info-col">
-                            <div style="display:flex; justify-content:space-between;">
-                                <div class="block-title">${block.name}</div>
-                                <button onclick="deleteBlock(${block.id})" style="background:none; border:none; color:var(--text-light); cursor:pointer;">&times;</button>
-                            </div>
-                            <div class="block-duration">${block.start} - ${block.end}</div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += html;
+                if (t.done) {
+                    groups.done.items.push(t);
+                    return;
+                }
+
+                if (t.date < todayStr) groups.overdue.items.push(t);
+                else if (t.date === todayStr) groups.today.items.push(t);
+                else if (t.date === tomorrow.toISOString().split('T')[0]) groups.tomorrow.items.push(t);
+                else if (tDateOnly <= nextWeek) groups.week.items.push(t);
+                else groups.future.items.push(t);
             });
-        }
 
-        // --- DASHBOARD LOGIC ---
-        function updateDashboard() {
-            const now = new Date();
-            const currentTime = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+            document.getElementById('today-count').innerText = groups.today.items.length;
 
-            // Find Current
-            const currentBlock = timeline.find(b => currentTime >= b.start && currentTime < b.end);
-            
-            if (currentBlock) {
-                document.getElementById('now-title').innerText = currentBlock.name;
-                document.getElementById('now-end').innerText = currentBlock.end;
-                document.getElementById('now-icon').innerText = currentBlock.icon;
-            } else {
-                document.getElementById('now-title').innerText = "Free Time";
-                document.getElementById('now-end').innerText = "--:--";
-                document.getElementById('now-icon').innerText = "☕";
+            // Render Groups
+            for (const [key, grp] of Object.entries(groups)) {
+                if (grp.items.length > 0) {
+                    const headerHtml = `<div class="agenda-header" style="color:${key==='overdue'?'var(--color-exam)':''};">${grp.title}</div>`;
+                    container.innerHTML += headerHtml;
+                    
+                    if (key === 'overdue' || key === 'today') dash.innerHTML += headerHtml;
+
+                    grp.items.forEach(t => {
+                        let typeClass = 'type-other';
+                        if(t.type === 'Homework') typeClass = 'type-hw';
+                        if(t.type === 'Exam') typeClass = 'type-exam';
+
+                        const html = `
+                            <div class="agenda-card ${t.done ? 'done' : ''}">
+                                <div class="color-strip ${typeClass}"></div>
+                                <div class="agenda-content" onclick="editTask(${t.id})">
+                                    <div class="agenda-subject" style="color: ${t.type === 'Exam' ? 'var(--color-exam)' : ''}">${t.subject}</div>
+                                    <div class="agenda-title">${t.desc}</div>
+                                    <div class="agenda-date">
+                                        <span style="font-size:0.9rem;">${t.type === 'Exam' ? '❗' : '📌'}</span> ${t.date}
+                                    </div>
+                                </div>
+                                <div class="agenda-check" onclick="toggleTask(${t.id})">
+                                    <div class="checkbox-circle"></div>
+                                </div>
+                                <button onclick="deleteTask(${t.id})" style="position:absolute; right:55px; top:10px; background:none; border:none; color:#ccc; z-index:10;">&times;</button>
+                            </div>
+                        `;
+                        container.innerHTML += html;
+                        if (key === 'overdue' || key === 'today') dash.innerHTML += html;
+                    });
+                }
             }
 
-            // Find Next
-            // Filter blocks that start after current time, sort, pick first
-            const upcoming = timeline.filter(b => b.start > currentTime).sort((a,b) => a.start.localeCompare(b.start));
-            
-            if (upcoming.length > 0) {
-                document.getElementById('next-title').innerText = upcoming[0].name;
-                document.getElementById('next-time').innerText = upcoming[0].start;
-            } else {
-                document.getElementById('next-title').innerText = "No upcoming blocks";
-                document.getElementById('next-time').innerText = "--:--";
-            }
-
-            // Render Tasks in Dashboard
-            const dashTaskContainer = document.getElementById('dash-tasks');
-            dashTaskContainer.innerHTML = '';
-            const pendingTasks = tasks.filter(t => !t.done).slice(0, 3); // Show top 3
-            
-            if(pendingTasks.length === 0) {
-                dashTaskContainer.innerHTML = '<div style="color:var(--text-light); font-size:0.9rem;">No pending tasks. Great job!</div>';
-            } else {
-                pendingTasks.forEach(t => {
-                    dashTaskContainer.innerHTML += `
-                        <div style="padding:10px 0; border-bottom:1px solid var(--border); display:flex; gap:10px; align-items:center;">
-                            <div style="width:10px; height:10px; background:var(--accent); border-radius:50%;"></div>
-                            <span>${t.text}</span>
-                        </div>`;
-                });
-            }
+            if(dash.innerHTML === '') dash.innerHTML = '<div style="text-align:center; padding:20px; color:#aaa;">No tasks for today.</div>';
         }
 
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            // Refresh dashboard highlights every minute
-            if(now.getSeconds() === 0) renderTimeline();
+        // --- TASK CRUD ---
+        function openModal() {
+            document.getElementById('t-date').value = todayStr;
+            document.getElementById('task-modal').style.display = 'flex';
         }
-
-        // --- TASKS LOGIC ---
+        function closeModal() { document.getElementById('task-modal').style.display = 'none'; }
+        
         function addTask() {
-            const input = document.getElementById('task-input');
-            if(!input.value) return;
-            tasks.push({ id: Date.now(), text: input.value, done: false });
-            input.value = '';
-            saveTasks();
+            const subj = document.getElementById('t-subject').value;
+            const desc = document.getElementById('t-desc').value;
+            const type = document.getElementById('t-type').value;
+            const date = document.getElementById('t-date').value;
+
+            if(!subj || !desc) return alert("Subject and Description required.");
+
+            tasks.push({ id: Date.now(), subject: subj, desc, type, date, done: false });
+            localStorage.setItem('vAgTasks', JSON.stringify(tasks));
+            closeModal();
+            renderTasks();
+            
+            // Clear
+            document.getElementById('t-subject').value = '';
+            document.getElementById('t-desc').value = '';
         }
 
         function toggleTask(id) {
             const t = tasks.find(x => x.id === id);
             if(t) t.done = !t.done;
-            saveTasks();
-        }
-
-        function deleteTask(id) {
-            tasks = tasks.filter(t => t.id !== id);
-            saveTasks();
-        }
-
-        function saveTasks() {
-            localStorage.setItem('vtTasks', JSON.stringify(tasks));
+            localStorage.setItem('vAgTasks', JSON.stringify(tasks));
             renderTasks();
-            updateDashboard();
+        }
+        function deleteTask(id) {
+            if(confirm("Delete task?")) {
+                tasks = tasks.filter(x => x.id !== id);
+                localStorage.setItem('vAgTasks', JSON.stringify(tasks));
+                renderTasks();
+            }
         }
 
-        function renderTasks() {
-            const container = document.getElementById('task-list');
+        // --- TIMELINE LOGIC (TIMETUNE) ---
+        function renderTimeline() {
+            const container = document.getElementById('timeline-list');
             container.innerHTML = '';
-            
-            tasks.sort((a,b) => a.done === b.done ? 0 : a.done ? 1 : -1); // Done items at bottom
+            timeline.sort((a,b) => a.start.localeCompare(b.start));
 
-            tasks.forEach(t => {
+            const now = new Date();
+            const curTime = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+            let foundCurrent = false;
+
+            timeline.forEach(b => {
+                const isActive = (curTime >= b.start && curTime < b.end);
+                if(isActive) {
+                    foundCurrent = true;
+                    document.getElementById('now-title').innerText = b.name;
+                    document.getElementById('now-end').innerText = b.end;
+                }
+
                 container.innerHTML += `
-                    <div class="task-item" style="opacity: ${t.done ? 0.5 : 1}">
-                        <div class="task-check ${t.done ? 'checked' : ''}" onclick="toggleTask(${t.id})"></div>
-                        <div style="flex:1; text-decoration: ${t.done ? 'line-through' : 'none'}">${t.text}</div>
-                        <button onclick="deleteTask(${t.id})" style="background:none; border:none; color:var(--text-light); font-size:1.2rem; cursor:pointer;">&times;</button>
+                    <div class="timeline-block ${isActive ? 'active' : ''}">
+                        <div class="time-col">${b.start}</div>
+                        <div class="icon-col">${b.icon}</div>
+                        <div class="info-col" style="display:flex; justify-content:space-between;">
+                            <div>
+                                <div style="font-weight:700;">${b.name}</div>
+                                <div style="font-size:0.8rem; color:var(--text-light);">${b.start} - ${b.end}</div>
+                            </div>
+                            <button onclick="delBlock(${b.id})" style="background:none; border:none; color:#ccc;">&times;</button>
+                        </div>
                     </div>
                 `;
             });
-        }
 
-        // --- TIMER LOGIC ---
-        let timer = null;
-        let timeLeft = 1500;
-        function toggleTimer() {
-            const btn = document.getElementById('timer-btn');
-            if(timer) {
-                clearInterval(timer); timer = null;
-                btn.innerText = "Start";
-            } else {
-                timer = setInterval(() => {
-                    timeLeft--;
-                    const m = Math.floor(timeLeft/60).toString().padStart(2,'0');
-                    const s = (timeLeft%60).toString().padStart(2,'0');
-                    document.getElementById('timer-display').innerText = `${m}:${s}`;
-                    if(timeLeft <= 0) resetTimer();
-                }, 1000);
-                btn.innerText = "Pause";
+            if(!foundCurrent) {
+                document.getElementById('now-title').innerText = "Free Time";
+                document.getElementById('now-end').innerText = "--:--";
             }
         }
-        function resetTimer() {
-            clearInterval(timer); timer = null; timeLeft = 1500;
-            document.getElementById('timer-display').innerText = "25:00";
-            document.getElementById('timer-btn').innerText = "Start";
+
+        function addBlock() {
+            const start = document.getElementById('tl-start').value;
+            const end = document.getElementById('tl-end').value;
+            const name = document.getElementById('tl-name').value;
+            if(!start || !end || !name) return;
+            timeline.push({id: Date.now(), name, start, end, icon: '⏱️'});
+            localStorage.setItem('vAgTimeline', JSON.stringify(timeline));
+            renderTimeline();
+        }
+        function delBlock(id) {
+            timeline = timeline.filter(x => x.id !== id);
+            localStorage.setItem('vAgTimeline', JSON.stringify(timeline));
+            renderTimeline();
         }
 
-        // --- THEME ---
+        // --- UTILS ---
+        function updateClock() {
+            const d = new Date();
+            document.getElementById('clock').innerText = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+            if(d.getSeconds()===0) renderTimeline();
+        }
+        function toggleTimer() {
+            alert("Timer started! (Simple Alert for Demo)"); 
+        }
         function toggleTheme() {
-            if(document.body.getAttribute('data-theme') === 'dark') {
-                document.body.removeAttribute('data-theme');
-                localStorage.setItem('vtTheme', 'light');
+            if(document.body.getAttribute('data-theme')==='dark') {
+                document.body.removeAttribute('data-theme'); localStorage.setItem('vAgTheme', 'light');
             } else {
-                document.body.setAttribute('data-theme', 'dark');
-                localStorage.setItem('vtTheme', 'dark');
+                document.body.setAttribute('data-theme', 'dark'); localStorage.setItem('vAgTheme', 'dark');
             }
         }
         function checkTheme() {
-            if(localStorage.getItem('vtTheme') === 'dark') document.body.setAttribute('data-theme', 'dark');
+            if(localStorage.getItem('vAgTheme')==='dark') document.body.setAttribute('data-theme', 'dark');
         }
+        function renderAll() { renderTasks(); renderTimeline(); }
+        
+        // Default Nav
+        nav('dashboard');
 
-        // --- INITIAL RENDER ---
-        function renderAll() {
-            renderTimeline();
-            renderTasks();
-            updateDashboard();
-        }
     </script>
 </body>
 </html>
