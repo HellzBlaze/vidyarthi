@@ -15,11 +15,6 @@
             --border: #e5e7eb;
             --radius: 16px;
             --shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.05);
-            
-            /* Agenda Colors */
-            --color-hw: #3b82f6; 
-            --color-exam: #ef4444; 
-            --color-other: #10b981; 
         }
 
         [data-theme="dark"] {
@@ -36,19 +31,10 @@
         body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: background 0.3s; }
 
         /* --- SIDEBAR --- */
-        .sidebar { 
-            width: 70px; background: var(--card-bg); display: flex; flex-direction: column; 
-            border-right: 1px solid var(--border); z-index: 100; align-items: center; padding-top: 20px;
-        }
-        .nav-btn {
-            background: none; border: none; width: 45px; height: 45px; border-radius: 12px; 
-            color: var(--text-light); font-size: 1.4rem; margin-bottom: 15px; cursor: pointer; 
-            display: flex; align-items: center; justify-content: center; transition: 0.2s; position: relative;
-        }
+        .sidebar { width: 70px; background: var(--card-bg); display: flex; flex-direction: column; border-right: 1px solid var(--border); z-index: 100; align-items: center; padding-top: 20px; }
+        .nav-btn { background: none; border: none; width: 45px; height: 45px; border-radius: 12px; color: var(--text-light); font-size: 1.4rem; margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; position: relative; }
         .nav-btn:hover { background: var(--bg); color: var(--primary); }
         .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.4); }
-        
-        /* Notification Dot */
         .perm-dot { position: absolute; top: 0; right: 0; width: 10px; height: 10px; background: #ef4444; border-radius: 50%; display: none; }
 
         /* --- MAIN CONTENT --- */
@@ -63,7 +49,11 @@
 
         .card { background: var(--card-bg); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 20px; }
         .btn { padding: 12px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-sm { padding: 5px 10px; font-size: 0.8rem; border-radius: 6px; }
+        .btn-danger { background: #fee2e2; color: #ef4444; }
+        
         input, select { padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; }
+        input[type="color"] { padding: 0; height: 40px; width: 50px; cursor: pointer; border: none; }
 
         /* --- TIMETUNE STYLE TIMELINE --- */
         .timeline-container { position: relative; padding-left: 20px; margin-top: 20px; }
@@ -73,10 +63,8 @@
         .time-col { width: 50px; font-size: 0.8rem; color: var(--text-light); text-align: right; padding-right: 15px; padding-top: 10px; font-weight: 600; }
         .icon-col { width: 36px; height: 36px; border-radius: 50%; background: var(--card-bg); border: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-right: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex-shrink: 0; position: relative; }
         .info-col { flex: 1; background: var(--card-bg); padding: 12px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
-        
         .timeline-block.active .icon-col { background: var(--primary); color: white; animation: pulse 2s infinite; }
         .alarm-badge { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; font-size: 0.6rem; padding: 2px 4px; border-radius: 6px; font-weight: bold; }
-        
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); } 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); } }
 
         /* --- AGENDA STYLES --- */
@@ -84,27 +72,25 @@
         .agenda-header::after { content: ''; height: 1px; flex: 1; background: var(--border); }
 
         .agenda-card { background: var(--card-bg); border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; margin-bottom: 8px; position: relative; overflow: hidden; border: 1px solid var(--border); }
-        
         .color-strip { width: 6px; flex-shrink: 0; }
-        .type-hw { background-color: var(--color-hw); }
-        .type-exam { background-color: var(--color-exam); }
-        .type-other { background-color: var(--color-other); }
-
         .agenda-content { flex: 1; padding: 12px 15px; }
         .agenda-subject { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-light); margin-bottom: 2px; }
         .agenda-title { font-size: 1rem; font-weight: 600; color: var(--text); }
         .agenda-meta { font-size: 0.8rem; color: var(--text-light); margin-top: 4px; display: flex; align-items: center; gap: 8px; }
         .agenda-check { width: 50px; display: flex; align-items: center; justify-content: center; border-left: 1px solid var(--border); cursor: pointer; }
         .checkbox-circle { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--text-light); }
-        
         .agenda-card.done .agenda-title { text-decoration: line-through; opacity: 0.6; }
         .agenda-card.done .checkbox-circle { background: var(--text-light); border-color: var(--text-light); }
+
+        /* --- SETTINGS LIST STYLES --- */
+        .setting-list-item { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--border); }
+        .setting-list-item:last-child { border-bottom: none; }
+        .color-dot { width: 15px; height: 15px; border-radius: 50%; display: inline-block; margin-right: 10px; }
 
         /* --- MODALS & FAB --- */
         .fab { position: fixed; bottom: 30px; right: 30px; width: 56px; height: 56px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); cursor: pointer; border: none; z-index: 500; }
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; }
         
-        /* Mobile */
         @media (max-width: 768px) {
             body { flex-direction: column; height: 100vh; }
             .sidebar { position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; flex-direction: row; padding: 0; border-top: 1px solid var(--border); border-right: none; justify-content: space-around; }
@@ -121,6 +107,7 @@
         <button class="nav-btn active" onclick="nav('dashboard')" title="Dashboard">🏠</button>
         <button class="nav-btn" onclick="nav('tasks')" title="Agenda">📅</button>
         <button class="nav-btn" onclick="nav('timeline')" title="Timeline">⏱️</button>
+        <button class="nav-btn" onclick="nav('focus')" title="Focus">🍅</button>
         <button class="nav-btn" onclick="nav('settings')" title="Settings">⚙️<div id="perm-badge" class="perm-dot"></div></button>
     </nav>
 
@@ -137,17 +124,12 @@
                 <div style="font-size: 2rem; font-weight: 800; margin: 5px 0;" id="now-title">Free Time</div>
                 <div style="font-size: 0.9rem;">Until <span id="now-end">--:--</span></div>
             </div>
-
             <div style="margin-top: 25px;">
                 <h3 style="margin-bottom: 15px; display:flex; justify-content:space-between;">
                     <span>Due Today</span>
                     <span id="today-count" style="background:var(--primary); color:white; padding:2px 8px; border-radius:10px; font-size:0.8rem;">0</span>
                 </h3>
                 <div id="dash-agenda"></div>
-            </div>
-            
-            <div style="margin-top: 20px; font-size: 0.8rem; color: var(--text-light); text-align: center;">
-                <i>Vidyarthi - Early Release v1.2</i>
             </div>
         </section>
 
@@ -158,13 +140,18 @@
 
         <section id="timeline" class="section">
             <div class="card">
-                <h3 style="margin-bottom: 15px;">Edit Routine</h3>
+                <h3 style="margin-bottom: 15px;">Add Routine Block</h3>
                 <div style="display: flex; gap: 5px; margin-bottom: 10px;">
                     <input type="time" id="tl-start">
                     <input type="time" id="tl-end">
                 </div>
+                <div style="margin-bottom: 10px;">
+                    <select id="tl-preset" onchange="applyTlPreset()">
+                        <option value="">-- Select Activity --</option>
+                        </select>
+                </div>
                 <div style="display: flex; gap: 10px; align-items: center;">
-                    <input type="text" id="tl-name" placeholder="Activity name..." style="flex:2;">
+                    <input type="text" id="tl-name" placeholder="Custom name..." style="flex:2;">
                     <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; border: 1px solid var(--border); padding: 8px; border-radius: 8px;">
                         <input type="checkbox" id="tl-notify"> 🔔
                     </label>
@@ -174,27 +161,51 @@
             <div class="timeline-container" id="timeline-list"></div>
         </section>
 
+        <section id="focus" class="section">
+            <div class="card" style="text-align: center; padding: 50px 20px;">
+                <h3>FOCUS TIMER</h3>
+                <div style="font-size: 4rem; font-weight: 800; color: var(--primary); margin: 20px 0;" id="timer-display">25:00</div>
+                <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                    <button class="btn" onclick="toggleTimer()" id="timer-btn" style="width: 120px;">Start</button>
+                    <button class="btn" onclick="resetTimer()" style="background: var(--bg); color: var(--text);">Reset</button>
+                </div>
+                <div style="border-top: 1px solid var(--border); padding-top: 15px;">
+                    <span style="font-size: 0.9rem; color: var(--text-light); margin-right: 10px;">Duration (mins):</span>
+                    <input type="number" id="focus-duration-input" value="25" style="width: 60px; text-align: center; display: inline-block;">
+                    <button class="btn-sm" onclick="saveFocusSettings()" style="background: var(--border); color: var(--text); cursor: pointer; border:none; margin-left: 5px;">Save</button>
+                </div>
+            </div>
+        </section>
+
         <section id="settings" class="section">
+            
             <div class="card">
-                <h3 style="margin-bottom: 15px;">App Settings</h3>
-                
-                <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border);">
-                    <div style="margin-bottom: 10px; font-weight: 600;">Notifications & Alarms</div>
-                    <button id="btn-perm" class="btn" onclick="requestPermission()" style="width: 100%;">
-                        Enable Alarms 🔔
-                    </button>
-                    <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px;">
-                        Required for Agenda and Timeline alerts. Keep this tab open to hear sound.
-                    </div>
-                </div>
+                <h3 style="margin-bottom: 10px;">Notifications</h3>
+                <button id="btn-perm" class="btn" onclick="requestPermission()" style="width: 100%;">Enable Alarms 🔔</button>
+            </div>
 
-                <div style="margin-bottom: 20px;">
-                    <div style="margin-bottom: 10px; font-weight: 600;">Appearance</div>
-                    <button class="btn" onclick="toggleTheme()" style="background: var(--bg); color: var(--text); width: 100%;">
-                        Toggle Dark Mode 🌗
-                    </button>
+            <div class="card">
+                <h3 style="margin-bottom: 10px;">Agenda Categories</h3>
+                <div id="settings-ag-list"></div>
+                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); display: flex; gap: 5px;">
+                    <input type="text" id="new-ag-name" placeholder="Name">
+                    <input type="color" id="new-ag-color" value="#6366f1">
+                    <button class="btn" onclick="addAgCategory()" style="padding: 0 15px;">+</button>
                 </div>
+            </div>
 
+            <div class="card">
+                <h3 style="margin-bottom: 10px;">Timeline Activities</h3>
+                <div id="settings-tl-list"></div>
+                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); display: flex; gap: 5px;">
+                    <input type="text" id="new-tl-name" placeholder="Name (e.g. Sleep)">
+                    <input type="text" id="new-tl-icon" placeholder="Emoji" style="width: 60px; text-align: center;">
+                    <button class="btn" onclick="addTlActivity()" style="padding: 0 15px;">+</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <button class="btn" onclick="toggleTheme()" style="background: var(--bg); color: var(--text); width: 100%; margin-bottom: 10px;">Toggle Dark Mode 🌗</button>
                 <button onclick="resetData()" style="color: #ef4444; background: none; border: none; font-size: 0.9rem; width: 100%; cursor: pointer;">Factory Reset App</button>
             </div>
         </section>
@@ -205,21 +216,17 @@
         <div class="card" style="width: 90%; max-width: 400px; padding: 25px;">
             <h3 style="margin-bottom: 15px;">New Task</h3>
             <input type="text" id="t-subject" placeholder="Subject (e.g. Math)" style="margin-bottom: 10px;">
-            <input type="text" id="t-desc" placeholder="Description (e.g. Chapter 5 Ex)" style="margin-bottom: 10px;">
+            <input type="text" id="t-desc" placeholder="Description (e.g. Chapter 5)" style="margin-bottom: 10px;">
             
             <div style="display: flex; gap: 10px; margin-bottom: 10px;">
                 <select id="t-type">
-                    <option value="Homework">Homework</option>
-                    <option value="Exam">Exam</option>
-                    <option value="Other">Other</option>
-                </select>
+                    </select>
                 <input type="date" id="t-date">
             </div>
             
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; border: 1px solid var(--border); padding: 8px; border-radius: 8px;">
                 <span>🔔 Alarm:</span>
                 <input type="time" id="t-time" style="border: none; background: transparent; padding: 0;">
-                <small style="color: var(--text-light);">(Optional)</small>
             </div>
 
             <div style="display: flex; gap: 10px; margin-top: 15px;">
@@ -232,129 +239,205 @@
     <button class="fab" onclick="openModal()">+</button>
 
     <script>
-        // --- 1. STATE & DATA ---
-        let tasks = JSON.parse(localStorage.getItem('erTasks')) || [
-            { id: 1, subject: 'MATH', desc: 'Worksheet 5', type: 'Homework', date: new Date().toISOString().split('T')[0], time: '', done: false },
-            { id: 2, subject: 'PHYSICS', desc: 'Lab Report', type: 'Exam', date: new Date(Date.now() + 86400000).toISOString().split('T')[0], time: '', done: false }
-        ];
+        // --- 1. DATA STORE & DEFAULTS ---
         
-        let timeline = JSON.parse(localStorage.getItem('erTimeline')) || [
-            { id: 1, name: "Morning Routine", start: "07:00", end: "08:00", icon: "🚿", notify: true },
-            { id: 2, name: "School", start: "08:30", end: "15:00", icon: "🚌", notify: false }
+        // Agenda Categories
+        let agCats = JSON.parse(localStorage.getItem('erAgCats')) || [
+            { id: 1, name: "Homework", color: "#3b82f6" },
+            { id: 2, name: "Exam", color: "#ef4444" },
+            { id: 3, name: "Other", color: "#10b981" }
         ];
 
-        // Beep Sound (Base64 MP3) - Short generic beep
-        const beepSound = new Audio("data:audio/wav;base64,UklGRl9vT1NEZnNjAAAAAAAAAAAAAABBAAAAAAAAAAAAAAAA//8AAH9/AAABAAAA//8AAP//AAAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA");
-        // Using a cleaner beep sound logic in JS if this fails, but browsers handle base64 audio well.
-        // Actually, let's use a function to generate a beep using AudioContext for cleaner reliability without external files.
+        // Timeline Activities
+        let tlActs = JSON.parse(localStorage.getItem('erTlActs')) || [
+            { id: 1, name: "School", icon: "🏫" },
+            { id: 2, name: "Study", icon: "📚" },
+            { id: 3, name: "Sleep", icon: "💤" },
+            { id: 4, name: "Free Time", icon: "🎮" }
+        ];
+
+        // Tasks & Timeline
+        let tasks = JSON.parse(localStorage.getItem('erTasks')) || [];
+        let timeline = JSON.parse(localStorage.getItem('erTimeline')) || [];
+        
+        // Settings
+        let focusDuration = parseInt(localStorage.getItem('erFocusDur')) || 25;
+
+        // Audio
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        // --- 2. INITIALIZATION ---
+        // --- 2. INIT ---
         const todayStr = new Date().toISOString().split('T')[0];
         checkTheme();
         updatePermUI();
+        document.getElementById('focus-duration-input').value = focusDuration;
         renderAll();
         
-        // Master Clock Loop (Every 5 seconds is enough for minute precision)
         setInterval(() => {
             updateClock();
             checkAlarms();
         }, 5000);
 
-        // --- 3. ALARM SYSTEM ---
-        function playAlarm() {
-            // Oscillators are better for offline single-file apps than base64 mp3 strings which can be huge
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
-            oscillator.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.5);
-            gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-            oscillator.start();
-            oscillator.stop(audioCtx.currentTime + 0.5);
+        // --- 3. SETTINGS & CATEGORY MANAGEMENT ---
+        
+        function renderSettingsLists() {
+            // Agenda List
+            const agList = document.getElementById('settings-ag-list');
+            agList.innerHTML = '';
+            agCats.forEach(cat => {
+                agList.innerHTML += `
+                    <div class="setting-list-item">
+                        <div style="display:flex; align-items:center;">
+                            <span class="color-dot" style="background:${cat.color}"></span>
+                            ${cat.name}
+                        </div>
+                        <button class="btn-sm btn-danger" onclick="delAgCategory(${cat.id})" style="border:none; cursor:pointer;">&times;</button>
+                    </div>`;
+            });
+
+            // Timeline List
+            const tlList = document.getElementById('settings-tl-list');
+            tlList.innerHTML = '';
+            tlActs.forEach(act => {
+                tlList.innerHTML += `
+                    <div class="setting-list-item">
+                        <div><span style="margin-right:10px;">${act.icon}</span>${act.name}</div>
+                        <button class="btn-sm btn-danger" onclick="delTlActivity(${act.id})" style="border:none; cursor:pointer;">&times;</button>
+                    </div>`;
+            });
+
+            // Update Dropdowns
+            updateDropdowns();
         }
 
-        function sendNotification(title, body) {
-            if (Notification.permission === 'granted') {
-                playAlarm();
-                new Notification(title, { body: body, icon: '' });
-            } else {
-                // Fallback if no permission but page is open
-                console.log("Alarm triggered but no permission:", title);
+        function addAgCategory() {
+            const name = document.getElementById('new-ag-name').value;
+            const color = document.getElementById('new-ag-color').value;
+            if(!name) return;
+            agCats.push({ id: Date.now(), name, color });
+            localStorage.setItem('erAgCats', JSON.stringify(agCats));
+            document.getElementById('new-ag-name').value = '';
+            renderAll();
+        }
+
+        function delAgCategory(id) {
+            if(confirm("Delete category?")) {
+                agCats = agCats.filter(c => c.id !== id);
+                localStorage.setItem('erAgCats', JSON.stringify(agCats));
+                renderAll();
             }
         }
 
-        function requestPermission() {
-            Notification.requestPermission().then(permission => {
-                if (permission === 'granted') {
-                    playAlarm(); // Test sound
-                    alert("Alarms Enabled! 🔔");
-                }
-                updatePermUI();
-            });
+        function addTlActivity() {
+            const name = document.getElementById('new-tl-name').value;
+            const icon = document.getElementById('new-tl-icon').value || '📍';
+            if(!name) return;
+            tlActs.push({ id: Date.now(), name, icon });
+            localStorage.setItem('erTlActs', JSON.stringify(tlActs));
+            document.getElementById('new-tl-name').value = '';
+            document.getElementById('new-tl-icon').value = '';
+            renderAll();
         }
 
-        function updatePermUI() {
-            const btn = document.getElementById('btn-perm');
-            const dot = document.getElementById('perm-badge');
-            if (Notification.permission === 'granted') {
-                btn.innerText = "Alarms Active ✅";
-                btn.style.background = "var(--color-other)";
-                dot.style.display = 'none';
-            } else {
-                btn.innerText = "Enable Alarms 🔔";
-                btn.style.background = "var(--primary)";
-                dot.style.display = 'block';
+        function delTlActivity(id) {
+            if(confirm("Delete activity?")) {
+                tlActs = tlActs.filter(a => a.id !== id);
+                localStorage.setItem('erTlActs', JSON.stringify(tlActs));
+                renderAll();
             }
         }
 
-        // Variable to prevent multiple alerts in the same minute
-        let lastAlertMinute = ""; 
-
-        function checkAlarms() {
-            const now = new Date();
-            const currentMinute = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
-            const currentDate = now.toISOString().split('T')[0];
-
-            if (currentMinute === lastAlertMinute) return; // Already checked this minute
-            lastAlertMinute = currentMinute;
-
-            // 1. Check Timeline
-            timeline.forEach(block => {
-                if (block.notify && block.start === currentMinute) {
-                    sendNotification(`Timeline: ${block.name}`, `Starting now until ${block.end}`);
-                }
+        function updateDropdowns() {
+            // Task Modal Type Select
+            const typeSel = document.getElementById('t-type');
+            typeSel.innerHTML = '';
+            agCats.forEach(c => {
+                typeSel.innerHTML += `<option value="${c.name}">${c.name}</option>`;
             });
 
-            // 2. Check Tasks (Must be today and match time)
-            tasks.forEach(task => {
-                if (!task.done && task.date === currentDate && task.time === currentMinute) {
-                    sendNotification(`Agenda: ${task.subject}`, task.desc);
-                }
+            // Timeline Preset Select
+            const tlSel = document.getElementById('tl-preset');
+            tlSel.innerHTML = '<option value="">-- Select Activity --</option>';
+            tlActs.forEach(a => {
+                tlSel.innerHTML += `<option value="${a.name}|${a.icon}">${a.icon} ${a.name}</option>`;
             });
         }
 
-        // --- 4. NAVIGATION ---
-        function nav(id) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            
-            const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.onclick.toString().includes(id));
-            if(btn) btn.classList.add('active');
-            
-            document.querySelector('.fab').style.display = (id === 'tasks') ? 'flex' : 'none';
-            document.getElementById('page-title').innerText = id === 'settings' ? 'Settings' : 'Vidyarthi';
-            if(id==='dashboard') document.getElementById('page-title').innerText = 'Dashboard';
-            if(id==='tasks') document.getElementById('page-title').innerText = 'Agenda';
-            if(id==='timeline') document.getElementById('page-title').innerText = 'Timeline';
+        // --- 4. FOCUS TIMER LOGIC ---
+        let timer = null;
+        let timeLeft = focusDuration * 60;
+        
+        function saveFocusSettings() {
+            const val = parseInt(document.getElementById('focus-duration-input').value);
+            if(val > 0) {
+                focusDuration = val;
+                localStorage.setItem('erFocusDur', focusDuration);
+                resetTimer();
+                alert("Duration Saved!");
+            }
         }
 
-        // --- 5. AGENDA LOGIC ---
+        function toggleTimer() {
+            const btn = document.getElementById('timer-btn');
+            if(timer) {
+                clearInterval(timer); timer = null;
+                btn.innerText = "Start";
+            } else {
+                if(timeLeft <= 0) resetTimer();
+                timer = setInterval(() => {
+                    timeLeft--;
+                    const m = Math.floor(timeLeft/60).toString().padStart(2,'0');
+                    const s = (timeLeft%60).toString().padStart(2,'0');
+                    document.getElementById('timer-display').innerText = `${m}:${s}`;
+                    if(timeLeft <= 0) {
+                        playAlarm();
+                        resetTimer();
+                    }
+                }, 1000);
+                btn.innerText = "Pause";
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timer); timer = null;
+            timeLeft = focusDuration * 60;
+            document.getElementById('timer-display').innerText = `${focusDuration}:00`;
+            document.getElementById('timer-btn').innerText = "Start";
+        }
+
+        // --- 5. TIMELINE LOGIC ---
+        function applyTlPreset() {
+            const val = document.getElementById('tl-preset').value;
+            if(val) {
+                const [name, icon] = val.split('|');
+                document.getElementById('tl-name').value = name;
+                document.getElementById('tl-name').dataset.icon = icon; // Store icon temporarily
+            }
+        }
+
+        function addBlock() {
+            const start = document.getElementById('tl-start').value;
+            const end = document.getElementById('tl-end').value;
+            const name = document.getElementById('tl-name').value;
+            const notify = document.getElementById('tl-notify').checked;
+            
+            // Try to find icon from preset or use generic
+            let icon = '⏱️';
+            // Check if name matches a known activity
+            const knownAct = tlActs.find(a => a.name === name);
+            if(knownAct) icon = knownAct.icon;
+
+            if(!start || !end || !name) return alert("Please fill details");
+            
+            timeline.push({id: Date.now(), name, start, end, icon, notify});
+            localStorage.setItem('erTimeline', JSON.stringify(timeline));
+            renderTimeline();
+            
+            document.getElementById('tl-name').value = '';
+            document.getElementById('tl-preset').value = '';
+        }
+
+        // --- 6. AGENDA LOGIC (Rendering with Custom Colors) ---
         function renderTasks() {
             const container = document.getElementById('agenda-container');
             const dash = document.getElementById('dash-agenda');
@@ -371,11 +454,7 @@
                 done: { title: "COMPLETED", items: [] }
             };
 
-            tasks.sort((a,b) => {
-                // Sort by date then time
-                if(a.date !== b.date) return a.date.localeCompare(b.date);
-                return (a.time || '00:00').localeCompare(b.time || '00:00');
-            });
+            tasks.sort((a,b) => (a.date !== b.date) ? a.date.localeCompare(b.date) : (a.time || '00:00').localeCompare(b.time || '00:00'));
 
             const now = new Date();
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -385,7 +464,6 @@
             tasks.forEach(t => {
                 if (t.done) { groups.done.items.push(t); return; }
                 const tDate = new Date(t.date);
-                // Reset time for comparisons
                 const tDateOnly = new Date(tDate.getUTCFullYear(), tDate.getUTCMonth(), tDate.getUTCDate());
 
                 if (t.date < todayStr) groups.overdue.items.push(t);
@@ -399,23 +477,22 @@
 
             for (const [key, grp] of Object.entries(groups)) {
                 if (grp.items.length > 0) {
-                    const headerHtml = `<div class="agenda-header" style="color:${key==='overdue'?'var(--color-exam)':''};">${grp.title}</div>`;
+                    const headerHtml = `<div class="agenda-header">${grp.title}</div>`;
                     container.innerHTML += headerHtml;
                     if (key === 'overdue' || key === 'today') dash.innerHTML += headerHtml;
 
                     grp.items.forEach(t => {
-                        let typeClass = 'type-other';
-                        if(t.type === 'Homework') typeClass = 'type-hw';
-                        if(t.type === 'Exam') typeClass = 'type-exam';
-
+                        // Find Category Color
+                        const cat = agCats.find(c => c.name === t.type) || { color: '#ccc' };
+                        
                         const html = `
                             <div class="agenda-card ${t.done ? 'done' : ''}">
-                                <div class="color-strip ${typeClass}"></div>
+                                <div class="color-strip" style="background-color:${cat.color}"></div>
                                 <div class="agenda-content">
-                                    <div class="agenda-subject" style="color: ${t.type === 'Exam' ? 'var(--color-exam)' : ''}">${t.subject}</div>
+                                    <div class="agenda-subject" style="color:${cat.color}">${t.subject}</div>
                                     <div class="agenda-title">${t.desc}</div>
                                     <div class="agenda-meta">
-                                        <span style="font-size:0.9rem;">${t.type === 'Exam' ? '❗' : '📌'}</span> ${t.date}
+                                        <span style="font-size:0.9rem;">${key==='overdue'?'⚠️':'📌'}</span> ${t.date}
                                         ${t.time ? `<span style="background:var(--bg); padding:2px 6px; border-radius:4px; font-weight:bold;">🔔 ${t.time}</span>` : ''}
                                     </div>
                                 </div>
@@ -433,12 +510,8 @@
             if(dash.innerHTML === '') dash.innerHTML = '<div style="text-align:center; padding:20px; color:#aaa;">No tasks due today.</div>';
         }
 
-        // --- TASK CRUD ---
-        function openModal() {
-            document.getElementById('t-date').value = todayStr;
-            document.getElementById('t-time').value = ""; 
-            document.getElementById('task-modal').style.display = 'flex';
-        }
+        // --- STANDARD FUNCTIONS (Copied & Adapted) ---
+        function openModal() { document.getElementById('t-date').value = todayStr; document.getElementById('task-modal').style.display = 'flex'; }
         function closeModal() { document.getElementById('task-modal').style.display = 'none'; }
         
         function addTask() {
@@ -446,9 +519,9 @@
             const desc = document.getElementById('t-desc').value;
             const type = document.getElementById('t-type').value;
             const date = document.getElementById('t-date').value;
-            const time = document.getElementById('t-time').value; // Get Alarm Time
+            const time = document.getElementById('t-time').value;
 
-            if(!subj || !desc) return alert("Subject and Description required.");
+            if(!subj || !desc) return alert("Required fields missing");
 
             tasks.push({ id: Date.now(), subject: subj, desc, type, date, time, done: false });
             localStorage.setItem('erTasks', JSON.stringify(tasks));
@@ -459,21 +532,9 @@
             document.getElementById('t-desc').value = '';
         }
 
-        function toggleTask(id) {
-            const t = tasks.find(x => x.id === id);
-            if(t) t.done = !t.done;
-            localStorage.setItem('erTasks', JSON.stringify(tasks));
-            renderTasks();
-        }
-        function deleteTask(id) {
-            if(confirm("Delete task?")) {
-                tasks = tasks.filter(x => x.id !== id);
-                localStorage.setItem('erTasks', JSON.stringify(tasks));
-                renderTasks();
-            }
-        }
+        function toggleTask(id) { const t = tasks.find(x => x.id === id); if(t) t.done = !t.done; localStorage.setItem('erTasks', JSON.stringify(tasks)); renderTasks(); }
+        function deleteTask(id) { if(confirm("Delete task?")) { tasks = tasks.filter(x => x.id !== id); localStorage.setItem('erTasks', JSON.stringify(tasks)); renderTasks(); } }
 
-        // --- TIMELINE LOGIC ---
         function renderTimeline() {
             const container = document.getElementById('timeline-list');
             container.innerHTML = '';
@@ -490,76 +551,39 @@
                     document.getElementById('now-title').innerText = b.name;
                     document.getElementById('now-end').innerText = b.end;
                 }
-
                 container.innerHTML += `
                     <div class="timeline-block ${isActive ? 'active' : ''}">
                         <div class="time-col">${b.start}</div>
-                        <div class="icon-col">
-                            ${b.icon}
-                            ${b.notify ? '<div class="alarm-badge">🔔</div>' : ''}
-                        </div>
+                        <div class="icon-col">${b.icon}${b.notify ? '<div class="alarm-badge">🔔</div>' : ''}</div>
                         <div class="info-col" style="display:flex; justify-content:space-between;">
-                            <div>
-                                <div style="font-weight:700;">${b.name}</div>
-                                <div style="font-size:0.8rem; color:var(--text-light);">${b.start} - ${b.end}</div>
-                            </div>
+                            <div><div style="font-weight:700;">${b.name}</div><div style="font-size:0.8rem; color:var(--text-light);">${b.start} - ${b.end}</div></div>
                             <button onclick="delBlock(${b.id})" style="background:none; border:none; color:#ccc;">&times;</button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
-
-            if(!foundCurrent) {
-                document.getElementById('now-title').innerText = "Free Time";
-                document.getElementById('now-end').innerText = "--:--";
-            }
+            if(!foundCurrent) { document.getElementById('now-title').innerText = "Free Time"; document.getElementById('now-end').innerText = "--:--"; }
         }
 
-        function addBlock() {
-            const start = document.getElementById('tl-start').value;
-            const end = document.getElementById('tl-end').value;
-            const name = document.getElementById('tl-name').value;
-            const notify = document.getElementById('tl-notify').checked;
-
-            if(!start || !end || !name) return;
-            timeline.push({id: Date.now(), name, start, end, icon: '⏱️', notify: notify});
-            localStorage.setItem('erTimeline', JSON.stringify(timeline));
-            renderTimeline();
-            
-            document.getElementById('tl-name').value = '';
-            document.getElementById('tl-notify').checked = false;
+        function delBlock(id) { timeline = timeline.filter(x => x.id !== id); localStorage.setItem('erTimeline', JSON.stringify(timeline)); renderTimeline(); }
+        function playAlarm() { if (audioCtx.state === 'suspended') audioCtx.resume(); const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination); o.type='sine'; o.frequency.setValueAtTime(880, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5); o.start(); o.stop(audioCtx.currentTime+0.5); }
+        function requestPermission() { Notification.requestPermission().then(p => { if(p==='granted') { playAlarm(); alert("Enabled!"); } updatePermUI(); }); }
+        function updatePermUI() { const b = document.getElementById('btn-perm'); const d = document.getElementById('perm-badge'); if(Notification.permission==='granted'){ b.innerText="Alarms Active ✅"; b.style.background="#10b981"; d.style.display='none'; } else { b.innerText="Enable Alarms 🔔"; b.style.background="#6366f1"; d.style.display='block'; } }
+        let lastAlert = "";
+        function checkAlarms() {
+            const now = new Date();
+            const min = now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0');
+            if(min===lastAlert) return; lastAlert=min;
+            timeline.forEach(b => { if(b.notify && b.start===min) new Notification(`Timeline: ${b.name}`); });
+            tasks.forEach(t => { if(!t.done && t.date===todayStr && t.time===min) new Notification(`Agenda: ${t.subject}`); });
         }
-        function delBlock(id) {
-            timeline = timeline.filter(x => x.id !== id);
-            localStorage.setItem('erTimeline', JSON.stringify(timeline));
-            renderTimeline();
-        }
-
-        // --- UTILS ---
-        function updateClock() {
-            const d = new Date();
-            document.getElementById('clock').innerText = d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-        }
-        function toggleTheme() {
-            if(document.body.getAttribute('data-theme')==='dark') {
-                document.body.removeAttribute('data-theme'); localStorage.setItem('erTheme', 'light');
-            } else {
-                document.body.setAttribute('data-theme', 'dark'); localStorage.setItem('erTheme', 'dark');
-            }
-        }
-        function checkTheme() {
-            if(localStorage.getItem('erTheme')==='dark') document.body.setAttribute('data-theme', 'dark');
-        }
-        function resetData() {
-            if(confirm("Factory Reset: Wipe all tasks and timeline data?")) {
-                localStorage.clear();
-                location.reload();
-            }
-        }
-        function renderAll() { renderTasks(); renderTimeline(); }
+        function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([],{hour:'2-digit', minute:'2-digit'}); }
+        function toggleTheme() { if(document.body.getAttribute('data-theme')==='dark') { document.body.removeAttribute('data-theme'); localStorage.setItem('erTheme','light'); } else { document.body.setAttribute('data-theme','dark'); localStorage.setItem('erTheme','dark'); } }
+        function checkTheme() { if(localStorage.getItem('erTheme')==='dark') document.body.setAttribute('data-theme','dark'); }
+        function resetData() { if(confirm("Reset Everything?")) { localStorage.clear(); location.reload(); } }
         
+        function renderAll() { renderSettingsLists(); renderTasks(); renderTimeline(); resetTimer(); }
+        function nav(id) { document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); const b=Array.from(document.querySelectorAll('.nav-btn')).find(b=>b.onclick.toString().includes(id)); if(b) b.classList.add('active'); document.querySelector('.fab').style.display=(id==='tasks')?'flex':'none'; document.getElementById('page-title').innerText=id.charAt(0).toUpperCase()+id.slice(1); if(id==='dashboard') document.getElementById('page-title').innerText='Dashboard'; }
         nav('dashboard');
-
     </script>
 </body>
 </html>
