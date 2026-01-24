@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - Platinum Design</title>
+    <title>Vidyarthi - Platinum</title>
     <style>
         :root {
             --primary: #4f46e5;
-            --primary-light: #e0e7ff; /* Auto-calculated in JS usually, but fixed here */
+            --primary-light: #e0e7ff;
             --bg: #f1f5f9;
             --surface: #ffffff;
             --text: #0f172a;
@@ -27,7 +27,7 @@
             --text: #f8fafc;
             --text-muted: #94a3b8;
             --border: #334155;
-            --primary-light: #312e81; /* Darker variant for dark mode */
+            --primary-light: #312e81;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
@@ -48,7 +48,6 @@
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; }
-        h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; }
 
         .section { display: none; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 100px; }
         .section.active { display: block; }
@@ -66,89 +65,51 @@
         input, select { padding: 12px 15px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; transition: 0.2s; }
         input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); background: var(--surface); }
 
-        /* --- 🎒 NEW SCHOOL HUB (AESTHETIC) --- */
+        /* --- SCHOOL HUB --- */
         .sub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
         
         .sub-card { 
             background: var(--surface); border-radius: 24px; padding: 20px; cursor: pointer; 
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); border: 1px solid var(--border);
-            position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
-            min-height: 160px;
+            transition: all 0.3s; border: 1px solid var(--border); position: relative; overflow: hidden; 
+            display: flex; flex-direction: column; justify-content: space-between; min-height: 160px;
         }
         .sub-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1); }
-        
-        /* Gradient overlay for cards */
         .sub-bg-blob { position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; border-radius: 50%; opacity: 0.1; filter: blur(20px); }
-        
-        .sub-icon { 
-            width: 45px; height: 45px; border-radius: 14px; display: flex; align-items: center; justify-content: center; 
-            font-size: 1.5rem; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        
-        .sub-meta { position: relative; z-index: 2; }
-        .sub-name { font-weight: 800; font-size: 1.1rem; margin-bottom: 2px; }
-        .sub-room { font-size: 0.8rem; opacity: 0.7; font-weight: 500; }
-        
-        .sub-grade-pill {
-            position: absolute; top: 15px; right: 15px; font-size: 0.75rem; font-weight: 800; 
-            padding: 4px 10px; border-radius: 20px; background: var(--surface); box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        /* Progress Bar */
+        .sub-grade-pill { position: absolute; top: 15px; right: 15px; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; background: var(--surface); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .att-bar-bg { height: 6px; width: 100%; background: var(--bg); border-radius: 10px; margin-top: 15px; overflow: hidden; }
-        .att-bar-fill { height: 100%; border-radius: 10px; transition: width 0.5s ease; }
+        .att-bar-fill { height: 100%; border-radius: 10px; }
 
-        /* Detail View Header */
-        .det-hero { 
-            background: var(--surface); padding: 30px; border-radius: 24px; text-align: center; 
-            margin-bottom: 20px; border: 1px solid var(--border); position: relative; overflow: hidden;
-        }
+        /* --- DETAIL VIEW --- */
+        .det-hero { background: var(--surface); padding: 30px; border-radius: 24px; text-align: center; margin-bottom: 20px; border: 1px solid var(--border); position: relative; overflow: hidden; }
         .det-stats-row { display: flex; gap: 15px; margin-top: 20px; }
         .det-stat-card { flex: 1; background: var(--bg); padding: 15px; border-radius: 16px; text-align: center; }
         .stat-val { font-size: 1.5rem; font-weight: 800; display: block; }
         .stat-lbl { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px; }
 
-        /* --- ⚙️ NEW SETTINGS (AESTHETIC) --- */
+        /* --- SETTINGS --- */
         .settings-group { margin-bottom: 25px; }
         .settings-label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; margin-left: 5px; }
-        
         .settings-list { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; }
-        .settings-item { 
-            padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; 
-            border-bottom: 1px solid var(--border); transition: background 0.2s;
-        }
+        .settings-item { padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); transition: background 0.2s; cursor: pointer; }
         .settings-item:last-child { border-bottom: none; }
         .settings-item:hover { background: var(--bg); }
-        
         .item-icon { width: 32px; height: 32px; background: var(--bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1.1rem; }
         .item-info { flex: 1; font-weight: 600; font-size: 0.95rem; }
 
-        /* iOS Toggle Switch */
         .toggle-switch { position: relative; width: 50px; height: 28px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .4s; border-radius: 34px; }
         .slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         input:checked + .slider { background-color: var(--success); }
         input:checked + .slider:before { transform: translateX(22px); }
-
-        /* Color Picker Circles */
         .color-opt { width: 35px; height: 35px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: 0.2s; }
         .color-opt.active { border-color: var(--text); transform: scale(1.1); }
 
-        /* --- DATE NAVIGATOR & TIMETABLE --- */
+        /* --- TIMETABLE --- */
         .date-nav { display: flex; align-items: center; justify-content: space-between; background: var(--surface); padding: 10px; border-radius: 18px; border: 1px solid var(--border); margin-bottom: 20px; box-shadow: var(--shadow); }
-        .date-display { text-align: center; }
-        .date-main { font-weight: 800; font-size: 1.1rem; }
-        .date-sub { font-size: 0.8rem; color: var(--text-muted); }
-        
         .tt-item { display: flex; gap: 15px; margin-bottom: 15px; position: relative; }
         .tt-time-col { width: 60px; text-align: right; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; flex-direction: column; justify-content: space-between; padding: 5px 0; }
         .tt-card { flex: 1; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 15px; position: relative; overflow: hidden; box-shadow: var(--shadow); transition: 0.2s; }
-        .tt-card:active { transform: scale(0.98); }
-        .tt-subject { font-weight: 800; font-size: 1.1rem; }
-        .tt-room { font-size: 0.85rem; opacity: 0.8; }
-
-        /* --- DASHBOARD HERO --- */
         .gpa-hero { background: linear-gradient(135deg, var(--primary), #8b5cf6); color: white; padding: 30px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; box-shadow: 0 10px 30px -10px var(--primary); }
 
         /* Modal */
@@ -235,7 +196,6 @@
         </section>
 
         <section id="school" class="section">
-            
             <div id="school-grid">
                 <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="margin:0">My Courses</h3>
@@ -256,10 +216,6 @@
                         <div class="det-stat-card">
                             <span class="stat-val" id="det-grade-val">95%</span>
                             <span class="stat-lbl">Grade</span>
-                        </div>
-                        <div class="det-stat-card">
-                            <span class="stat-val" id="det-att-val">100%</span>
-                            <span class="stat-lbl">Attendance</span>
                         </div>
                     </div>
                 </div>
@@ -314,20 +270,40 @@
             </div>
 
             <div class="settings-group">
+                <div class="settings-label">Data Management</div>
+                <div class="settings-list">
+                    <div class="settings-item" onclick="exportData()">
+                        <div style="display:flex; align-items:center;">
+                            <div class="item-icon">💾</div>
+                            <div class="item-info">Backup Data</div>
+                        </div>
+                        <span style="color:var(--text-muted);">⬇️</span>
+                    </div>
+                    <div class="settings-item" onclick="document.getElementById('restore-input').click()">
+                        <div style="display:flex; align-items:center;">
+                            <div class="item-icon">📂</div>
+                            <div class="item-info">Restore Data</div>
+                        </div>
+                        <span style="color:var(--text-muted);">⬆️</span>
+                    </div>
+                    <input type="file" id="restore-input" style="display:none;" accept=".json" onchange="importData(this)">
+                </div>
+            </div>
+
+            <div class="settings-group">
                 <div class="settings-label">System</div>
                 <div class="settings-list">
-                    <div class="settings-item" onclick="resetApp()" style="cursor:pointer;">
+                    <div class="settings-item" onclick="resetApp()">
                         <div style="display:flex; align-items:center;">
-                            <div class="item-icon" style="color:var(--danger);">🗑️</div>
+                            <div class="item-icon" style="color:var(--danger); background:var(--bg);">🗑️</div>
                             <div class="item-info" style="color:var(--danger);">Factory Reset</div>
                         </div>
-                        <span style="color:var(--text-muted);">❯</span>
                     </div>
                 </div>
             </div>
 
             <div style="text-align:center; color:var(--text-muted); font-size:0.8rem; margin-top:30px;">
-                Vidyarthi Platinum v2.5
+                Vidyarthi Platinum v3.0
             </div>
         </section>
 
@@ -361,9 +337,6 @@
                     <input type="checkbox" id="c-repeat" checked style="width:auto; margin-right:10px;">
                     <span style="font-weight:600;">Repeat Weekly</span>
                 </label>
-                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:5px; margin-left:25px;">
-                    Uncheck to add just for this date (override).
-                </div>
             </div>
 
             <div style="display:flex; gap:10px;">
@@ -446,18 +419,49 @@
                 document.getElementById('theme-toggle').checked = true;
             }
             document.documentElement.style.setProperty('--primary', db.settings.accent);
-            // Simple light variant approximation
             document.documentElement.style.setProperty('--primary-light', db.settings.accent + '20'); 
         }
 
+        // --- BACKUP & RESTORE LOGIC ---
+        function exportData() {
+            const dataStr = JSON.stringify(db, null, 2);
+            const blob = new Blob([dataStr], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `vidyarthi_backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    // Validasi sederhana
+                    if (imported.timetable && imported.subjects) {
+                        db = imported;
+                        save();
+                        alert("Data restored successfully!");
+                        location.reload();
+                    } else {
+                        alert("Invalid backup file.");
+                    }
+                } catch (err) {
+                    alert("Error reading file: " + err);
+                }
+            };
+            reader.readAsText(file);
+        }
+
         // --- RENDERERS ---
-        
-        // 1. SCHOOL (NEW DESIGN)
         function renderSchool() {
             const grid = document.getElementById('subject-list');
             grid.innerHTML = '';
             
-            // Dropdowns
             const options = db.subjects.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
             document.getElementById('t-sub').innerHTML = options;
             document.getElementById('c-sub').innerHTML = options;
@@ -490,7 +494,6 @@
             updateGPA();
         }
 
-        // 2. TIMETABLE (SMART DATE LOGIC)
         function changeDate(delta) { selectedDate.setDate(selectedDate.getDate() + delta); renderTimetable(); }
 
         function renderTimetable() {
@@ -503,7 +506,6 @@
             document.getElementById('tt-date-sub').innerText = selectedDate.toLocaleDateString('en-US', {month:'long', day:'numeric'});
             document.getElementById('tt-add-hint').innerText = isToday ? "Today" : selectedDate.toLocaleDateString('en-US', {weekday:'long'});
 
-            // Logic: Override vs Template
             const dateStr = selectedDate.toISOString().split('T')[0];
             let classes = [];
             let isOverride = false;
@@ -514,11 +516,9 @@
             } else {
                 const dayIdx = selectedDate.getDay();
                 classes = db.timetable.filter(c => c.day === dayIdx);
-                // Deep copy to prevent ref issues
                 classes = JSON.parse(JSON.stringify(classes));
             }
 
-            // UI State
             document.getElementById('tt-modifier-badge').style.display = isOverride ? 'inline-block' : 'none';
             document.getElementById('reset-day-container').style.display = isOverride ? 'flex' : 'none';
 
@@ -553,7 +553,6 @@
             });
         }
 
-        // --- LOGIC ---
         function saveClass() {
             const subId = document.getElementById('c-sub').value;
             const start = document.getElementById('c-start').value;
@@ -567,7 +566,6 @@
                 } else {
                     const dateStr = selectedDate.toISOString().split('T')[0];
                     if(!db.overrides[dateStr]) {
-                        // Init override with current template
                         const dayIdx = selectedDate.getDay();
                         db.overrides[dateStr] = JSON.parse(JSON.stringify(db.timetable.filter(c => c.day === dayIdx)));
                     }
@@ -588,7 +586,6 @@
                     if(confirm("Delete for ALL weeks (OK) or just TODAY (Cancel)?")) {
                         db.timetable = db.timetable.filter(c => c.id !== id);
                     } else {
-                        // Convert to override
                         const dayIdx = selectedDate.getDay();
                         db.overrides[dateStr] = JSON.parse(JSON.stringify(db.timetable.filter(c => c.day === dayIdx)));
                         db.overrides[dateStr] = db.overrides[dateStr].filter(c => c.id !== id);
@@ -603,13 +600,11 @@
             if(confirm("Discard custom changes?")) { delete db.overrides[dateStr]; save(); renderTimetable(); }
         }
 
-        // --- DASHBOARD & UTILS ---
         function checkLiveStatus() {
             const now = new Date();
             const cur = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
             const dateStr = now.toISOString().split('T')[0];
             
-            // Get classes for TODAY (handling overrides)
             let classes = db.overrides[dateStr];
             if(!classes) classes = db.timetable.filter(c => c.day === now.getDay());
 
@@ -622,7 +617,7 @@
                 document.getElementById('now-time').innerText = active.end;
             } else {
                 document.getElementById('now-activity').innerText = "Free Time";
-                document.getElementById('now-room').innerText = "Relax";
+                document.getElementById('now-room').innerText = "No class right now";
                 document.getElementById('now-time').innerText = "--:--";
             }
             if(selectedDate.toDateString() === now.toDateString()) renderTimetable();
@@ -676,7 +671,6 @@
             document.getElementById('dash-grade').innerText = "Grade: " + l;
         }
 
-        // System
         function save() {
             localStorage.setItem('vs3Timetable', JSON.stringify(db.timetable));
             localStorage.setItem('vs3Overrides', JSON.stringify(db.overrides));
@@ -708,7 +702,6 @@
         function toggleTheme() { db.settings.theme = db.settings.theme==='dark'?'light':'dark'; save(); applySettings(); }
         function resetApp() { if(confirm("Reset?")) { localStorage.clear(); location.reload(); } }
         
-        // CRUD Wrappers
         function saveSubject() { const n=document.getElementById('s-name').value; if(n){db.subjects.push({id:Date.now(), name:n, room:document.getElementById('s-room').value, color:document.getElementById('s-color').value}); save(); closeModal('modal-sub');} }
         function saveTask() { const d=document.getElementById('t-desc').value; if(d){db.tasks.push({id:Date.now(), desc:d, subId:document.getElementById('t-sub').value, date:document.getElementById('t-date').value, done:false}); save(); closeModal('modal-task');} }
         function saveGrade() { const n=document.getElementById('g-name').value; if(n){db.grades.push({id:Date.now(), subId:currentSubId, name:n, score:document.getElementById('g-score').value, total:document.getElementById('g-total').value}); save(); closeModal('modal-grade'); renderDetailGrades();} }
@@ -724,10 +717,3 @@
         function openTaskModal() { document.getElementById('t-date').value = new Date().toISOString().split('T')[0]; document.getElementById('modal-task').style.display='flex'; }
         function openSubjectModal() { document.getElementById('modal-sub').style.display='flex'; }
         function openGradeModal() { document.getElementById('modal-grade').style.display='flex'; }
-        function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([],{hour:'2-digit', minute:'2-digit'}); }
-
-        init();
-        nav('dashboard');
-    </script>
-</body>
-</html>
