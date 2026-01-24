@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - Platinum Fixed</title>
+    <title>Vidyarthi - School Edition</title>
     <style>
         :root {
-            --primary: #6366f1;
+            --primary: #4f46e5;
             --primary-light: #e0e7ff;
             --bg: #f8fafc;
             --surface: #ffffff;
             --text: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --radius: 18px;
+            --radius: 16px;
             --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-            --danger: #ef4444;
+            
             --success: #10b981;
+            --danger: #ef4444;
         }
 
         [data-theme="dark"] {
@@ -48,31 +49,37 @@
         @keyframes fadeScale { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
 
         .card { background: var(--surface); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 15px; }
-        
         .btn { padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.95rem; }
         .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
         .btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 8px; }
-        .btn-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: none; background: transparent; cursor: pointer; color: var(--text-muted); }
 
         input, select { padding: 12px 15px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; }
 
-        /* --- TIMELINE --- */
-        .date-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; background: var(--surface); padding: 10px; border-radius: 16px; border: 1px solid var(--border); }
-        
-        .timeline-wrapper { position: relative; padding: 10px 0 10px 20px; }
-        .timeline-line { position: absolute; left: 45px; top: 0; bottom: 0; width: 2px; background: var(--border); z-index: 0; }
-        
-        .tl-item { display: flex; margin-bottom: 20px; position: relative; z-index: 1; }
-        .tl-time { width: 50px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-align: right; padding-right: 15px; padding-top: 14px; }
-        .tl-node { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; flex-shrink: 0; z-index: 2; }
-        .tl-card { flex: 1; background: var(--surface); padding: 15px; border-radius: 16px; border: 1px solid var(--border); position: relative; }
-        
-        .tl-item.active .tl-node { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); transform: scale(1.1); }
-        .live-badge { position: absolute; top: -10px; right: 10px; background: var(--danger); color: white; font-size: 0.65rem; padding: 4px 8px; border-radius: 10px; font-weight: 800; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        /* --- 📅 NEW TIMETABLE DESIGN --- */
+        .day-tabs { display: flex; justify-content: space-between; background: var(--surface); padding: 5px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 20px; overflow-x: auto; }
+        .day-tab { flex: 1; text-align: center; padding: 10px 5px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: 0.2s; min-width: 40px; }
+        .day-tab.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
 
-        /* --- EDITOR LIST --- */
-        .editor-block { display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 10px; border-radius: 10px; margin-bottom: 8px; border: 1px solid var(--border); }
+        .tt-list { display: flex; flex-direction: column; gap: 15px; }
+        .tt-item { display: flex; gap: 15px; position: relative; }
+        
+        /* Time Column */
+        .tt-time-col { width: 60px; text-align: right; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; flex-direction: column; justify-content: space-between; padding: 5px 0; }
+        
+        /* Class Card */
+        .tt-card { flex: 1; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); position: relative; overflow: hidden; display: flex; transition: transform 0.2s; box-shadow: var(--shadow); }
+        .tt-card:active { transform: scale(0.98); }
+        .tt-color-bar { width: 6px; flex-shrink: 0; }
+        .tt-info { padding: 12px 15px; flex: 1; }
+        .tt-subject { font-weight: 800; font-size: 1.1rem; margin-bottom: 2px; }
+        .tt-room { font-size: 0.85rem; opacity: 0.8; }
+        .tt-duration { font-size: 0.75rem; color: var(--text-muted); margin-top: 5px; display: flex; align-items: center; gap: 5px; }
+
+        /* Current Class Indicator */
+        .tt-item.now .tt-card { border: 2px solid var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
+        .tt-item.now .tt-card::after { content: 'NOW'; position: absolute; top: 10px; right: 10px; background: var(--danger); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; animation: pulse 2s infinite; }
+        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         /* --- SCHOOL & AGENDA --- */
         .gpa-hero { background: linear-gradient(135deg, var(--primary), #4f46e5); color: white; padding: 25px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -89,7 +96,7 @@
 
         /* Modal */
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(4px); }
-        .modal-box { background: var(--surface); width: 90%; max-width: 450px; border-radius: 24px; padding: 25px; max-height: 90vh; overflow-y: auto; }
+        .modal-box { background: var(--surface); width: 90%; max-width: 400px; border-radius: 24px; padding: 25px; max-height: 90vh; overflow-y: auto; }
 
         @media (max-width: 768px) {
             body { flex-direction: column; }
@@ -104,10 +111,10 @@
     <nav class="sidebar">
         <div style="font-weight:900; color:var(--primary); font-size:1.5rem; margin-bottom:20px;">V</div>
         <button class="nav-item active" onclick="nav('dashboard')">🏠</button>
+        <button class="nav-item" onclick="nav('timetable')">📅</button>
         <button class="nav-item" onclick="nav('school')">🎓</button>
-        <button class="nav-item" onclick="nav('timeline')">⏱️</button>
-        <button class="nav-item" onclick="nav('schedules')">📅</button>
         <button class="nav-item" onclick="nav('agenda')">✅</button>
+        <button class="nav-item" onclick="nav('settings')">⚙️</button>
     </nav>
 
     <main class="main-content">
@@ -129,14 +136,14 @@
 
             <div class="card">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                    <h3>Happening Now</h3>
+                    <h3>Up Next</h3>
                     <div style="font-size:0.8rem; color:var(--text-muted);" id="now-time">--:--</div>
                 </div>
                 <div style="display:flex; align-items:center; gap:15px;">
-                    <div style="width:50px; height:50px; background:var(--primary-light); color:var(--primary); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.5rem;" id="now-icon">☕</div>
+                    <div style="width:50px; height:50px; background:var(--primary-light); color:var(--primary); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">🏫</div>
                     <div>
-                        <div style="font-size:1.2rem; font-weight:700;" id="now-activity">Free Time</div>
-                        <div style="font-size:0.9rem; color:var(--text-muted);" id="now-schedule-name">No Schedule</div>
+                        <div style="font-size:1.2rem; font-weight:700;" id="now-activity">No Classes</div>
+                        <div style="font-size:0.9rem; color:var(--text-muted);" id="now-room">Enjoy your free time</div>
                     </div>
                 </div>
             </div>
@@ -144,37 +151,23 @@
             <div id="dash-agenda-preview"></div>
         </section>
 
-        <section id="timeline" class="section">
-            <div class="date-nav">
-                <button class="btn-icon" onclick="changeDate(-1)">◀</button>
-                <div style="text-align:center;">
-                    <div style="font-weight:700;" id="tl-date-display">Today</div>
-                    <div style="font-size:0.8rem; color:var(--primary);" id="tl-schedule-name">Loading...</div>
+        <section id="timetable" class="section">
+            <div class="day-tabs">
+                <div class="day-tab" onclick="switchDay(1)" id="day-1">Mon</div>
+                <div class="day-tab" onclick="switchDay(2)" id="day-2">Tue</div>
+                <div class="day-tab" onclick="switchDay(3)" id="day-3">Wed</div>
+                <div class="day-tab" onclick="switchDay(4)" id="day-4">Thu</div>
+                <div class="day-tab" onclick="switchDay(5)" id="day-5">Fri</div>
+                <div class="day-tab" onclick="switchDay(6)" id="day-6">Sat</div>
+                <div class="day-tab" onclick="switchDay(0)" id="day-0">Sun</div>
+            </div>
+
+            <div class="tt-list" id="timetable-list">
                 </div>
-                <button class="btn-icon" onclick="changeDate(1)">▶</button>
+            
+            <div style="text-align:center; margin-top:30px; color:var(--text-muted);">
+                <small>Tap + to add a class to this day</small>
             </div>
-
-            <button class="btn" style="width:100%; margin-bottom:20px; background:var(--surface); color:var(--primary); border:1px solid var(--primary);" onclick="editCurrentDaySchedule()">
-                ✏️ Edit This Routine
-            </button>
-
-            <div class="timeline-wrapper">
-                <div class="timeline-line"></div>
-                <div id="timeline-list"></div>
-            </div>
-        </section>
-
-        <section id="schedules" class="section">
-            <div class="card">
-                <h3>Calendar Assignment</h3>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;">Assign your routines to days.</p>
-                <div id="calendar-assigner"></div>
-            </div>
-            <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-                <h3>My Routines</h3>
-                <button class="btn btn-sm" onclick="createSchedule()">+ New</button>
-            </div>
-            <div id="schedule-list"></div>
         </section>
 
         <section id="school" class="section">
@@ -185,6 +178,24 @@
                 </div>
                 <div class="sub-grid" id="subject-list"></div>
             </div>
+            
+            <div id="school-detail" style="display:none; animation: fadeScale 0.2s;">
+                <div style="display:flex; gap:10px; margin-bottom:20px;">
+                    <button class="btn-ghost" onclick="closeDetail()" style="font-size:1.2rem;">←</button>
+                    <div>
+                        <h2 id="det-name">Math</h2>
+                        <div style="color:var(--text-muted);" id="det-room">Room 101</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                        <h3>Grades</h3>
+                        <button class="btn-sm btn-ghost" onclick="openGradeModal()">+ Grade</button>
+                    </div>
+                    <div id="det-grades"></div>
+                </div>
+                <button class="btn-ghost" style="width:100%; color:var(--danger); border-color:var(--danger);" onclick="deleteSubject()">Delete Subject</button>
+            </div>
         </section>
 
         <section id="agenda" class="section">
@@ -192,33 +203,40 @@
             <div style="height:60px;"></div>
         </section>
 
+        <section id="settings" class="section">
+            <div class="card">
+                <h3>Settings</h3>
+                <button class="btn-ghost" style="width:100%; margin-top:10px;" onclick="toggleTheme()">Dark Mode 🌗</button>
+                <button class="btn-ghost" style="width:100%; margin-top:10px; color:var(--danger);" onclick="resetApp()">Factory Reset 🗑️</button>
+            </div>
+        </section>
+
     </main>
 
     <button class="fab" onclick="handleFab()">+</button>
 
-    <div id="modal-sched" class="modal">
+    <div id="modal-class" class="modal">
         <div class="modal-box">
-            <h3>Edit Routine</h3>
-            <input type="hidden" id="sch-id">
-            <input type="text" id="sch-name" placeholder="Routine Name" style="margin:10px 0;">
+            <h3>Add Class</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:10px;">Adding to <span id="class-modal-day" style="font-weight:bold;">Monday</span></p>
             
-            <div style="background:var(--bg); padding:10px; border-radius:12px; margin-bottom:10px;">
-                <div style="font-size:0.8rem; font-weight:700; margin-bottom:5px;">ADD BLOCK</div>
-                <div style="display:flex; gap:5px; margin-bottom:5px;">
-                    <input type="time" id="b-start">
-                    <input type="time" id="b-end">
+            <label style="font-size:0.8rem; font-weight:bold;">Subject</label>
+            <select id="c-sub" style="margin-bottom:10px;"></select>
+            
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <div style="flex:1">
+                    <label style="font-size:0.8rem; font-weight:bold;">Start</label>
+                    <input type="time" id="c-start">
                 </div>
-                <div style="display:flex; gap:5px;">
-                    <input type="text" id="b-name" placeholder="Activity" style="flex:1;">
-                    <input type="text" id="b-icon" placeholder="Emoji" style="width:50px; text-align:center;">
-                    <button class="btn btn-sm" onclick="addBlockToSchedule()">+</button>
+                <div style="flex:1">
+                    <label style="font-size:0.8rem; font-weight:bold;">End</label>
+                    <input type="time" id="c-end">
                 </div>
             </div>
 
-            <div style="max-height:250px; overflow-y:auto; margin-bottom:15px;" id="sch-blocks-list"></div>
-
             <div style="display:flex; gap:10px;">
-                <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-sched')">Done</button>
+                <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-class')">Cancel</button>
+                <button class="btn" style="flex:1" onclick="saveClass()">Save</button>
             </div>
         </div>
     </div>
@@ -249,241 +267,240 @@
         </div>
     </div>
 
+    <div id="modal-grade" class="modal">
+        <div class="modal-box">
+            <h3>Add Grade</h3>
+            <input type="text" id="g-name" placeholder="Exam Name" style="margin:10px 0;">
+            <div style="display:flex; gap:10px; margin-bottom:10px;">
+                <input type="number" id="g-score" placeholder="Score">
+                <input type="number" id="g-total" placeholder="Total" value="100">
+            </div>
+            <button class="btn" onclick="saveGrade()" style="width:100%;">Save</button>
+            <button class="btn-ghost" onclick="closeModal('modal-grade')" style="width:100%; margin-top:5px;">Cancel</button>
+        </div>
+    </div>
+
     <script>
         // --- DATA ---
         let db = {
-            schedules: JSON.parse(localStorage.getItem('vpfScheds')) || [
-                { id: 1, name: "School Day", blocks: [
-                    {id:1, name:"Wake Up", start:"07:00", end:"08:00", icon:"☀️"},
-                    {id:2, name:"School", start:"08:00", end:"15:00", icon:"🏫"},
-                    {id:3, name:"Study", start:"16:00", end:"18:00", icon:"📚"}
-                ]},
-                { id: 2, name: "Weekend", blocks: [
-                    {id:1, name:"Sleep In", start:"09:00", end:"10:00", icon:"💤"},
-                    {id:2, name:"Relax", start:"10:00", end:"22:00", icon:"🎮"}
-                ]}
-            ],
-            assignments: JSON.parse(localStorage.getItem('vpfAssign')) || { 1:1, 2:1, 3:1, 4:1, 5:1, 6:2, 0:2 },
-            subjects: JSON.parse(localStorage.getItem('vpfSubs')) || [],
-            tasks: JSON.parse(localStorage.getItem('vpfTasks')) || [],
-            grades: JSON.parse(localStorage.getItem('vpfGrades')) || [],
+            // New Timetable Structure: { day: 1, subId: 1, start: '09:00', end: '10:00' }
+            timetable: JSON.parse(localStorage.getItem('vseTimetable')) || [],
+            subjects: JSON.parse(localStorage.getItem('vseSubs')) || [],
+            tasks: JSON.parse(localStorage.getItem('vseTasks')) || [],
+            grades: JSON.parse(localStorage.getItem('vseGrades')) || [],
+            settings: JSON.parse(localStorage.getItem('vseSets')) || { theme: 'light' }
         };
 
-        let selectedDate = new Date();
-        let editingScheduleId = null;
+        let currentDayIdx = new Date().getDay(); // 0-6
+        let currentSubId = null;
+        let currentPage = 'dashboard';
 
         function init() {
+            if(db.settings.theme === 'dark') document.body.setAttribute('data-theme', 'dark');
             renderAll();
+            switchDay(currentDayIdx); // Select today by default
             setInterval(updateClock, 1000);
             setInterval(checkLiveStatus, 5000);
         }
 
-        // --- TIMELINE ENGINE ---
-        function changeDate(delta) {
-            selectedDate.setDate(selectedDate.getDate() + delta);
-            renderTimeline();
+        // --- TIMETABLE ENGINE ---
+        function switchDay(dayIdx) {
+            currentDayIdx = dayIdx;
+            
+            // Update Tabs
+            document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(`day-${dayIdx}`).classList.add('active');
+            
+            renderTimetable();
         }
 
-        function getScheduleForDate(date) {
-            const dayIdx = date.getDay(); // 0 (Sun) - 6 (Sat)
-            const schedId = db.assignments[dayIdx];
-            return db.schedules.find(s => s.id == schedId);
-        }
-
-        function renderTimeline() {
-            const list = document.getElementById('timeline-list');
+        function renderTimetable() {
+            const list = document.getElementById('timetable-list');
             list.innerHTML = '';
-            
-            const options = { weekday: 'long', month: 'short', day: 'numeric' };
-            const isToday = new Date().toDateString() === selectedDate.toDateString();
-            document.getElementById('tl-date-display').innerText = isToday ? "Today" : selectedDate.toLocaleDateString('en-US', options);
 
-            const sched = getScheduleForDate(selectedDate);
-            
-            if (!sched) {
-                document.getElementById('tl-schedule-name').innerText = "No Routine Assigned";
-                list.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted);">No routine assigned to this day.</div>`;
+            // Filter classes for selected day
+            const classes = db.timetable.filter(c => c.day === currentDayIdx);
+            classes.sort((a,b) => a.start.localeCompare(b.start));
+
+            if (classes.length === 0) {
+                list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);">No classes on this day.</div>`;
                 return;
             }
 
-            document.getElementById('tl-schedule-name').innerText = sched.name;
+            const now = new Date();
+            const curTime = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+            const isToday = (currentDayIdx === now.getDay());
 
-            sched.blocks.sort((a,b) => a.start.localeCompare(b.start));
-            sched.blocks.forEach(b => {
+            classes.forEach(c => {
+                const sub = db.subjects.find(s => s.id == c.subId) || { name: 'Unknown', color: '#ccc', room: '?' };
+                const isNow = isToday && (curTime >= c.start && curTime < c.end);
+
                 list.innerHTML += `
-                    <div class="tl-item" data-start="${b.start}" data-end="${b.end}">
-                        <div class="tl-time">${b.start}</div>
-                        <div class="tl-node">${b.icon}</div>
-                        <div class="tl-card">
-                            <div class="live-badge" style="display:none;">LIVE</div>
-                            <div style="font-weight:700;">${b.name}</div>
-                            <div style="font-size:0.8rem; color:var(--text-muted);">${b.start} - ${b.end}</div>
+                    <div class="tt-item ${isNow ? 'now' : ''}">
+                        <div class="tt-time-col">
+                            <span>${c.start}</span>
+                            <span style="opacity:0.6">${c.end}</span>
                         </div>
-                    </div>`;
+                        <div class="tt-card">
+                            <div class="tt-color-bar" style="background:${sub.color}"></div>
+                            <div class="tt-info">
+                                <div class="tt-subject" style="color:${sub.color}">${sub.name}</div>
+                                <div class="tt-room">${sub.room}</div>
+                                <div class="tt-duration">
+                                    <span>⏱️</span>
+                                    <span>${c.start} - ${c.end}</span>
+                                </div>
+                            </div>
+                            <button onclick="deleteClass(${c.id})" style="position:absolute; top:5px; right:5px; border:none; background:none; color:var(--text-muted); cursor:pointer;">&times;</button>
+                        </div>
+                    </div>
+                `;
             });
+        }
 
-            if(isToday) checkLiveStatus();
+        function saveClass() {
+            const subId = document.getElementById('c-sub').value;
+            const start = document.getElementById('c-start').value;
+            const end = document.getElementById('c-end').value;
+
+            if (subId && start && end) {
+                db.timetable.push({ id: Date.now(), day: currentDayIdx, subId, start, end });
+                save(); closeModal('modal-class'); renderTimetable();
+            }
+        }
+
+        function deleteClass(id) {
+            if(confirm("Remove this class?")) {
+                db.timetable = db.timetable.filter(c => c.id !== id);
+                save(); renderTimetable();
+            }
         }
 
         function checkLiveStatus() {
+            // Dashboard Status Update
             const now = new Date();
             const cur = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
-            
-            // Dashboard Logic
-            const sched = getScheduleForDate(now);
-            if(sched) {
-                const active = sched.blocks.find(b => cur >= b.start && cur < b.end);
-                if(active) {
-                    document.getElementById('now-activity').innerText = active.name;
-                    document.getElementById('now-icon').innerText = active.icon;
-                    document.getElementById('now-time').innerText = active.end;
-                    document.getElementById('now-schedule-name').innerText = sched.name;
-                } else {
-                    document.getElementById('now-activity').innerText = "Free Time";
-                    document.getElementById('now-icon').innerText = "☕";
-                }
-            }
+            const day = now.getDay();
 
-            // Timeline Logic (Only if viewing today)
-            if(selectedDate.toDateString() === now.toDateString()) {
-                document.querySelectorAll('.tl-item').forEach(el => {
-                    const s = el.dataset.start;
-                    const e = el.dataset.end;
-                    if(cur >= s && cur < e) {
-                        el.classList.add('active');
-                        el.querySelector('.live-badge').style.display = 'block';
-                    } else {
-                        el.classList.remove('active');
-                        el.querySelector('.live-badge').style.display = 'none';
-                    }
-                });
-            }
-        }
+            const classes = db.timetable.filter(c => c.day === day);
+            const active = classes.find(c => cur >= c.start && cur < c.end);
 
-        // --- NEW: EDIT CURRENT DAY SCHEDULE ---
-        function editCurrentDaySchedule() {
-            const sched = getScheduleForDate(selectedDate);
-            if(sched) {
-                editSchedule(sched.id);
+            if (active) {
+                const sub = db.subjects.find(s => s.id == active.subId);
+                document.getElementById('now-activity').innerText = sub.name;
+                document.getElementById('now-room').innerText = sub.room;
+                document.getElementById('now-time').innerText = active.end;
+                document.getElementById('now-icon').style.background = sub.color + '20'; // light opacity
+                document.getElementById('now-icon').style.color = sub.color;
             } else {
-                alert("No schedule assigned to this day. Please assign one in the Schedules tab first.");
+                document.getElementById('now-activity').innerText = "Free Time";
+                document.getElementById('now-room').innerText = "No class right now";
+                document.getElementById('now-time').innerText = "--:--";
+                document.getElementById('now-icon').style.background = "var(--primary-light)";
+                document.getElementById('now-icon').style.color = "var(--primary)";
             }
+
+            // If we are looking at the timetable for today, refresh highlights
+            if(currentDayIdx === day) renderTimetable();
         }
 
-        // --- SCHEDULE MANAGER ---
-        function renderScheduleManager() {
-            // Calendar Assigner
-            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            const cont = document.getElementById('calendar-assigner');
-            cont.innerHTML = '';
-            
-            days.forEach((day, idx) => {
-                const currentSchedId = db.assignments[idx];
-                let options = `<option value="">None</option>`;
-                db.schedules.forEach(s => {
-                    options += `<option value="${s.id}" ${s.id == currentSchedId ? 'selected' : ''}>${s.name}</option>`;
-                });
-                cont.innerHTML += `
-                    <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border);">
-                        <div style="font-weight:600; width:50px;">${day}</div>
-                        <select onchange="assignSchedule(${idx}, this.value)" style="padding:5px;">${options}</select>
-                    </div>`;
-            });
-
-            // List
-            const list = document.getElementById('schedule-list');
-            list.innerHTML = '';
-            db.schedules.forEach(s => {
-                list.innerHTML += `
-                    <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <div style="font-weight:700;">${s.name}</div>
-                            <div style="font-size:0.8rem; color:var(--text-muted);">${s.blocks.length} blocks</div>
-                        </div>
-                        <button class="btn btn-ghost" onclick="editSchedule(${s.id})">Edit</button>
-                    </div>`;
-            });
-        }
-
-        function assignSchedule(dayIdx, schedId) {
-            db.assignments[dayIdx] = schedId;
-            save(); renderTimeline();
-        }
-
-        function createSchedule() {
-            const name = prompt("Routine Name:");
-            if(name) {
-                const newS = {id:Date.now(), name:name, blocks:[]};
-                db.schedules.push(newS);
-                save(); renderScheduleManager(); editSchedule(newS.id);
-            }
-        }
-
-        function editSchedule(id) {
-            editingScheduleId = id;
-            const s = db.schedules.find(x => x.id == id);
-            document.getElementById('sch-id').value = id;
-            document.getElementById('sch-name').value = s.name;
-            renderEditorBlocks();
-            document.getElementById('modal-sched').style.display = 'flex';
-        }
-
-        function renderEditorBlocks() {
-            const s = db.schedules.find(x => x.id == editingScheduleId);
-            const list = document.getElementById('sch-blocks-list');
-            list.innerHTML = '';
-            s.blocks.sort((a,b) => a.start.localeCompare(b.start));
-            
-            s.blocks.forEach(b => {
-                list.innerHTML += `
-                    <div class="editor-block">
-                        <div>
-                            <div style="font-size:0.8rem; font-weight:700;">${b.icon} ${b.name}</div>
-                            <div style="font-size:0.75rem; color:var(--text-muted);">${b.start} - ${b.end}</div>
-                        </div>
-                        <button onclick="removeBlock(${b.id})" style="color:var(--danger); border:none; background:none;">&times;</button>
-                    </div>`;
-            });
-        }
-
-        function addBlockToSchedule() {
-            const start = document.getElementById('b-start').value;
-            const end = document.getElementById('b-end').value;
-            const name = document.getElementById('b-name').value;
-            const icon = document.getElementById('b-icon').value || '⏱️';
-            
-            if(start && end && name) {
-                const s = db.schedules.find(x => x.id == editingScheduleId);
-                s.blocks.push({ id:Date.now(), name, start, end, icon });
-                document.getElementById('b-name').value = '';
-                save(); renderEditorBlocks(); renderTimeline();
-            }
-        }
-
-        function removeBlock(bid) {
-            const s = db.schedules.find(x => x.id == editingScheduleId);
-            s.blocks = s.blocks.filter(b => b.id !== bid);
-            save(); renderEditorBlocks(); renderTimeline();
-        }
-
-        // --- SCHOOL, TASKS, GENERAL ---
+        // --- SCHOOL HUB ---
         function renderSchool() {
             const grid = document.getElementById('subject-list');
             grid.innerHTML = '';
-            const tSub = document.getElementById('t-sub');
-            tSub.innerHTML = '<option value="">General</option>';
             
+            // Populate Dropdowns
+            const options = db.subjects.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+            document.getElementById('t-sub').innerHTML = options;
+            document.getElementById('c-sub').innerHTML = options;
+
             db.subjects.forEach(s => {
-                tSub.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+                // Grades Logic
+                const sGrades = db.grades.filter(g => g.subId == s.id);
+                let total=0, max=0;
+                sGrades.forEach(g => { total+=parseFloat(g.score); max+=parseFloat(g.total); });
+                const pct = max > 0 ? Math.round((total/max)*100) : '-';
+
                 grid.innerHTML += `
-                    <div class="sub-card" style="border-top:4px solid ${s.color}">
+                    <div class="sub-card" style="border-top:4px solid ${s.color}" onclick="openDetail(${s.id})">
                         <h3 style="color:${s.color}">${s.name}</h3>
                         <div style="font-size:0.8rem; color:var(--text-muted);">${s.room}</div>
-                    </div>`;
+                        <div style="margin-top:10px; font-weight:700;">${pct}%</div>
+                    </div>
+                `;
             });
             updateGPA();
         }
 
+        function openDetail(id) {
+            currentSubId = id;
+            const s = db.subjects.find(x => x.id == id);
+            document.getElementById('school-grid').style.display='none';
+            document.getElementById('school-detail').style.display='block';
+            document.getElementById('det-name').innerText = s.name;
+            document.getElementById('det-room').innerText = s.room;
+            renderDetailGrades();
+        }
+        
+        function closeDetail() {
+            document.getElementById('school-detail').style.display='none';
+            document.getElementById('school-grid').style.display='block';
+            renderSchool();
+        }
+
+        function renderDetailGrades() {
+            const list = document.getElementById('det-grades');
+            list.innerHTML = '';
+            const grads = db.grades.filter(g => g.subId == currentSubId);
+            grads.forEach(g => {
+                list.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border);">
+                        <span>${g.name}</span>
+                        <span><strong>${g.score}/${g.total}</strong> <button onclick="delGrade(${g.id})" style="border:none;background:none;color:red;">&times;</button></span>
+                    </div>
+                `;
+            });
+        }
+
+        function updateGPA() {
+            let total=0, max=0;
+            db.grades.forEach(g => { total+=parseFloat(g.score); max+=parseFloat(g.total); });
+            const pct = max > 0 ? Math.round((total/max)*100) : 0;
+            document.getElementById('dash-gpa').innerText = pct + "%";
+            
+            let l='F';
+            if(pct>=90)l='A'; else if(pct>=80)l='B'; else if(pct>=70)l='C'; else if(pct>=60)l='D';
+            document.getElementById('dash-grade').innerText = "Grade: " + l;
+        }
+
+        function saveSubject() {
+            const name = document.getElementById('s-name').value;
+            const room = document.getElementById('s-room').value;
+            const color = document.getElementById('s-color').value;
+            if(name) { db.subjects.push({id:Date.now(), name, room, color}); save(); closeModal('modal-sub'); }
+        }
+
+        function deleteSubject() {
+            if(confirm("Delete Subject and all its classes?")) {
+                db.subjects = db.subjects.filter(x=>x.id != currentSubId);
+                db.timetable = db.timetable.filter(x=>x.subId != currentSubId);
+                db.grades = db.grades.filter(x=>x.subId != currentSubId);
+                save(); closeDetail();
+            }
+        }
+
+        function saveGrade() {
+            const name = document.getElementById('g-name').value;
+            const score = document.getElementById('g-score').value;
+            const total = document.getElementById('g-total').value;
+            if(name && score) {
+                db.grades.push({id:Date.now(), subId:currentSubId, name, score, total});
+                save(); closeModal('modal-grade'); renderDetailGrades();
+            }
+        }
+        function delGrade(id) { db.grades=db.grades.filter(x=>x.id!==id); save(); renderDetailGrades(); }
+
+        // --- TASKS ---
         function renderTasks() {
             const list = document.getElementById('agenda-container');
             list.innerHTML = '';
@@ -493,79 +510,108 @@
             const today = new Date().toISOString().split('T')[0];
             db.tasks.sort((a,b) => a.date.localeCompare(b.date));
             
+            const buckets = { Overdue:[], Today:[], Upcoming:[] };
+            
             db.tasks.forEach(t => {
-                const s = db.subjects.find(x => x.id == t.subId);
-                const html = `
-                    <div class="task-row ${t.done?'done':''}">
+                if(t.done) return;
+                if(t.date < today) buckets.Overdue.push(t);
+                else if(t.date === today) buckets.Today.push(t);
+                else buckets.Upcoming.push(t);
+            });
+
+            const renderBucket = (title, items, isPreview) => {
+                if(items.length === 0) return;
+                const html = `<div class="agenda-label">${title}</div>` + items.map(t => {
+                    const s = db.subjects.find(x => x.id == t.subId);
+                    return `
+                    <div class="task-row">
                         <div class="task-check" onclick="toggleTask(${t.id})"></div>
                         <div style="flex:1;">
                             <div style="font-size:0.7rem; font-weight:800; color:${s?s.color:'#ccc'}">${s?s.name:'GENERAL'}</div>
                             <div class="task-title">${t.desc}</div>
                             <div style="font-size:0.8rem; color:var(--text-muted);">${t.date}</div>
                         </div>
-                        <button onclick="delTask(${t.id})" style="border:none; background:none;">&times;</button>
+                        <button onclick="delTask(${t.id})" style="border:none;background:none;">&times;</button>
                     </div>`;
-                list.innerHTML += html;
-                if(t.date === today && !t.done) preview.innerHTML += html;
-            });
+                }).join('');
+                
+                if(!isPreview) list.innerHTML += html;
+                if(title === 'Today' || title === 'Overdue') preview.innerHTML += html;
+            };
+
+            renderBucket('⚠️ Overdue', buckets.Overdue, true);
+            renderBucket('🔥 Today', buckets.Today, true);
+            renderBucket('📅 Upcoming', buckets.Upcoming, false);
         }
 
-        function updateGPA() {
-            let total=0, max=0;
-            db.grades.forEach(g => { total+=parseFloat(g.score); max+=parseFloat(g.total); });
-            const pct = max > 0 ? Math.round((total/max)*100) : 0;
-            document.getElementById('dash-gpa').innerText = pct + "%";
+        function saveTask() {
+            const desc = document.getElementById('t-desc').value;
+            const sub = document.getElementById('t-sub').value;
+            const date = document.getElementById('t-date').value;
+            if(desc && date) {
+                db.tasks.push({id:Date.now(), desc, subId:sub, date, done:false});
+                save(); closeModal('modal-task');
+            }
         }
+        function toggleTask(id) { const t=db.tasks.find(x=>x.id==id); if(t)t.done=!t.done; save(); }
+        function delTask(id) { db.tasks=db.tasks.filter(x=>x.id!=id); save(); }
 
-        // --- UTILS ---
+        // --- SYSTEM ---
         function save() {
-            localStorage.setItem('vpfScheds', JSON.stringify(db.schedules));
-            localStorage.setItem('vpfAssign', JSON.stringify(db.assignments));
-            localStorage.setItem('vpfSubs', JSON.stringify(db.subjects));
-            localStorage.setItem('vpfTasks', JSON.stringify(db.tasks));
+            localStorage.setItem('vseTimetable', JSON.stringify(db.timetable));
+            localStorage.setItem('vseSubs', JSON.stringify(db.subjects));
+            localStorage.setItem('vseTasks', JSON.stringify(db.tasks));
+            localStorage.setItem('vseGrades', JSON.stringify(db.grades));
+            localStorage.setItem('vseSets', JSON.stringify(db.settings));
             renderAll();
         }
 
         function renderAll() {
-            renderTimeline();
-            renderScheduleManager();
             renderSchool();
+            renderTimetable();
             renderTasks();
         }
 
         function nav(id) {
+            currentPage = id;
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             const btn = Array.from(document.querySelectorAll('.nav-item')).find(b => b.onclick.toString().includes(id));
             if(btn) btn.classList.add('active');
-            document.getElementById('page-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
-            document.querySelector('.fab').style.display = id === 'agenda' ? 'flex' : 'none';
+            
+            const titles = {dashboard:'Dashboard', timetable:'Timetable', school:'School', agenda:'Agenda', settings:'Settings'};
+            document.getElementById('page-title').innerText = titles[id];
+            
+            // FAB Logic
+            const fab = document.querySelector('.fab');
+            if(id === 'timetable' || id === 'agenda') fab.style.display = 'flex';
+            else fab.style.display = 'none';
+        }
+
+        function handleFab() {
+            if (currentPage === 'timetable') {
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                document.getElementById('class-modal-day').innerText = days[currentDayIdx];
+                document.getElementById('modal-class').style.display='flex';
+            } else if (currentPage === 'agenda') {
+                openTaskModal();
+            }
         }
 
         function closeModal(id) { document.getElementById(id).style.display='none'; }
-        function saveSubject() {
-            const name = document.getElementById('s-name').value;
-            const room = document.getElementById('s-room').value;
-            const color = document.getElementById('s-color').value;
-            if(name) { db.subjects.push({id:Date.now(), name, room, color}); save(); closeModal('modal-sub'); }
-        }
-        function saveTask() {
-            const desc = document.getElementById('t-desc').value;
-            const sub = document.getElementById('t-sub').value;
-            const date = document.getElementById('t-date').value;
-            if(desc) { db.tasks.push({id:Date.now(), desc, subId:sub, date, done:false}); save(); closeModal('modal-task'); }
-        }
-        function toggleTask(id) { const t=db.tasks.find(x=>x.id==id); if(t)t.done=!t.done; save(); }
-        function delTask(id) { db.tasks=db.tasks.filter(x=>x.id!==id); save(); }
         
-        function openSubjectModal() { document.getElementById('modal-sub').style.display='flex'; }
         function openTaskModal() { document.getElementById('t-date').value = new Date().toISOString().split('T')[0]; document.getElementById('modal-task').style.display='flex'; }
-        function handleFab() { openTaskModal(); }
+        function openSubjectModal() { document.getElementById('modal-sub').style.display='flex'; }
+        function openGradeModal() { document.getElementById('modal-grade').style.display='flex'; }
+        
+        function resetApp() { if(confirm("Reset?")) { localStorage.clear(); location.reload(); } }
+        function toggleTheme() { db.settings.theme = db.settings.theme==='dark'?'light':'dark'; document.body.setAttribute('data-theme', db.settings.theme); save(); }
         function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([],{hour:'2-digit', minute:'2-digit'}); }
 
         init();
         nav('dashboard');
+
     </script>
 </body>
 </html>
