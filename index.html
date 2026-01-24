@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - Platinum</title>
+    <title>Vidyarthi - Platinum Fixed</title>
     <style>
         :root {
             --primary: #6366f1;
@@ -37,11 +37,7 @@
         .sidebar { width: 80px; background: var(--surface); display: flex; flex-direction: column; border-right: 1px solid var(--border); z-index: 100; align-items: center; padding-top: 25px; }
         .main-content { flex: 1; padding: 25px; overflow-y: auto; scroll-behavior: smooth; position: relative; max-width: 800px; margin: 0 auto; width: 100%; }
         
-        .nav-item { 
-            width: 50px; height: 50px; border-radius: 16px; color: var(--text-muted); font-size: 1.5rem; 
-            margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            transition: 0.2s; border: none; background: transparent;
-        }
+        .nav-item { width: 50px; height: 50px; border-radius: 16px; color: var(--text-muted); font-size: 1.5rem; margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; border: none; background: transparent; }
         .nav-item.active { background: var(--primary); color: white; box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.5); }
 
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
@@ -52,14 +48,15 @@
         @keyframes fadeScale { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
 
         .card { background: var(--surface); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 15px; }
+        
         .btn { padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.95rem; }
         .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
-        .btn-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: none; background: transparent; cursor: pointer; color: var(--text-muted); }
         .btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 8px; }
+        .btn-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: none; background: transparent; cursor: pointer; color: var(--text-muted); }
 
         input, select { padding: 12px 15px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; }
 
-        /* --- TIMELINE (Continuous) --- */
+        /* --- TIMELINE --- */
         .date-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; background: var(--surface); padding: 10px; border-radius: 16px; border: 1px solid var(--border); }
         
         .timeline-wrapper { position: relative; padding: 10px 0 10px 20px; }
@@ -74,29 +71,25 @@
         .live-badge { position: absolute; top: -10px; right: 10px; background: var(--danger); color: white; font-size: 0.65rem; padding: 4px 8px; border-radius: 10px; font-weight: 800; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        /* --- SCHEDULE MANAGER --- */
-        .schedule-chip { display: inline-block; padding: 5px 10px; background: var(--primary-light); color: var(--primary); border-radius: 8px; font-size: 0.8rem; font-weight: 700; margin-right: 5px; }
-        .day-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+        /* --- EDITOR LIST --- */
+        .editor-block { display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 10px; border-radius: 10px; margin-bottom: 8px; border: 1px solid var(--border); }
+
+        /* --- SCHOOL & AGENDA --- */
+        .gpa-hero { background: linear-gradient(135deg, var(--primary), #4f46e5); color: white; padding: 25px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .sub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        .sub-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px; cursor: pointer; border-top: 4px solid var(--text-muted); transition: 0.2s; }
         
-        /* --- AGENDA (School Planner) --- */
-        .agenda-label { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px; }
         .task-row { background: var(--surface); padding: 12px; border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; margin-bottom: 8px; }
         .task-row.done { opacity: 0.5; text-decoration: line-through; }
         .task-check { width: 24px; height: 24px; border: 2px solid var(--border); border-radius: 6px; margin-right: 10px; cursor: pointer; }
         .task-row.done .task-check { background: var(--success); border-color: var(--success); }
-
-        /* --- SCHOOL HUB --- */
-        .gpa-hero { background: linear-gradient(135deg, var(--primary), #4f46e5); color: white; padding: 25px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .sub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-        .sub-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px; cursor: pointer; border-top: 4px solid var(--text-muted); transition: 0.2s; }
-        .sub-card:hover { transform: translateY(-3px); }
 
         /* FAB */
         .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--text); color: var(--bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer; z-index: 500; }
 
         /* Modal */
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(4px); }
-        .modal-box { background: var(--surface); width: 90%; max-width: 400px; border-radius: 24px; padding: 25px; max-height: 90vh; overflow-y: auto; }
+        .modal-box { background: var(--surface); width: 90%; max-width: 450px; border-radius: 24px; padding: 25px; max-height: 90vh; overflow-y: auto; }
 
         @media (max-width: 768px) {
             body { flex-direction: column; }
@@ -110,12 +103,11 @@
 
     <nav class="sidebar">
         <div style="font-weight:900; color:var(--primary); font-size:1.5rem; margin-bottom:20px;">V</div>
-        <button class="nav-item active" onclick="nav('dashboard')" title="Dashboard">🏠</button>
-        <button class="nav-item" onclick="nav('school')" title="School">🎓</button>
-        <button class="nav-item" onclick="nav('timeline')" title="Timeline">⏱️</button>
-        <button class="nav-item" onclick="nav('schedules')" title="Schedules">📅</button>
-        <button class="nav-item" onclick="nav('agenda')" title="Tasks">✅</button>
-        <button class="nav-item" onclick="nav('settings')" title="Settings">⚙️</button>
+        <button class="nav-item active" onclick="nav('dashboard')">🏠</button>
+        <button class="nav-item" onclick="nav('school')">🎓</button>
+        <button class="nav-item" onclick="nav('timeline')">⏱️</button>
+        <button class="nav-item" onclick="nav('schedules')">📅</button>
+        <button class="nav-item" onclick="nav('agenda')">✅</button>
     </nav>
 
     <main class="main-content">
@@ -152,34 +144,6 @@
             <div id="dash-agenda-preview"></div>
         </section>
 
-        <section id="school" class="section">
-            <div id="school-grid">
-                <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-                    <h3>My Subjects</h3>
-                    <button class="btn btn-sm" onclick="openSubjectModal()">+ Add</button>
-                </div>
-                <div class="sub-grid" id="subject-list"></div>
-            </div>
-
-            <div id="school-detail" style="display:none; animation: fadeScale 0.2s;">
-                <div style="display:flex; gap:10px; margin-bottom:20px;">
-                    <button class="btn-icon" onclick="closeDetail()" style="background:var(--border); font-size:1.2rem;">←</button>
-                    <div>
-                        <h2 id="det-name">Math</h2>
-                        <div style="color:var(--text-muted);" id="det-room">Room 101</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                        <h3>Grades</h3>
-                        <button class="btn-sm btn-ghost" onclick="openGradeModal()">+ Grade</button>
-                    </div>
-                    <div id="det-grades"></div>
-                </div>
-                <button class="btn-ghost" style="width:100%; color:var(--danger); border-color:var(--danger);" onclick="deleteSubject()">Delete Subject</button>
-            </div>
-        </section>
-
         <section id="timeline" class="section">
             <div class="date-nav">
                 <button class="btn-icon" onclick="changeDate(-1)">◀</button>
@@ -190,27 +154,37 @@
                 <button class="btn-icon" onclick="changeDate(1)">▶</button>
             </div>
 
+            <button class="btn" style="width:100%; margin-bottom:20px; background:var(--surface); color:var(--primary); border:1px solid var(--primary);" onclick="editCurrentDaySchedule()">
+                ✏️ Edit This Routine
+            </button>
+
             <div class="timeline-wrapper">
                 <div class="timeline-line"></div>
-                <div id="timeline-list">
-                    </div>
+                <div id="timeline-list"></div>
             </div>
         </section>
 
         <section id="schedules" class="section">
             <div class="card">
                 <h3>Calendar Assignment</h3>
-                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;">Assign your routines to days of the week.</p>
-                <div id="calendar-assigner">
-                    </div>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;">Assign your routines to days.</p>
+                <div id="calendar-assigner"></div>
             </div>
-
             <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
                 <h3>My Routines</h3>
                 <button class="btn btn-sm" onclick="createSchedule()">+ New</button>
             </div>
-            <div id="schedule-list">
+            <div id="schedule-list"></div>
+        </section>
+
+        <section id="school" class="section">
+            <div id="school-grid">
+                <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3>My Subjects</h3>
+                    <button class="btn btn-sm" onclick="openSubjectModal()">+ Add</button>
                 </div>
+                <div class="sub-grid" id="subject-list"></div>
+            </div>
         </section>
 
         <section id="agenda" class="section">
@@ -218,17 +192,36 @@
             <div style="height:60px;"></div>
         </section>
 
-        <section id="settings" class="section">
-            <div class="card">
-                <h3>Settings</h3>
-                <button class="btn-ghost" style="width:100%; margin-top:10px;" onclick="toggleTheme()">Dark Mode 🌗</button>
-                <button class="btn-ghost" style="width:100%; margin-top:10px; color:var(--danger);" onclick="resetApp()">Factory Reset 🗑️</button>
-            </div>
-        </section>
-
     </main>
 
     <button class="fab" onclick="handleFab()">+</button>
+
+    <div id="modal-sched" class="modal">
+        <div class="modal-box">
+            <h3>Edit Routine</h3>
+            <input type="hidden" id="sch-id">
+            <input type="text" id="sch-name" placeholder="Routine Name" style="margin:10px 0;">
+            
+            <div style="background:var(--bg); padding:10px; border-radius:12px; margin-bottom:10px;">
+                <div style="font-size:0.8rem; font-weight:700; margin-bottom:5px;">ADD BLOCK</div>
+                <div style="display:flex; gap:5px; margin-bottom:5px;">
+                    <input type="time" id="b-start">
+                    <input type="time" id="b-end">
+                </div>
+                <div style="display:flex; gap:5px;">
+                    <input type="text" id="b-name" placeholder="Activity" style="flex:1;">
+                    <input type="text" id="b-icon" placeholder="Emoji" style="width:50px; text-align:center;">
+                    <button class="btn btn-sm" onclick="addBlockToSchedule()">+</button>
+                </div>
+            </div>
+
+            <div style="max-height:250px; overflow-y:auto; margin-bottom:15px;" id="sch-blocks-list"></div>
+
+            <div style="display:flex; gap:10px;">
+                <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-sched')">Done</button>
+            </div>
+        </div>
+    </div>
 
     <div id="modal-task" class="modal">
         <div class="modal-box">
@@ -256,94 +249,44 @@
         </div>
     </div>
 
-    <div id="modal-sched" class="modal">
-        <div class="modal-box">
-            <h3>Edit Routine</h3>
-            <input type="hidden" id="sch-id">
-            <input type="text" id="sch-name" placeholder="Routine Name (e.g. School Day)" style="margin:10px 0;">
-            
-            <div style="max-height:200px; overflow-y:auto; border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:10px;" id="sch-blocks-list">
-                </div>
-
-            <div style="background:var(--bg); padding:10px; border-radius:12px; margin-bottom:10px;">
-                <div style="font-size:0.8rem; font-weight:700; margin-bottom:5px;">ADD BLOCK</div>
-                <div style="display:flex; gap:5px; margin-bottom:5px;">
-                    <input type="time" id="b-start">
-                    <input type="time" id="b-end">
-                </div>
-                <div style="display:flex; gap:5px;">
-                    <input type="text" id="b-name" placeholder="Activity" style="flex:1;">
-                    <input type="text" id="b-icon" placeholder="Icon" style="width:40px; text-align:center;">
-                    <button class="btn btn-sm" onclick="addBlockToSchedule()">+</button>
-                </div>
-            </div>
-
-            <div style="display:flex; gap:10px;">
-                <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-sched')">Done</button>
-                <button class="btn" style="flex:1; background:var(--danger);" onclick="deleteSchedule()">Delete</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-grade" class="modal">
-        <div class="modal-box">
-            <h3>Add Grade</h3>
-            <input type="text" id="g-name" placeholder="Exam Name" style="margin:10px 0;">
-            <div style="display:flex; gap:10px; margin-bottom:10px;">
-                <input type="number" id="g-score" placeholder="Score">
-                <input type="number" id="g-total" placeholder="Total" value="100">
-            </div>
-            <button class="btn" onclick="saveGrade()" style="width:100%;">Save</button>
-            <button class="btn-ghost" onclick="closeModal('modal-grade')" style="width:100%; margin-top:5px;">Cancel</button>
-        </div>
-    </div>
-
     <script>
-        // --- DATA STORE ---
+        // --- DATA ---
         let db = {
-            // Schedules (Templates)
-            schedules: JSON.parse(localStorage.getItem('vpScheds')) || [
+            schedules: JSON.parse(localStorage.getItem('vpfScheds')) || [
                 { id: 1, name: "School Day", blocks: [
-                    {id:1, name:"Morning Routine", start:"07:00", end:"08:00", icon:"🚿"},
+                    {id:1, name:"Wake Up", start:"07:00", end:"08:00", icon:"☀️"},
                     {id:2, name:"School", start:"08:00", end:"15:00", icon:"🏫"},
-                    {id:3, name:"Homework", start:"16:00", end:"18:00", icon:"📚"}
+                    {id:3, name:"Study", start:"16:00", end:"18:00", icon:"📚"}
                 ]},
                 { id: 2, name: "Weekend", blocks: [
-                    {id:1, name:"Sleep In", start:"08:00", end:"10:00", icon:"💤"},
-                    {id:2, name:"Free Time", start:"10:00", end:"22:00", icon:"🎮"}
+                    {id:1, name:"Sleep In", start:"09:00", end:"10:00", icon:"💤"},
+                    {id:2, name:"Relax", start:"10:00", end:"22:00", icon:"🎮"}
                 ]}
             ],
-            // Calendar Assignments (0=Sun, 1=Mon...)
-            assignments: JSON.parse(localStorage.getItem('vpAssign')) || { 1:1, 2:1, 3:1, 4:1, 5:1, 6:2, 0:2 },
-            
-            subjects: JSON.parse(localStorage.getItem('vpSubs')) || [],
-            tasks: JSON.parse(localStorage.getItem('vpTasks')) || [],
-            grades: JSON.parse(localStorage.getItem('vpGrades')) || [],
-            settings: JSON.parse(localStorage.getItem('vpSets')) || { theme: 'light' }
+            assignments: JSON.parse(localStorage.getItem('vpfAssign')) || { 1:1, 2:1, 3:1, 4:1, 5:1, 6:2, 0:2 },
+            subjects: JSON.parse(localStorage.getItem('vpfSubs')) || [],
+            tasks: JSON.parse(localStorage.getItem('vpfTasks')) || [],
+            grades: JSON.parse(localStorage.getItem('vpfGrades')) || [],
         };
 
-        // State
         let selectedDate = new Date();
         let editingScheduleId = null;
-        let currentSubId = null;
 
-        // --- INIT ---
         function init() {
-            if(db.settings.theme === 'dark') document.body.setAttribute('data-theme', 'dark');
             renderAll();
             setInterval(updateClock, 1000);
             setInterval(checkLiveStatus, 5000);
         }
 
-        // --- TIMELINE ENGINE (MULTI-DAY) ---
+        // --- TIMELINE ENGINE ---
         function changeDate(delta) {
             selectedDate.setDate(selectedDate.getDate() + delta);
             renderTimeline();
         }
 
         function getScheduleForDate(date) {
-            const dayOfWeek = date.getDay(); // 0-6
-            const schedId = db.assignments[dayOfWeek];
+            const dayIdx = date.getDay(); // 0 (Sun) - 6 (Sat)
+            const schedId = db.assignments[dayIdx];
             return db.schedules.find(s => s.id == schedId);
         }
 
@@ -351,25 +294,20 @@
             const list = document.getElementById('timeline-list');
             list.innerHTML = '';
             
-            // Date Header
             const options = { weekday: 'long', month: 'short', day: 'numeric' };
-            const dateStr = selectedDate.toLocaleDateString('en-US', options);
             const isToday = new Date().toDateString() === selectedDate.toDateString();
-            
-            document.getElementById('tl-date-display').innerText = isToday ? "Today" : dateStr;
+            document.getElementById('tl-date-display').innerText = isToday ? "Today" : selectedDate.toLocaleDateString('en-US', options);
 
-            // Get Schedule
             const sched = getScheduleForDate(selectedDate);
             
             if (!sched) {
                 document.getElementById('tl-schedule-name').innerText = "No Routine Assigned";
-                list.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted);">No routine set for this day.<br>Go to Schedules to assign one.</div>`;
+                list.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted);">No routine assigned to this day.</div>`;
                 return;
             }
 
             document.getElementById('tl-schedule-name').innerText = sched.name;
 
-            // Render Blocks
             sched.blocks.sort((a,b) => a.start.localeCompare(b.start));
             sched.blocks.forEach(b => {
                 list.innerHTML += `
@@ -381,20 +319,18 @@
                             <div style="font-weight:700;">${b.name}</div>
                             <div style="font-size:0.8rem; color:var(--text-muted);">${b.start} - ${b.end}</div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
 
             if(isToday) checkLiveStatus();
         }
 
         function checkLiveStatus() {
-            // Only runs on Dashboard and Timeline if today is selected
             const now = new Date();
             const cur = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
-            const sched = getScheduleForDate(now);
             
-            // Dashboard Update
+            // Dashboard Logic
+            const sched = getScheduleForDate(now);
             if(sched) {
                 const active = sched.blocks.find(b => cur >= b.start && cur < b.end);
                 if(active) {
@@ -405,11 +341,10 @@
                 } else {
                     document.getElementById('now-activity').innerText = "Free Time";
                     document.getElementById('now-icon').innerText = "☕";
-                    document.getElementById('now-schedule-name').innerText = sched.name;
                 }
             }
 
-            // Timeline Highlights (only if viewing Today)
+            // Timeline Logic (Only if viewing today)
             if(selectedDate.toDateString() === now.toDateString()) {
                 document.querySelectorAll('.tl-item').forEach(el => {
                     const s = el.dataset.start;
@@ -422,42 +357,40 @@
                         el.querySelector('.live-badge').style.display = 'none';
                     }
                 });
-            } else {
-                // Clear highlights if not today
-                document.querySelectorAll('.tl-item').forEach(el => {
-                    el.classList.remove('active');
-                    el.querySelector('.live-badge').style.display = 'none';
-                });
             }
         }
 
-        // --- SCHEDULE MANAGER (TIMETUNE STYLE) ---
+        // --- NEW: EDIT CURRENT DAY SCHEDULE ---
+        function editCurrentDaySchedule() {
+            const sched = getScheduleForDate(selectedDate);
+            if(sched) {
+                editSchedule(sched.id);
+            } else {
+                alert("No schedule assigned to this day. Please assign one in the Schedules tab first.");
+            }
+        }
+
+        // --- SCHEDULE MANAGER ---
         function renderScheduleManager() {
-            // 1. Calendar Assigner
+            // Calendar Assigner
             const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const cont = document.getElementById('calendar-assigner');
             cont.innerHTML = '';
             
             days.forEach((day, idx) => {
                 const currentSchedId = db.assignments[idx];
-                
-                // Build options
                 let options = `<option value="">None</option>`;
                 db.schedules.forEach(s => {
                     options += `<option value="${s.id}" ${s.id == currentSchedId ? 'selected' : ''}>${s.name}</option>`;
                 });
-
                 cont.innerHTML += `
-                    <div class="day-row">
+                    <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border);">
                         <div style="font-weight:600; width:50px;">${day}</div>
-                        <select onchange="assignSchedule(${idx}, this.value)" style="padding:8px;">
-                            ${options}
-                        </select>
-                    </div>
-                `;
+                        <select onchange="assignSchedule(${idx}, this.value)" style="padding:5px;">${options}</select>
+                    </div>`;
             });
 
-            // 2. Schedule List
+            // List
             const list = document.getElementById('schedule-list');
             list.innerHTML = '';
             db.schedules.forEach(s => {
@@ -468,8 +401,7 @@
                             <div style="font-size:0.8rem; color:var(--text-muted);">${s.blocks.length} blocks</div>
                         </div>
                         <button class="btn btn-ghost" onclick="editSchedule(${s.id})">Edit</button>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
@@ -479,11 +411,11 @@
         }
 
         function createSchedule() {
-            const name = prompt("Routine Name (e.g. Summer Break):");
+            const name = prompt("Routine Name:");
             if(name) {
-                const newSched = { id: Date.now(), name: name, blocks: [] };
-                db.schedules.push(newSched);
-                save(); renderScheduleManager(); editSchedule(newSched.id);
+                const newS = {id:Date.now(), name:name, blocks:[]};
+                db.schedules.push(newS);
+                save(); renderScheduleManager(); editSchedule(newS.id);
             }
         }
 
@@ -504,13 +436,13 @@
             
             s.blocks.forEach(b => {
                 list.innerHTML += `
-                    <div style="background:var(--bg); padding:8px; border-radius:8px; margin-bottom:5px; display:flex; justify-content:space-between; align-items:center;">
-                        <div style="font-size:0.8rem;">
-                            <strong>${b.name}</strong> (${b.start}-${b.end})
+                    <div class="editor-block">
+                        <div>
+                            <div style="font-size:0.8rem; font-weight:700;">${b.icon} ${b.name}</div>
+                            <div style="font-size:0.75rem; color:var(--text-muted);">${b.start} - ${b.end}</div>
                         </div>
                         <button onclick="removeBlock(${b.id})" style="color:var(--danger); border:none; background:none;">&times;</button>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
@@ -522,80 +454,59 @@
             
             if(start && end && name) {
                 const s = db.schedules.find(x => x.id == editingScheduleId);
-                s.blocks.push({ id: Date.now(), name, start, end, icon });
-                renderEditorBlocks();
-                // Clear inputs
+                s.blocks.push({ id:Date.now(), name, start, end, icon });
                 document.getElementById('b-name').value = '';
+                save(); renderEditorBlocks(); renderTimeline();
             }
         }
 
-        function removeBlock(blockId) {
+        function removeBlock(bid) {
             const s = db.schedules.find(x => x.id == editingScheduleId);
-            s.blocks = s.blocks.filter(b => b.id !== blockId);
-            renderEditorBlocks();
+            s.blocks = s.blocks.filter(b => b.id !== bid);
+            save(); renderEditorBlocks(); renderTimeline();
         }
 
-        function deleteSchedule() {
-            if(confirm("Delete this routine template?")) {
-                db.schedules = db.schedules.filter(x => x.id != editingScheduleId);
-                save(); closeModal('modal-sched'); renderScheduleManager();
-            }
-        }
-
-        // --- SCHOOL HUB ---
+        // --- SCHOOL, TASKS, GENERAL ---
         function renderSchool() {
             const grid = document.getElementById('subject-list');
             grid.innerHTML = '';
             const tSub = document.getElementById('t-sub');
             tSub.innerHTML = '<option value="">General</option>';
-
+            
             db.subjects.forEach(s => {
                 tSub.innerHTML += `<option value="${s.id}">${s.name}</option>`;
-                
-                // Grades Logic
-                const sGrades = db.grades.filter(g => g.subId == s.id);
-                let total=0, max=0;
-                sGrades.forEach(g => { total+=parseFloat(g.score); max+=parseFloat(g.total); });
-                const pct = max > 0 ? Math.round((total/max)*100) : '-';
-
                 grid.innerHTML += `
-                    <div class="sub-card" style="border-top:4px solid ${s.color}" onclick="openDetail(${s.id})">
+                    <div class="sub-card" style="border-top:4px solid ${s.color}">
                         <h3 style="color:${s.color}">${s.name}</h3>
                         <div style="font-size:0.8rem; color:var(--text-muted);">${s.room}</div>
-                        <div style="margin-top:10px; font-weight:700;">${pct}%</div>
-                    </div>
-                `;
+                    </div>`;
             });
             updateGPA();
         }
 
-        function openDetail(id) {
-            currentSubId = id;
-            const s = db.subjects.find(x => x.id == id);
-            document.getElementById('school-grid').style.display='none';
-            document.getElementById('school-detail').style.display='block';
-            document.getElementById('det-name').innerText = s.name;
-            document.getElementById('det-room').innerText = s.room;
-            renderDetailGrades();
-        }
-        
-        function closeDetail() {
-            document.getElementById('school-detail').style.display='none';
-            document.getElementById('school-grid').style.display='block';
-            renderSchool();
-        }
-
-        function renderDetailGrades() {
-            const list = document.getElementById('det-grades');
+        function renderTasks() {
+            const list = document.getElementById('agenda-container');
             list.innerHTML = '';
-            const grads = db.grades.filter(g => g.subId == currentSubId);
-            grads.forEach(g => {
-                list.innerHTML += `
-                    <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border);">
-                        <span>${g.name}</span>
-                        <span><strong>${g.score}/${g.total}</strong> <button onclick="delGrade(${g.id})" style="border:none;background:none;color:red;">&times;</button></span>
-                    </div>
-                `;
+            const preview = document.getElementById('dash-agenda-preview');
+            preview.innerHTML = '';
+
+            const today = new Date().toISOString().split('T')[0];
+            db.tasks.sort((a,b) => a.date.localeCompare(b.date));
+            
+            db.tasks.forEach(t => {
+                const s = db.subjects.find(x => x.id == t.subId);
+                const html = `
+                    <div class="task-row ${t.done?'done':''}">
+                        <div class="task-check" onclick="toggleTask(${t.id})"></div>
+                        <div style="flex:1;">
+                            <div style="font-size:0.7rem; font-weight:800; color:${s?s.color:'#ccc'}">${s?s.name:'GENERAL'}</div>
+                            <div class="task-title">${t.desc}</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted);">${t.date}</div>
+                        </div>
+                        <button onclick="delTask(${t.id})" style="border:none; background:none;">&times;</button>
+                    </div>`;
+                list.innerHTML += html;
+                if(t.date === today && !t.done) preview.innerHTML += html;
             });
         }
 
@@ -604,111 +515,22 @@
             db.grades.forEach(g => { total+=parseFloat(g.score); max+=parseFloat(g.total); });
             const pct = max > 0 ? Math.round((total/max)*100) : 0;
             document.getElementById('dash-gpa').innerText = pct + "%";
-            
-            let l='F';
-            if(pct>=90)l='A'; else if(pct>=80)l='B'; else if(pct>=70)l='C'; else if(pct>=60)l='D';
-            document.getElementById('dash-grade').innerText = "Grade: " + l;
         }
 
-        function saveSubject() {
-            const name = document.getElementById('s-name').value;
-            const room = document.getElementById('s-room').value;
-            const color = document.getElementById('s-color').value;
-            if(name) { db.subjects.push({id:Date.now(), name, room, color}); save(); closeModal('modal-sub'); }
-        }
-
-        function deleteSubject() {
-            if(confirm("Delete Subject?")) {
-                db.subjects = db.subjects.filter(x=>x.id != currentSubId);
-                db.grades = db.grades.filter(x=>x.subId != currentSubId);
-                save(); closeDetail();
-            }
-        }
-
-        function saveGrade() {
-            const name = document.getElementById('g-name').value;
-            const score = document.getElementById('g-score').value;
-            const total = document.getElementById('g-total').value;
-            if(name && score) {
-                db.grades.push({id:Date.now(), subId:currentSubId, name, score, total});
-                save(); closeModal('modal-grade'); renderDetailGrades();
-            }
-        }
-        function delGrade(id) { db.grades=db.grades.filter(x=>x.id!==id); save(); renderDetailGrades(); }
-
-        // --- TASKS ---
-        function renderTasks() {
-            const list = document.getElementById('agenda-container');
-            const preview = document.getElementById('dash-agenda-preview');
-            list.innerHTML = ''; preview.innerHTML = '';
-
-            db.tasks.sort((a,b) => a.date.localeCompare(b.date));
-            
-            // Buckets
-            const buckets = { Overdue:[], Today:[], Upcoming:[] };
-            const today = new Date().toISOString().split('T')[0];
-
-            db.tasks.forEach(t => {
-                if(t.done) return;
-                if(t.date < today) buckets.Overdue.push(t);
-                else if(t.date === today) buckets.Today.push(t);
-                else buckets.Upcoming.push(t);
-            });
-
-            // Renderer
-            const renderBucket = (title, items, isPreview) => {
-                if(items.length === 0) return;
-                const html = `<div class="agenda-label">${title}</div>` + items.map(t => {
-                    const s = db.subjects.find(x => x.id == t.subId);
-                    return `
-                    <div class="task-row">
-                        <div class="task-check" onclick="toggleTask(${t.id})"></div>
-                        <div style="flex:1;">
-                            <div style="font-size:0.7rem; font-weight:800; color:${s?s.color:'#ccc'}">${s?s.name:'GENERAL'}</div>
-                            <div class="task-title">${t.desc}</div>
-                            <div style="font-size:0.8rem; color:var(--text-muted);">${t.date}</div>
-                        </div>
-                        <button onclick="delTask(${t.id})" style="border:none;background:none;">&times;</button>
-                    </div>`;
-                }).join('');
-                
-                if(!isPreview) list.innerHTML += html;
-                if(title === 'Today' || title === 'Overdue') preview.innerHTML += html;
-            };
-
-            renderBucket('⚠️ Overdue', buckets.Overdue, true);
-            renderBucket('🔥 Today', buckets.Today, true);
-            renderBucket('📅 Upcoming', buckets.Upcoming, false);
-        }
-
-        function saveTask() {
-            const desc = document.getElementById('t-desc').value;
-            const sub = document.getElementById('t-sub').value;
-            const date = document.getElementById('t-date').value;
-            if(desc && date) {
-                db.tasks.push({id:Date.now(), desc, subId:sub, date, done:false});
-                save(); closeModal('modal-task');
-            }
-        }
-        function toggleTask(id) { const t=db.tasks.find(x=>x.id==id); if(t)t.done=!t.done; save(); }
-        function delTask(id) { db.tasks=db.tasks.filter(x=>x.id!=id); save(); }
-
-        // --- SYSTEM ---
+        // --- UTILS ---
         function save() {
-            localStorage.setItem('vpScheds', JSON.stringify(db.schedules));
-            localStorage.setItem('vpAssign', JSON.stringify(db.assignments));
-            localStorage.setItem('vpSubs', JSON.stringify(db.subjects));
-            localStorage.setItem('vpTasks', JSON.stringify(db.tasks));
-            localStorage.setItem('vpGrades', JSON.stringify(db.grades));
-            localStorage.setItem('vpSets', JSON.stringify(db.settings));
+            localStorage.setItem('vpfScheds', JSON.stringify(db.schedules));
+            localStorage.setItem('vpfAssign', JSON.stringify(db.assignments));
+            localStorage.setItem('vpfSubs', JSON.stringify(db.subjects));
+            localStorage.setItem('vpfTasks', JSON.stringify(db.tasks));
             renderAll();
         }
 
         function renderAll() {
             renderTimeline();
+            renderScheduleManager();
             renderSchool();
             renderTasks();
-            renderScheduleManager();
         }
 
         function nav(id) {
@@ -718,33 +540,32 @@
             const btn = Array.from(document.querySelectorAll('.nav-item')).find(b => b.onclick.toString().includes(id));
             if(btn) btn.classList.add('active');
             document.getElementById('page-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
-            document.querySelector('.fab').style.display = (id === 'agenda') ? 'flex' : 'none';
+            document.querySelector('.fab').style.display = id === 'agenda' ? 'flex' : 'none';
         }
 
-        function handleFab() { openTaskModal(); }
-        
-        function closeModal(id) { 
-            document.getElementById(id).style.display = 'none'; 
-            // If closing scheduler, save manual changes
-            if(id === 'modal-sched') {
-                const name = document.getElementById('sch-name').value;
-                const s = db.schedules.find(x => x.id == editingScheduleId);
-                if(s) s.name = name;
-                save(); renderScheduleManager(); renderTimeline();
-            }
+        function closeModal(id) { document.getElementById(id).style.display='none'; }
+        function saveSubject() {
+            const name = document.getElementById('s-name').value;
+            const room = document.getElementById('s-room').value;
+            const color = document.getElementById('s-color').value;
+            if(name) { db.subjects.push({id:Date.now(), name, room, color}); save(); closeModal('modal-sub'); }
         }
+        function saveTask() {
+            const desc = document.getElementById('t-desc').value;
+            const sub = document.getElementById('t-sub').value;
+            const date = document.getElementById('t-date').value;
+            if(desc) { db.tasks.push({id:Date.now(), desc, subId:sub, date, done:false}); save(); closeModal('modal-task'); }
+        }
+        function toggleTask(id) { const t=db.tasks.find(x=>x.id==id); if(t)t.done=!t.done; save(); }
+        function delTask(id) { db.tasks=db.tasks.filter(x=>x.id!==id); save(); }
         
-        function openTaskModal() { document.getElementById('t-date').value = new Date().toISOString().split('T')[0]; document.getElementById('modal-task').style.display='flex'; }
         function openSubjectModal() { document.getElementById('modal-sub').style.display='flex'; }
-        function openGradeModal() { document.getElementById('modal-grade').style.display='flex'; }
-        
-        function resetApp() { if(confirm("Reset?")) { localStorage.clear(); location.reload(); } }
-        function toggleTheme() { db.settings.theme = db.settings.theme==='dark'?'light':'dark'; document.body.setAttribute('data-theme', db.settings.theme); save(); }
+        function openTaskModal() { document.getElementById('t-date').value = new Date().toISOString().split('T')[0]; document.getElementById('modal-task').style.display='flex'; }
+        function handleFab() { openTaskModal(); }
         function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([],{hour:'2-digit', minute:'2-digit'}); }
 
         init();
         nav('dashboard');
-
     </script>
 </body>
 </html>
