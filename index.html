@@ -15,12 +15,8 @@
             --border: #e2e8f0;
             --radius: 18px;
             --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-            
-            /* Status Colors */
-            --success: #10b981;
             --danger: #ef4444;
-            --warning: #f59e0b;
-            --info: #3b82f6;
+            --success: #10b981;
         }
 
         [data-theme="dark"] {
@@ -33,7 +29,7 @@
             --primary-light: #312e81;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Inter', system-ui, sans-serif; }
         
         body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: background 0.3s; }
 
@@ -41,145 +37,83 @@
         .sidebar { width: 80px; background: var(--surface); display: flex; flex-direction: column; border-right: 1px solid var(--border); z-index: 100; align-items: center; padding-top: 25px; }
         .main-content { flex: 1; padding: 25px; overflow-y: auto; scroll-behavior: smooth; position: relative; max-width: 800px; margin: 0 auto; width: 100%; }
         
-        /* --- NAVIGATION --- */
-        .brand { font-weight: 900; color: var(--primary); font-size: 1.8rem; margin-bottom: 30px; letter-spacing: -1px; }
         .nav-item { 
             width: 50px; height: 50px; border-radius: 16px; color: var(--text-muted); font-size: 1.5rem; 
             margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); position: relative; border: none; background: transparent;
+            transition: 0.2s; border: none; background: transparent;
         }
-        .nav-item:hover { background: var(--bg); color: var(--primary); transform: translateY(-2px); }
         .nav-item.active { background: var(--primary); color: white; box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.5); }
 
-        /* --- UI COMPONENTS --- */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; }
-        h2, h3 { font-weight: 700; }
+        h1 { font-size: 1.8rem; font-weight: 800; }
         
         .section { display: none; animation: fadeScale 0.3s ease-out; padding-bottom: 100px; }
         .section.active { display: block; }
-        @keyframes fadeScale { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeScale { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
 
-        .card { background: var(--surface); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 15px; position: relative; overflow: hidden; }
-        
+        .card { background: var(--surface); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 15px; }
         .btn { padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.95rem; }
-        .btn:active { transform: scale(0.96); }
         .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
         .btn-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: none; background: transparent; cursor: pointer; color: var(--text-muted); }
-        .btn-icon:hover { background: var(--bg); color: var(--text); }
+        .btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 8px; }
 
-        input, select { padding: 12px 15px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; transition: 0.2s; }
-        input:focus { border-color: var(--primary); background: var(--surface); box-shadow: 0 0 0 3px var(--primary-light); }
+        input, select { padding: 12px 15px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; }
 
-        /* --- 💎 NEW TIMELINE DESIGN --- */
+        /* --- TIMELINE (Continuous) --- */
+        .date-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; background: var(--surface); padding: 10px; border-radius: 16px; border: 1px solid var(--border); }
+        
         .timeline-wrapper { position: relative; padding: 10px 0 10px 20px; }
-        /* The continuous line */
-        .timeline-line { 
-            position: absolute; left: 45px; top: 0; bottom: 0; width: 2px; 
-            background: linear-gradient(to bottom, var(--border) 50%, transparent 100%); z-index: 0; 
-        }
-
-        .tl-item { display: flex; margin-bottom: 25px; position: relative; z-index: 1; }
+        .timeline-line { position: absolute; left: 45px; top: 0; bottom: 0; width: 2px; background: var(--border); z-index: 0; }
         
-        .tl-time { 
-            width: 50px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); 
-            text-align: right; padding-right: 15px; padding-top: 14px; 
-        }
+        .tl-item { display: flex; margin-bottom: 20px; position: relative; z-index: 1; }
+        .tl-time { width: 50px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-align: right; padding-right: 15px; padding-top: 14px; }
+        .tl-node { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; flex-shrink: 0; z-index: 2; }
+        .tl-card { flex: 1; background: var(--surface); padding: 15px; border-radius: 16px; border: 1px solid var(--border); position: relative; }
         
-        .tl-node { 
-            width: 40px; height: 40px; border-radius: 50%; background: var(--surface); 
-            border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; 
-            font-size: 1.2rem; margin-right: 15px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            transition: 0.3s;
-        }
+        .tl-item.active .tl-node { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); transform: scale(1.1); }
+        .live-badge { position: absolute; top: -10px; right: 10px; background: var(--danger); color: white; font-size: 0.65rem; padding: 4px 8px; border-radius: 10px; font-weight: 800; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        .tl-card { 
-            flex: 1; background: var(--surface); padding: 15px; border-radius: 16px; 
-            border: 1px solid var(--border); box-shadow: var(--shadow); position: relative;
-            transition: 0.2s;
-        }
-
-        /* Active State */
-        .tl-item.active .tl-node { 
-            background: var(--primary); color: white; border-color: var(--primary); 
-            box-shadow: 0 0 0 6px var(--primary-light); transform: scale(1.1);
-        }
-        .tl-item.active .tl-card { 
-            border-color: var(--primary); background: linear-gradient(to right, var(--primary-light), var(--surface) 50%);
-        }
-        .live-badge { 
-            position: absolute; top: -10px; right: 10px; background: var(--danger); color: white; 
-            font-size: 0.65rem; padding: 4px 8px; border-radius: 10px; font-weight: 800; 
-            text-transform: uppercase; animation: pulseRed 2s infinite; 
-        }
-
-        @keyframes pulseRed { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
-        /* --- 🎓 NEW SCHOOL HUB DESIGN --- */
-        .gpa-hero { 
-            background: linear-gradient(135deg, var(--primary), #4f46e5); color: white; padding: 25px; 
-            border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
-        }
-        .sub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        /* --- SCHEDULE MANAGER --- */
+        .schedule-chip { display: inline-block; padding: 5px 10px; background: var(--primary-light); color: var(--primary); border-radius: 8px; font-size: 0.8rem; font-weight: 700; margin-right: 5px; }
+        .day-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
         
-        .sub-card { 
-            background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px; 
-            cursor: pointer; transition: 0.2s; position: relative; overflow: hidden;
-        }
-        .sub-card:hover { transform: translateY(-3px); border-color: var(--primary); }
-        .sub-stripe { height: 6px; width: 100%; position: absolute; top: 0; left: 0; }
-        
-        .att-ring { width: 40px; height: 40px; border-radius: 50%; background: conic-gradient(var(--success) 0%, var(--bg) 0%); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; }
-        
-        /* Detail View (Overlay) */
-        .detail-view { display: none; margin-top: 20px; animation: slideUp 0.2s; }
-        .detail-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .back-btn { background: var(--bg); border: none; font-size: 1.5rem; cursor: pointer; padding: 5px 10px; border-radius: 8px; }
+        /* --- AGENDA (School Planner) --- */
+        .agenda-label { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px; }
+        .task-row { background: var(--surface); padding: 12px; border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; margin-bottom: 8px; }
+        .task-row.done { opacity: 0.5; text-decoration: line-through; }
+        .task-check { width: 24px; height: 24px; border: 2px solid var(--border); border-radius: 6px; margin-right: 10px; cursor: pointer; }
+        .task-row.done .task-check { background: var(--success); border-color: var(--success); }
 
-        /* --- AGENDA --- */
-        .agenda-group { margin-bottom: 20px; }
-        .agenda-label { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; padding-left: 5px; }
-        
-        .task-row { 
-            background: var(--surface); padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border); 
-            display: flex; align-items: center; margin-bottom: 8px; transition: 0.2s; 
-        }
-        .task-row.done { opacity: 0.6; background: var(--bg); }
-        .task-row.done .task-title { text-decoration: line-through; }
-        .task-check { 
-            width: 24px; height: 24px; border: 2px solid var(--border); border-radius: 8px; 
-            margin-right: 15px; display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; transition: 0.2s; flex-shrink: 0;
-        }
-        .task-row.done .task-check { background: var(--success); border-color: var(--success); color: white; }
+        /* --- SCHOOL HUB --- */
+        .gpa-hero { background: linear-gradient(135deg, var(--primary), #4f46e5); color: white; padding: 25px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .sub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        .sub-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px; cursor: pointer; border-top: 4px solid var(--text-muted); transition: 0.2s; }
+        .sub-card:hover { transform: translateY(-3px); }
 
-        /* --- MODALS --- */
+        /* FAB */
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--text); color: var(--bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer; z-index: 500; }
+
+        /* Modal */
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(4px); }
-        .modal-box { background: var(--surface); width: 90%; max-width: 420px; border-radius: 24px; padding: 25px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); max-height: 90vh; overflow-y: auto; }
-        
-        /* Floating Action Button */
-        .fab { position: fixed; bottom: 30px; right: 30px; width: 64px; height: 64px; background: var(--text); color: var(--bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer; border: none; z-index: 500; transition: transform 0.2s; }
-        .fab:hover { transform: scale(1.05); }
+        .modal-box { background: var(--surface); width: 90%; max-width: 400px; border-radius: 24px; padding: 25px; max-height: 90vh; overflow-y: auto; }
 
-        /* Mobile */
         @media (max-width: 768px) {
             body { flex-direction: column; }
-            .sidebar { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; flex-direction: row; padding: 0; justify-content: space-evenly; border-top: 1px solid var(--border); border-right: none; }
-            .brand { display: none; }
-            .nav-item { margin: 0; width: auto; height: 100%; flex: 1; border-radius: 0; }
-            .main-content { padding: 15px; margin-bottom: 70px; }
-            .fab { bottom: 90px; right: 20px; }
-            .timeline-line { left: 45px; }
+            .sidebar { position: fixed; bottom: 0; left: 0; width: 100%; height: 65px; flex-direction: row; padding: 0; justify-content: space-evenly; border-top: 1px solid var(--border); }
+            .main-content { padding: 15px; margin-bottom: 65px; }
+            .fab { bottom: 85px; right: 20px; }
         }
     </style>
 </head>
 <body>
 
     <nav class="sidebar">
-        <div class="brand">V</div>
-        <button class="nav-item active" onclick="nav('dashboard')" title="Home">🏠</button>
+        <div style="font-weight:900; color:var(--primary); font-size:1.5rem; margin-bottom:20px;">V</div>
+        <button class="nav-item active" onclick="nav('dashboard')" title="Dashboard">🏠</button>
         <button class="nav-item" onclick="nav('school')" title="School">🎓</button>
         <button class="nav-item" onclick="nav('timeline')" title="Timeline">⏱️</button>
+        <button class="nav-item" onclick="nav('schedules')" title="Schedules">📅</button>
         <button class="nav-item" onclick="nav('agenda')" title="Tasks">✅</button>
         <button class="nav-item" onclick="nav('settings')" title="Settings">⚙️</button>
     </nav>
@@ -188,90 +122,72 @@
         
         <div class="header">
             <h1 id="page-title">Dashboard</h1>
-            <div id="clock" style="font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums;">00:00</div>
+            <div id="clock" style="font-weight:700; color:var(--primary);">00:00</div>
         </div>
 
         <section id="dashboard" class="section active">
             <div class="gpa-hero">
                 <div>
-                    <div style="opacity: 0.9; font-size: 0.9rem;">ACADEMIC PERFORMANCE</div>
-                    <div style="font-size: 2.5rem; font-weight: 800; margin-top: 5px;" id="dash-gpa">0%</div>
-                    <div style="font-size: 0.9rem; opacity: 0.9;" id="dash-grade">Grade: -</div>
+                    <div style="opacity:0.9; font-size:0.8rem;">ACADEMIC PERFORMANCE</div>
+                    <div style="font-size:2.5rem; font-weight:800; margin-top:5px;" id="dash-gpa">0%</div>
+                    <div style="opacity:0.9; font-size:0.9rem;" id="dash-grade">Grade: -</div>
                 </div>
-                <div style="font-size: 3rem;">📊</div>
+                <div style="font-size:3rem;">📊</div>
             </div>
 
             <div class="card">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                     <h3>Happening Now</h3>
-                    <div style="font-size:0.8rem; color:var(--text-muted);" id="now-time-range">--:--</div>
+                    <div style="font-size:0.8rem; color:var(--text-muted);" id="now-time">--:--</div>
                 </div>
                 <div style="display:flex; align-items:center; gap:15px;">
                     <div style="width:50px; height:50px; background:var(--primary-light); color:var(--primary); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.5rem;" id="now-icon">☕</div>
                     <div>
-                        <div style="font-size:1.2rem; font-weight:700;" id="now-title">Free Time</div>
-                        <div style="font-size:0.9rem; color:var(--text-muted);">Stay focused!</div>
+                        <div style="font-size:1.2rem; font-weight:700;" id="now-activity">Free Time</div>
+                        <div style="font-size:0.9rem; color:var(--text-muted);" id="now-schedule-name">No Schedule</div>
                     </div>
                 </div>
             </div>
+            
+            <div id="dash-agenda-preview"></div>
         </section>
 
         <section id="school" class="section">
-            
             <div id="school-grid">
-                <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 15px;">
-                    <h3 style="margin:0">My Subjects</h3>
-                    <button class="btn btn-sm" onclick="openSubjectModal()">+ Add Subject</button>
+                <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3>My Subjects</h3>
+                    <button class="btn btn-sm" onclick="openSubjectModal()">+ Add</button>
                 </div>
-                <div class="sub-grid" id="subject-list">
-                    </div>
+                <div class="sub-grid" id="subject-list"></div>
             </div>
 
-            <div id="school-detail" class="detail-view">
-                <div class="detail-header">
-                    <button class="back-btn" onclick="closeDetailView()">←</button>
+            <div id="school-detail" style="display:none; animation: fadeScale 0.2s;">
+                <div style="display:flex; gap:10px; margin-bottom:20px;">
+                    <button class="btn-icon" onclick="closeDetail()" style="background:var(--border); font-size:1.2rem;">←</button>
                     <div>
-                        <h2 id="det-name">Mathematics</h2>
+                        <h2 id="det-name">Math</h2>
                         <div style="color:var(--text-muted);" id="det-room">Room 101</div>
                     </div>
                 </div>
-
                 <div class="card">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-                        <h3>Attendance</h3>
-                        <div style="font-weight:700; font-size:1.2rem;" id="det-att-pct">100%</div>
-                    </div>
-                    <div style="display:flex; gap:10px;">
-                        <button class="btn" style="flex:1; background:#dcfce7; color:#166534;" onclick="updateAtt('p')">Present 👍</button>
-                        <button class="btn" style="flex:1; background:#fee2e2; color:#991b1b;" onclick="updateAtt('a')">Absent 👎</button>
-                    </div>
-                    <div style="text-align:center; margin-top:10px; font-size:0.8rem; color:var(--text-muted);" id="det-att-stats">0 Pres / 0 Abs</div>
-                </div>
-
-                <div class="card">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
                         <h3>Grades</h3>
-                        <button class="btn-ghost btn-sm" onclick="openGradeModal()">+ Add</button>
+                        <button class="btn-sm btn-ghost" onclick="openGradeModal()">+ Grade</button>
                     </div>
-                    <div id="det-grades-list"></div>
+                    <div id="det-grades"></div>
                 </div>
-                
-                <button class="btn-ghost" style="width:100%; color:var(--danger); border-color:var(--border);" onclick="deleteSubject()">Delete Subject</button>
+                <button class="btn-ghost" style="width:100%; color:var(--danger); border-color:var(--danger);" onclick="deleteSubject()">Delete Subject</button>
             </div>
         </section>
 
         <section id="timeline" class="section">
-            <div class="card">
-                <div style="display:flex; gap:10px; margin-bottom:10px;">
-                    <input type="time" id="tl-start">
-                    <input type="time" id="tl-end">
+            <div class="date-nav">
+                <button class="btn-icon" onclick="changeDate(-1)">◀</button>
+                <div style="text-align:center;">
+                    <div style="font-weight:700;" id="tl-date-display">Today</div>
+                    <div style="font-size:0.8rem; color:var(--primary);" id="tl-schedule-name">Loading...</div>
                 </div>
-                <div style="display:flex; gap:10px;">
-                    <input type="text" id="tl-name" placeholder="Activity name">
-                    <button class="btn-icon" style="background:var(--bg); width:45px;" onclick="document.getElementById('emoji-picker').style.display='grid'">😊</button>
-                    <button class="btn" onclick="addBlock()">Add</button>
-                </div>
-                <div id="emoji-picker" style="display:none; grid-template-columns:repeat(8,1fr); gap:5px; margin-top:10px; max-height:100px; overflow-y:auto; background:var(--bg); padding:10px; border-radius:10px;"></div>
+                <button class="btn-icon" onclick="changeDate(1)">▶</button>
             </div>
 
             <div class="timeline-wrapper">
@@ -281,34 +197,43 @@
             </div>
         </section>
 
+        <section id="schedules" class="section">
+            <div class="card">
+                <h3>Calendar Assignment</h3>
+                <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;">Assign your routines to days of the week.</p>
+                <div id="calendar-assigner">
+                    </div>
+            </div>
+
+            <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+                <h3>My Routines</h3>
+                <button class="btn btn-sm" onclick="createSchedule()">+ New</button>
+            </div>
+            <div id="schedule-list">
+                </div>
+        </section>
+
         <section id="agenda" class="section">
-            <div id="agenda-list"></div>
-            <div style="height: 60px;"></div>
+            <div id="agenda-container"></div>
+            <div style="height:60px;"></div>
         </section>
 
         <section id="settings" class="section">
             <div class="card">
                 <h3>Settings</h3>
-                <div style="margin-top:15px;">
-                    <button class="btn-ghost" style="width:100%; margin-bottom:10px; justify-content: space-between;" onclick="toggleTheme()">
-                        Dark Mode <span>🌗</span>
-                    </button>
-                    <button class="btn-ghost" style="width:100%; justify-content: space-between; color:var(--danger);" onclick="resetData()">
-                        Reset All Data <span>🗑️</span>
-                    </button>
-                </div>
+                <button class="btn-ghost" style="width:100%; margin-top:10px;" onclick="toggleTheme()">Dark Mode 🌗</button>
+                <button class="btn-ghost" style="width:100%; margin-top:10px; color:var(--danger);" onclick="resetApp()">Factory Reset 🗑️</button>
             </div>
-            <div style="text-align:center; color:var(--text-muted); font-size:0.8rem; margin-top:20px;">Vidyarthi Platinum v2.0</div>
         </section>
 
     </main>
 
-    <button class="fab" onclick="openTaskModal()">+</button>
+    <button class="fab" onclick="handleFab()">+</button>
 
     <div id="modal-task" class="modal">
         <div class="modal-box">
-            <h3 style="margin-bottom:15px;">Add Task</h3>
-            <input type="text" id="t-desc" placeholder="What needs to be done?" style="margin-bottom:10px;">
+            <h3>Add Task</h3>
+            <input type="text" id="t-desc" placeholder="Task Name" style="margin:10px 0;">
             <select id="t-sub" style="margin-bottom:10px;"></select>
             <input type="date" id="t-date" style="margin-bottom:10px;">
             <div style="display:flex; gap:10px;">
@@ -320,197 +245,133 @@
 
     <div id="modal-sub" class="modal">
         <div class="modal-box">
-            <h3 style="margin-bottom:15px;">New Subject</h3>
-            <input type="text" id="s-name" placeholder="Name (e.g. History)" style="margin-bottom:10px;">
-            <input type="text" id="s-room" placeholder="Room / Teacher" style="margin-bottom:10px;">
-            <div style="margin-bottom:15px;">
-                <label style="font-size:0.8rem; color:var(--text-muted);">Color</label>
-                <div style="display:flex; gap:10px; overflow-x:auto; padding:5px 0;" id="color-row"></div>
-                <input type="hidden" id="s-color" value="#6366f1">
-            </div>
+            <h3>New Subject</h3>
+            <input type="text" id="s-name" placeholder="Name" style="margin:10px 0;">
+            <input type="text" id="s-room" placeholder="Room/Teacher" style="margin-bottom:10px;">
+            <input type="color" id="s-color" value="#6366f1" style="width:100%; height:40px; margin-bottom:10px;">
             <div style="display:flex; gap:10px;">
                 <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-sub')">Cancel</button>
-                <button class="btn" style="flex:1" onclick="saveSubject()">Create</button>
+                <button class="btn" style="flex:1" onclick="saveSubject()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-sched" class="modal">
+        <div class="modal-box">
+            <h3>Edit Routine</h3>
+            <input type="hidden" id="sch-id">
+            <input type="text" id="sch-name" placeholder="Routine Name (e.g. School Day)" style="margin:10px 0;">
+            
+            <div style="max-height:200px; overflow-y:auto; border:1px solid var(--border); border-radius:12px; padding:10px; margin-bottom:10px;" id="sch-blocks-list">
+                </div>
+
+            <div style="background:var(--bg); padding:10px; border-radius:12px; margin-bottom:10px;">
+                <div style="font-size:0.8rem; font-weight:700; margin-bottom:5px;">ADD BLOCK</div>
+                <div style="display:flex; gap:5px; margin-bottom:5px;">
+                    <input type="time" id="b-start">
+                    <input type="time" id="b-end">
+                </div>
+                <div style="display:flex; gap:5px;">
+                    <input type="text" id="b-name" placeholder="Activity" style="flex:1;">
+                    <input type="text" id="b-icon" placeholder="Icon" style="width:40px; text-align:center;">
+                    <button class="btn btn-sm" onclick="addBlockToSchedule()">+</button>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:10px;">
+                <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-sched')">Done</button>
+                <button class="btn" style="flex:1; background:var(--danger);" onclick="deleteSchedule()">Delete</button>
             </div>
         </div>
     </div>
 
     <div id="modal-grade" class="modal">
         <div class="modal-box">
-            <h3 style="margin-bottom:15px;">Record Grade</h3>
-            <input type="text" id="g-name" placeholder="Exam Name" style="margin-bottom:10px;">
-            <div style="display:flex; gap:10px; margin-bottom:15px;">
+            <h3>Add Grade</h3>
+            <input type="text" id="g-name" placeholder="Exam Name" style="margin:10px 0;">
+            <div style="display:flex; gap:10px; margin-bottom:10px;">
                 <input type="number" id="g-score" placeholder="Score">
                 <input type="number" id="g-total" placeholder="Total" value="100">
             </div>
-            <div style="display:flex; gap:10px;">
-                <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-grade')">Cancel</button>
-                <button class="btn" style="flex:1" onclick="saveGrade()">Save</button>
-            </div>
+            <button class="btn" onclick="saveGrade()" style="width:100%;">Save</button>
+            <button class="btn-ghost" onclick="closeModal('modal-grade')" style="width:100%; margin-top:5px;">Cancel</button>
         </div>
     </div>
 
     <script>
-        // --- STORE ---
+        // --- DATA STORE ---
         let db = {
-            subjects: JSON.parse(localStorage.getItem('vpSubjects')) || [
-                { id: 1, name: 'Math', room: '101', color: '#6366f1', att: {p:0, a:0} },
-                { id: 2, name: 'Physics', room: 'Lab 2', color: '#10b981', att: {p:0, a:0} }
+            // Schedules (Templates)
+            schedules: JSON.parse(localStorage.getItem('vpScheds')) || [
+                { id: 1, name: "School Day", blocks: [
+                    {id:1, name:"Morning Routine", start:"07:00", end:"08:00", icon:"🚿"},
+                    {id:2, name:"School", start:"08:00", end:"15:00", icon:"🏫"},
+                    {id:3, name:"Homework", start:"16:00", end:"18:00", icon:"📚"}
+                ]},
+                { id: 2, name: "Weekend", blocks: [
+                    {id:1, name:"Sleep In", start:"08:00", end:"10:00", icon:"💤"},
+                    {id:2, name:"Free Time", start:"10:00", end:"22:00", icon:"🎮"}
+                ]}
             ],
+            // Calendar Assignments (0=Sun, 1=Mon...)
+            assignments: JSON.parse(localStorage.getItem('vpAssign')) || { 1:1, 2:1, 3:1, 4:1, 5:1, 6:2, 0:2 },
+            
+            subjects: JSON.parse(localStorage.getItem('vpSubs')) || [],
             tasks: JSON.parse(localStorage.getItem('vpTasks')) || [],
             grades: JSON.parse(localStorage.getItem('vpGrades')) || [],
-            timeline: JSON.parse(localStorage.getItem('vpTimeline')) || [
-                {id: 1, name: 'Morning Routine', start: '07:00', end: '08:00', icon: '🚿'},
-                {id: 2, name: 'School', start: '09:00', end: '15:00', icon: '🏫'}
-            ],
-            settings: JSON.parse(localStorage.getItem('vpSettings')) || { theme: 'light' }
+            settings: JSON.parse(localStorage.getItem('vpSets')) || { theme: 'light' }
         };
 
+        // State
+        let selectedDate = new Date();
+        let editingScheduleId = null;
         let currentSubId = null;
-        const colors = ['#6366f1', '#ef4444', '#f59e0b', '#10b981', '#ec4899', '#8b5cf6'];
-        const emojis = ["🚿","☕","🏫","📚","🥪","🚌","⚽","🎮","💤","📝"];
 
         // --- INIT ---
         function init() {
             if(db.settings.theme === 'dark') document.body.setAttribute('data-theme', 'dark');
-            setupPickers();
             renderAll();
             setInterval(updateClock, 1000);
-            setInterval(checkTimeline, 1000);
+            setInterval(checkLiveStatus, 5000);
         }
 
-        function setupPickers() {
-            // Colors
-            const row = document.getElementById('color-row');
-            colors.forEach(c => {
-                const d = document.createElement('div');
-                d.style.cssText = `width:30px; height:30px; border-radius:50%; background:${c}; cursor:pointer; flex-shrink:0; border:2px solid transparent;`;
-                d.onclick = () => {
-                    document.getElementById('s-color').value = c;
-                    Array.from(row.children).forEach(x => x.style.borderColor = 'transparent');
-                    d.style.borderColor = 'var(--text)';
-                };
-                row.appendChild(d);
-            });
-            // Emojis
-            const ep = document.getElementById('emoji-picker');
-            emojis.forEach(e => {
-                const b = document.createElement('button');
-                b.innerText = e;
-                b.className = 'btn-icon';
-                b.onclick = () => {
-                    document.getElementById('tl-name').value = e + " " + document.getElementById('tl-name').value;
-                    ep.style.display = 'none';
-                };
-                ep.appendChild(b);
-            });
-        }
-
-        // --- RENDERERS ---
-        function renderAll() {
-            renderSchoolGrid();
+        // --- TIMELINE ENGINE (MULTI-DAY) ---
+        function changeDate(delta) {
+            selectedDate.setDate(selectedDate.getDate() + delta);
             renderTimeline();
-            renderTasks();
-            updateGPA();
         }
 
-        // SCHOOL
-        function renderSchoolGrid() {
-            const grid = document.getElementById('subject-list');
-            grid.innerHTML = '';
-            const tSub = document.getElementById('t-sub');
-            tSub.innerHTML = '';
-
-            db.subjects.forEach(s => {
-                // Dropdown
-                tSub.innerHTML += `<option value="${s.id}">${s.name}</option>`;
-                
-                // Attendance Calc
-                const total = s.att.p + s.att.a;
-                const pct = total === 0 ? 0 : Math.round((s.att.p / total) * 100);
-                
-                // Grade Calc
-                const sGrades = db.grades.filter(g => g.subId == s.id);
-                let gTotal = 0, gMax = 0;
-                sGrades.forEach(g => { gTotal += parseFloat(g.score); gMax += parseFloat(g.total); });
-                const gPct = gMax > 0 ? Math.round((gTotal/gMax)*100) : '-';
-
-                grid.innerHTML += `
-                    <div class="sub-card" onclick="openDetailView(${s.id})" style="border-top: 4px solid ${s.color}">
-                        <div style="display:flex; justify-content:space-between; align-items:start;">
-                            <div>
-                                <h3 style="color:${s.color}">${s.name}</h3>
-                                <div style="font-size:0.8rem; color:var(--text-muted);">${s.room}</div>
-                            </div>
-                            <div class="att-ring" style="background:conic-gradient(${s.color} ${pct}%, var(--bg) 0%)">${pct}%</div>
-                        </div>
-                        <div style="margin-top:15px; font-weight:700; font-size:1.1rem;">${gPct}% <span style="font-size:0.8rem; font-weight:400; color:var(--text-muted);">Grade</span></div>
-                    </div>
-                `;
-            });
+        function getScheduleForDate(date) {
+            const dayOfWeek = date.getDay(); // 0-6
+            const schedId = db.assignments[dayOfWeek];
+            return db.schedules.find(s => s.id == schedId);
         }
 
-        function openDetailView(id) {
-            currentSubId = id;
-            const s = db.subjects.find(x => x.id == id);
-            document.getElementById('school-grid').style.display = 'none';
-            document.getElementById('school-detail').style.display = 'block';
-            
-            document.getElementById('det-name').innerText = s.name;
-            document.getElementById('det-name').style.color = s.color;
-            document.getElementById('det-room').innerText = s.room;
-            
-            updateDetailStats();
-            renderDetailGrades();
-        }
-
-        function closeDetailView() {
-            currentSubId = null;
-            document.getElementById('school-detail').style.display = 'none';
-            document.getElementById('school-grid').style.display = 'block';
-            renderSchoolGrid(); // Refresh dashboard
-        }
-
-        function updateDetailStats() {
-            const s = db.subjects.find(x => x.id == currentSubId);
-            const total = s.att.p + s.att.a;
-            const pct = total === 0 ? 100 : Math.round((s.att.p / total) * 100);
-            document.getElementById('det-att-pct').innerText = pct + "% Attendance";
-            document.getElementById('det-att-stats').innerText = `${s.att.p} Present • ${s.att.a} Absent`;
-        }
-
-        function renderDetailGrades() {
-            const list = document.getElementById('det-grades-list');
-            list.innerHTML = '';
-            const grads = db.grades.filter(g => g.subId == currentSubId);
-            
-            grads.forEach(g => {
-                list.innerHTML += `
-                    <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border);">
-                        <span>${g.name}</span>
-                        <div style="display:flex; gap:10px;">
-                            <strong>${g.score}/${g.total}</strong>
-                            <button onclick="delGrade(${g.id})" style="color:var(--danger); border:none; background:none; cursor:pointer;">&times;</button>
-                        </div>
-                    </div>
-                `;
-            });
-            if(grads.length === 0) list.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:10px;">No grades yet</div>';
-        }
-
-        function updateAtt(type) {
-            const s = db.subjects.find(x => x.id == currentSubId);
-            if(type === 'p') s.att.p++; else s.att.a++;
-            save(); updateDetailStats();
-        }
-
-        // TIMELINE
         function renderTimeline() {
             const list = document.getElementById('timeline-list');
             list.innerHTML = '';
-            db.timeline.sort((a,b) => a.start.localeCompare(b.start));
             
-            db.timeline.forEach(b => {
+            // Date Header
+            const options = { weekday: 'long', month: 'short', day: 'numeric' };
+            const dateStr = selectedDate.toLocaleDateString('en-US', options);
+            const isToday = new Date().toDateString() === selectedDate.toDateString();
+            
+            document.getElementById('tl-date-display').innerText = isToday ? "Today" : dateStr;
+
+            // Get Schedule
+            const sched = getScheduleForDate(selectedDate);
+            
+            if (!sched) {
+                document.getElementById('tl-schedule-name').innerText = "No Routine Assigned";
+                list.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted);">No routine set for this day.<br>Go to Schedules to assign one.</div>`;
+                return;
+            }
+
+            document.getElementById('tl-schedule-name').innerText = sched.name;
+
+            // Render Blocks
+            sched.blocks.sort((a,b) => a.start.localeCompare(b.start));
+            sched.blocks.forEach(b => {
                 list.innerHTML += `
                     <div class="tl-item" data-start="${b.start}" data-end="${b.end}">
                         <div class="tl-time">${b.start}</div>
@@ -519,124 +380,335 @@
                             <div class="live-badge" style="display:none;">LIVE</div>
                             <div style="font-weight:700;">${b.name}</div>
                             <div style="font-size:0.8rem; color:var(--text-muted);">${b.start} - ${b.end}</div>
-                            <button onclick="delBlock(${b.id})" style="position:absolute; bottom:10px; right:10px; border:none; background:none; color:var(--text-muted); cursor:pointer;">&times;</button>
                         </div>
                     </div>
                 `;
             });
-            checkTimeline();
+
+            if(isToday) checkLiveStatus();
         }
 
-        function checkTimeline() {
+        function checkLiveStatus() {
+            // Only runs on Dashboard and Timeline if today is selected
             const now = new Date();
             const cur = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
-            let found = false;
-
-            document.querySelectorAll('.tl-item').forEach(el => {
-                const s = el.dataset.start;
-                const e = el.dataset.end;
-                if (cur >= s && cur < e) {
-                    el.classList.add('active');
-                    el.querySelector('.live-badge').style.display = 'block';
-                    
-                    const block = db.timeline.find(b => b.start === s);
-                    if(block) {
-                        document.getElementById('now-title').innerText = block.name;
-                        document.getElementById('now-icon').innerText = block.icon;
-                        document.getElementById('now-time-range').innerText = `${s} - ${e}`;
-                    }
-                    found = true;
+            const sched = getScheduleForDate(now);
+            
+            // Dashboard Update
+            if(sched) {
+                const active = sched.blocks.find(b => cur >= b.start && cur < b.end);
+                if(active) {
+                    document.getElementById('now-activity').innerText = active.name;
+                    document.getElementById('now-icon').innerText = active.icon;
+                    document.getElementById('now-time').innerText = active.end;
+                    document.getElementById('now-schedule-name').innerText = sched.name;
                 } else {
+                    document.getElementById('now-activity').innerText = "Free Time";
+                    document.getElementById('now-icon').innerText = "☕";
+                    document.getElementById('now-schedule-name').innerText = sched.name;
+                }
+            }
+
+            // Timeline Highlights (only if viewing Today)
+            if(selectedDate.toDateString() === now.toDateString()) {
+                document.querySelectorAll('.tl-item').forEach(el => {
+                    const s = el.dataset.start;
+                    const e = el.dataset.end;
+                    if(cur >= s && cur < e) {
+                        el.classList.add('active');
+                        el.querySelector('.live-badge').style.display = 'block';
+                    } else {
+                        el.classList.remove('active');
+                        el.querySelector('.live-badge').style.display = 'none';
+                    }
+                });
+            } else {
+                // Clear highlights if not today
+                document.querySelectorAll('.tl-item').forEach(el => {
                     el.classList.remove('active');
                     el.querySelector('.live-badge').style.display = 'none';
-                }
+                });
+            }
+        }
+
+        // --- SCHEDULE MANAGER (TIMETUNE STYLE) ---
+        function renderScheduleManager() {
+            // 1. Calendar Assigner
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const cont = document.getElementById('calendar-assigner');
+            cont.innerHTML = '';
+            
+            days.forEach((day, idx) => {
+                const currentSchedId = db.assignments[idx];
+                
+                // Build options
+                let options = `<option value="">None</option>`;
+                db.schedules.forEach(s => {
+                    options += `<option value="${s.id}" ${s.id == currentSchedId ? 'selected' : ''}>${s.name}</option>`;
+                });
+
+                cont.innerHTML += `
+                    <div class="day-row">
+                        <div style="font-weight:600; width:50px;">${day}</div>
+                        <select onchange="assignSchedule(${idx}, this.value)" style="padding:8px;">
+                            ${options}
+                        </select>
+                    </div>
+                `;
             });
 
-            if(!found) {
-                document.getElementById('now-title').innerText = "Free Time";
-                document.getElementById('now-icon').innerText = "☕";
-                document.getElementById('now-time-range').innerText = "--:--";
-            }
-        }
-
-        function addBlock() {
-            const name = document.getElementById('tl-name').value;
-            const start = document.getElementById('tl-start').value;
-            const end = document.getElementById('tl-end').value;
-            if(name && start && end) {
-                db.timeline.push({ id: Date.now(), name, start, end, icon: name.split(" ")[0] || '⏱️' });
-                document.getElementById('tl-name').value = '';
-                save(); renderTimeline();
-            }
-        }
-
-        // AGENDA
-        function renderTasks() {
-            const list = document.getElementById('agenda-list');
+            // 2. Schedule List
+            const list = document.getElementById('schedule-list');
             list.innerHTML = '';
+            db.schedules.forEach(s => {
+                list.innerHTML += `
+                    <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <div style="font-weight:700;">${s.name}</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted);">${s.blocks.length} blocks</div>
+                        </div>
+                        <button class="btn btn-ghost" onclick="editSchedule(${s.id})">Edit</button>
+                    </div>
+                `;
+            });
+        }
+
+        function assignSchedule(dayIdx, schedId) {
+            db.assignments[dayIdx] = schedId;
+            save(); renderTimeline();
+        }
+
+        function createSchedule() {
+            const name = prompt("Routine Name (e.g. Summer Break):");
+            if(name) {
+                const newSched = { id: Date.now(), name: name, blocks: [] };
+                db.schedules.push(newSched);
+                save(); renderScheduleManager(); editSchedule(newSched.id);
+            }
+        }
+
+        function editSchedule(id) {
+            editingScheduleId = id;
+            const s = db.schedules.find(x => x.id == id);
+            document.getElementById('sch-id').value = id;
+            document.getElementById('sch-name').value = s.name;
+            renderEditorBlocks();
+            document.getElementById('modal-sched').style.display = 'flex';
+        }
+
+        function renderEditorBlocks() {
+            const s = db.schedules.find(x => x.id == editingScheduleId);
+            const list = document.getElementById('sch-blocks-list');
+            list.innerHTML = '';
+            s.blocks.sort((a,b) => a.start.localeCompare(b.start));
             
+            s.blocks.forEach(b => {
+                list.innerHTML += `
+                    <div style="background:var(--bg); padding:8px; border-radius:8px; margin-bottom:5px; display:flex; justify-content:space-between; align-items:center;">
+                        <div style="font-size:0.8rem;">
+                            <strong>${b.name}</strong> (${b.start}-${b.end})
+                        </div>
+                        <button onclick="removeBlock(${b.id})" style="color:var(--danger); border:none; background:none;">&times;</button>
+                    </div>
+                `;
+            });
+        }
+
+        function addBlockToSchedule() {
+            const start = document.getElementById('b-start').value;
+            const end = document.getElementById('b-end').value;
+            const name = document.getElementById('b-name').value;
+            const icon = document.getElementById('b-icon').value || '⏱️';
+            
+            if(start && end && name) {
+                const s = db.schedules.find(x => x.id == editingScheduleId);
+                s.blocks.push({ id: Date.now(), name, start, end, icon });
+                renderEditorBlocks();
+                // Clear inputs
+                document.getElementById('b-name').value = '';
+            }
+        }
+
+        function removeBlock(blockId) {
+            const s = db.schedules.find(x => x.id == editingScheduleId);
+            s.blocks = s.blocks.filter(b => b.id !== blockId);
+            renderEditorBlocks();
+        }
+
+        function deleteSchedule() {
+            if(confirm("Delete this routine template?")) {
+                db.schedules = db.schedules.filter(x => x.id != editingScheduleId);
+                save(); closeModal('modal-sched'); renderScheduleManager();
+            }
+        }
+
+        // --- SCHOOL HUB ---
+        function renderSchool() {
+            const grid = document.getElementById('subject-list');
+            grid.innerHTML = '';
+            const tSub = document.getElementById('t-sub');
+            tSub.innerHTML = '<option value="">General</option>';
+
+            db.subjects.forEach(s => {
+                tSub.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+                
+                // Grades Logic
+                const sGrades = db.grades.filter(g => g.subId == s.id);
+                let total=0, max=0;
+                sGrades.forEach(g => { total+=parseFloat(g.score); max+=parseFloat(g.total); });
+                const pct = max > 0 ? Math.round((total/max)*100) : '-';
+
+                grid.innerHTML += `
+                    <div class="sub-card" style="border-top:4px solid ${s.color}" onclick="openDetail(${s.id})">
+                        <h3 style="color:${s.color}">${s.name}</h3>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">${s.room}</div>
+                        <div style="margin-top:10px; font-weight:700;">${pct}%</div>
+                    </div>
+                `;
+            });
+            updateGPA();
+        }
+
+        function openDetail(id) {
+            currentSubId = id;
+            const s = db.subjects.find(x => x.id == id);
+            document.getElementById('school-grid').style.display='none';
+            document.getElementById('school-detail').style.display='block';
+            document.getElementById('det-name').innerText = s.name;
+            document.getElementById('det-room').innerText = s.room;
+            renderDetailGrades();
+        }
+        
+        function closeDetail() {
+            document.getElementById('school-detail').style.display='none';
+            document.getElementById('school-grid').style.display='block';
+            renderSchool();
+        }
+
+        function renderDetailGrades() {
+            const list = document.getElementById('det-grades');
+            list.innerHTML = '';
+            const grads = db.grades.filter(g => g.subId == currentSubId);
+            grads.forEach(g => {
+                list.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border);">
+                        <span>${g.name}</span>
+                        <span><strong>${g.score}/${g.total}</strong> <button onclick="delGrade(${g.id})" style="border:none;background:none;color:red;">&times;</button></span>
+                    </div>
+                `;
+            });
+        }
+
+        function updateGPA() {
+            let total=0, max=0;
+            db.grades.forEach(g => { total+=parseFloat(g.score); max+=parseFloat(g.total); });
+            const pct = max > 0 ? Math.round((total/max)*100) : 0;
+            document.getElementById('dash-gpa').innerText = pct + "%";
+            
+            let l='F';
+            if(pct>=90)l='A'; else if(pct>=80)l='B'; else if(pct>=70)l='C'; else if(pct>=60)l='D';
+            document.getElementById('dash-grade').innerText = "Grade: " + l;
+        }
+
+        function saveSubject() {
+            const name = document.getElementById('s-name').value;
+            const room = document.getElementById('s-room').value;
+            const color = document.getElementById('s-color').value;
+            if(name) { db.subjects.push({id:Date.now(), name, room, color}); save(); closeModal('modal-sub'); }
+        }
+
+        function deleteSubject() {
+            if(confirm("Delete Subject?")) {
+                db.subjects = db.subjects.filter(x=>x.id != currentSubId);
+                db.grades = db.grades.filter(x=>x.subId != currentSubId);
+                save(); closeDetail();
+            }
+        }
+
+        function saveGrade() {
+            const name = document.getElementById('g-name').value;
+            const score = document.getElementById('g-score').value;
+            const total = document.getElementById('g-total').value;
+            if(name && score) {
+                db.grades.push({id:Date.now(), subId:currentSubId, name, score, total});
+                save(); closeModal('modal-grade'); renderDetailGrades();
+            }
+        }
+        function delGrade(id) { db.grades=db.grades.filter(x=>x.id!==id); save(); renderDetailGrades(); }
+
+        // --- TASKS ---
+        function renderTasks() {
+            const list = document.getElementById('agenda-container');
+            const preview = document.getElementById('dash-agenda-preview');
+            list.innerHTML = ''; preview.innerHTML = '';
+
             db.tasks.sort((a,b) => a.date.localeCompare(b.date));
-            const buckets = { overdue:[], today:[], upcoming:[] };
+            
+            // Buckets
+            const buckets = { Overdue:[], Today:[], Upcoming:[] };
             const today = new Date().toISOString().split('T')[0];
 
             db.tasks.forEach(t => {
                 if(t.done) return;
-                if(t.date < today) buckets.overdue.push(t);
-                else if(t.date === today) buckets.today.push(t);
-                else buckets.upcoming.push(t);
+                if(t.date < today) buckets.Overdue.push(t);
+                else if(t.date === today) buckets.Today.push(t);
+                else buckets.Upcoming.push(t);
             });
 
-            const renderBucket = (title, items) => {
+            // Renderer
+            const renderBucket = (title, items, isPreview) => {
                 if(items.length === 0) return;
-                list.innerHTML += `<div class="agenda-label">${title}</div>`;
-                items.forEach(t => {
+                const html = `<div class="agenda-label">${title}</div>` + items.map(t => {
                     const s = db.subjects.find(x => x.id == t.subId);
-                    list.innerHTML += `
-                        <div class="task-row">
-                            <div class="task-check" onclick="toggleTask(${t.id})"></div>
-                            <div style="flex:1;">
-                                <div style="font-size:0.7rem; font-weight:800; color:${s ? s.color : '#ccc'}; text-transform:uppercase;">${s ? s.name : 'General'}</div>
-                                <div class="task-title" style="font-weight:600;">${t.desc}</div>
-                                <div style="font-size:0.8rem; color:var(--text-muted);">📅 ${t.date}</div>
-                            </div>
-                            <button onclick="delTask(${t.id})" style="border:none; background:none; color:#ccc; cursor:pointer;">&times;</button>
+                    return `
+                    <div class="task-row">
+                        <div class="task-check" onclick="toggleTask(${t.id})"></div>
+                        <div style="flex:1;">
+                            <div style="font-size:0.7rem; font-weight:800; color:${s?s.color:'#ccc'}">${s?s.name:'GENERAL'}</div>
+                            <div class="task-title">${t.desc}</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted);">${t.date}</div>
                         </div>
-                    `;
-                });
+                        <button onclick="delTask(${t.id})" style="border:none;background:none;">&times;</button>
+                    </div>`;
+                }).join('');
+                
+                if(!isPreview) list.innerHTML += html;
+                if(title === 'Today' || title === 'Overdue') preview.innerHTML += html;
             };
 
-            renderBucket('⚠️ Overdue', buckets.overdue);
-            renderBucket('🔥 Today', buckets.today);
-            renderBucket('📅 Upcoming', buckets.upcoming);
+            renderBucket('⚠️ Overdue', buckets.Overdue, true);
+            renderBucket('🔥 Today', buckets.Today, true);
+            renderBucket('📅 Upcoming', buckets.Upcoming, false);
         }
 
-        // --- GPA CALC ---
-        function updateGPA() {
-            let totalScore = 0, maxScore = 0;
-            db.grades.forEach(g => {
-                totalScore += parseFloat(g.score);
-                maxScore += parseFloat(g.total);
-            });
-            const pct = maxScore === 0 ? 0 : Math.round((totalScore / maxScore) * 100);
-            document.getElementById('dash-gpa').innerText = pct + "%";
-            
-            let letter = 'F';
-            if(pct >= 90) letter = 'A';
-            else if(pct >= 80) letter = 'B';
-            else if(pct >= 70) letter = 'C';
-            else if(pct >= 60) letter = 'D';
-            
-            document.getElementById('dash-grade').innerText = `Grade: ${letter}`;
+        function saveTask() {
+            const desc = document.getElementById('t-desc').value;
+            const sub = document.getElementById('t-sub').value;
+            const date = document.getElementById('t-date').value;
+            if(desc && date) {
+                db.tasks.push({id:Date.now(), desc, subId:sub, date, done:false});
+                save(); closeModal('modal-task');
+            }
         }
+        function toggleTask(id) { const t=db.tasks.find(x=>x.id==id); if(t)t.done=!t.done; save(); }
+        function delTask(id) { db.tasks=db.tasks.filter(x=>x.id!=id); save(); }
 
-        // --- UTILS ---
+        // --- SYSTEM ---
         function save() {
-            localStorage.setItem('vpSubjects', JSON.stringify(db.subjects));
+            localStorage.setItem('vpScheds', JSON.stringify(db.schedules));
+            localStorage.setItem('vpAssign', JSON.stringify(db.assignments));
+            localStorage.setItem('vpSubs', JSON.stringify(db.subjects));
             localStorage.setItem('vpTasks', JSON.stringify(db.tasks));
             localStorage.setItem('vpGrades', JSON.stringify(db.grades));
-            localStorage.setItem('vpTimeline', JSON.stringify(db.timeline));
-            localStorage.setItem('vpSettings', JSON.stringify(db.settings));
+            localStorage.setItem('vpSets', JSON.stringify(db.settings));
             renderAll();
+        }
+
+        function renderAll() {
+            renderTimeline();
+            renderSchool();
+            renderTasks();
+            renderScheduleManager();
         }
 
         function nav(id) {
@@ -646,66 +718,30 @@
             const btn = Array.from(document.querySelectorAll('.nav-item')).find(b => b.onclick.toString().includes(id));
             if(btn) btn.classList.add('active');
             document.getElementById('page-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
-            document.querySelector('.fab').style.display = id === 'agenda' ? 'flex' : 'none';
+            document.querySelector('.fab').style.display = (id === 'agenda') ? 'flex' : 'none';
         }
 
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function saveSubject() {
-            const name = document.getElementById('s-name').value;
-            const room = document.getElementById('s-room').value;
-            const color = document.getElementById('s-color').value;
-            if(name) {
-                db.subjects.push({id: Date.now(), name, room, color, att:{p:0, a:0}});
-                save(); closeModal('modal-sub');
+        function handleFab() { openTaskModal(); }
+        
+        function closeModal(id) { 
+            document.getElementById(id).style.display = 'none'; 
+            // If closing scheduler, save manual changes
+            if(id === 'modal-sched') {
+                const name = document.getElementById('sch-name').value;
+                const s = db.schedules.find(x => x.id == editingScheduleId);
+                if(s) s.name = name;
+                save(); renderScheduleManager(); renderTimeline();
             }
         }
-        function saveTask() {
-            db.tasks.push({
-                id: Date.now(),
-                desc: document.getElementById('t-desc').value,
-                subId: document.getElementById('t-sub').value,
-                date: document.getElementById('t-date').value,
-                done: false
-            });
-            save(); closeModal('modal-task');
-        }
-        function saveGrade() {
-            db.grades.push({
-                id: Date.now(),
-                subId: currentSubId,
-                name: document.getElementById('g-name').value,
-                score: document.getElementById('g-score').value,
-                total: document.getElementById('g-total').value
-            });
-            save(); closeModal('modal-grade'); renderDetailGrades();
-        }
-
-        function toggleTask(id) { const t=db.tasks.find(x=>x.id==id); if(t) t.done=!t.done; save(); }
-        function delTask(id) { db.tasks=db.tasks.filter(x=>x.id!==id); save(); }
-        function delBlock(id) { db.timeline=db.timeline.filter(x=>x.id!==id); save(); }
-        function delGrade(id) { db.grades=db.grades.filter(x=>x.id!==id); save(); renderDetailGrades(); }
-        function deleteSubject() {
-            if(confirm("Delete Subject and all its grades?")) {
-                db.subjects = db.subjects.filter(x=>x.id != currentSubId);
-                db.grades = db.grades.filter(x=>x.subId != currentSubId);
-                db.tasks = db.tasks.filter(x=>x.subId != currentSubId);
-                save(); closeDetailView();
-            }
-        }
-
-        function openTaskModal() { document.getElementById('modal-task').style.display='flex'; }
+        
+        function openTaskModal() { document.getElementById('t-date').value = new Date().toISOString().split('T')[0]; document.getElementById('modal-task').style.display='flex'; }
         function openSubjectModal() { document.getElementById('modal-sub').style.display='flex'; }
         function openGradeModal() { document.getElementById('modal-grade').style.display='flex'; }
-        function resetData() { if(confirm("Reset?")) { localStorage.clear(); location.reload(); } }
-        function toggleTheme() {
-            db.settings.theme = db.settings.theme === 'dark' ? 'light' : 'dark';
-            document.body.setAttribute('data-theme', db.settings.theme);
-            if(db.settings.theme === 'light') document.body.removeAttribute('data-theme');
-            save();
-        }
+        
+        function resetApp() { if(confirm("Reset?")) { localStorage.clear(); location.reload(); } }
+        function toggleTheme() { db.settings.theme = db.settings.theme==='dark'?'light':'dark'; document.body.setAttribute('data-theme', db.settings.theme); save(); }
         function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([],{hour:'2-digit', minute:'2-digit'}); }
 
-        // Start
         init();
         nav('dashboard');
 
