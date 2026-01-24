@@ -3,103 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - Smart School</title>
+    <title>Vidyarthi - Platinum Design</title>
     <style>
         :root {
             --primary: #4f46e5;
-            --primary-light: #e0e7ff;
-            --bg: #f8fafc;
+            --primary-light: #e0e7ff; /* Auto-calculated in JS usually, but fixed here */
+            --bg: #f1f5f9;
             --surface: #ffffff;
             --text: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --radius: 16px;
-            --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-            --danger: #ef4444;
+            --radius: 20px;
+            --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+            
             --success: #10b981;
+            --danger: #ef4444;
             --warning: #f59e0b;
         }
 
         [data-theme="dark"] {
             --bg: #0b0f19;
             --surface: #1e293b;
-            --text: #f1f5f9;
+            --text: #f8fafc;
             --text-muted: #94a3b8;
             --border: #334155;
-            --primary: #818cf8;
-            --primary-light: #312e81;
+            --primary-light: #312e81; /* Darker variant for dark mode */
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Inter', system-ui, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
         
-        body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: background 0.3s; }
+        body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: background 0.3s, color 0.3s; }
 
         /* --- LAYOUT --- */
-        .sidebar { width: 80px; background: var(--surface); display: flex; flex-direction: column; border-right: 1px solid var(--border); z-index: 100; align-items: center; padding-top: 25px; }
-        .main-content { flex: 1; padding: 25px; overflow-y: auto; scroll-behavior: smooth; position: relative; max-width: 800px; margin: 0 auto; width: 100%; }
+        .sidebar { width: 80px; background: var(--surface); display: flex; flex-direction: column; border-right: 1px solid var(--border); z-index: 100; align-items: center; padding-top: 30px; transition: background 0.3s; }
+        .main-content { flex: 1; padding: 25px; overflow-y: auto; scroll-behavior: smooth; position: relative; max-width: 900px; margin: 0 auto; width: 100%; }
         
-        .nav-item { width: 50px; height: 50px; border-radius: 16px; color: var(--text-muted); font-size: 1.5rem; margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; border: none; background: transparent; }
-        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.5); }
+        .nav-item { 
+            width: 50px; height: 50px; border-radius: 18px; color: var(--text-muted); font-size: 1.6rem; 
+            margin-bottom: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); border: none; background: transparent;
+        }
+        .nav-item:hover { background: var(--bg); color: var(--primary); transform: scale(1.05); }
+        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 10px 20px -5px var(--primary-light); transform: scale(1.1); }
 
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        h1 { font-size: 1.8rem; font-weight: 800; }
-        
-        .section { display: none; animation: fadeScale 0.3s ease-out; padding-bottom: 100px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; }
+        h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; }
+
+        .section { display: none; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 100px; }
         .section.active { display: block; }
-        @keyframes fadeScale { from { opacity: 0; transform: scale(0.99); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card { background: var(--surface); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 15px; }
-        .btn { padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.95rem; }
+        .card { background: var(--surface); padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 20px; transition: background 0.3s; }
+        
+        .btn { padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.95rem; }
+        .btn:active { transform: scale(0.96); }
         .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
-        .btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 8px; }
-        .btn-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: none; background: transparent; cursor: pointer; color: var(--text-muted); }
+        .btn-sm { padding: 6px 14px; font-size: 0.8rem; border-radius: 10px; }
+        .btn-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 10px; border: none; background: transparent; cursor: pointer; color: var(--text-muted); transition: 0.2s; }
+        .btn-icon:hover { background: var(--bg); color: var(--text); }
 
-        input, select { padding: 12px 15px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; }
+        input, select { padding: 12px 15px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; transition: 0.2s; }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); background: var(--surface); }
 
-        /* --- DATE NAVIGATOR --- */
-        .date-nav { display: flex; align-items: center; justify-content: space-between; background: var(--surface); padding: 10px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 20px; }
+        /* --- 🎒 NEW SCHOOL HUB (AESTHETIC) --- */
+        .sub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+        
+        .sub-card { 
+            background: var(--surface); border-radius: 24px; padding: 20px; cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); border: 1px solid var(--border);
+            position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+            min-height: 160px;
+        }
+        .sub-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1); }
+        
+        /* Gradient overlay for cards */
+        .sub-bg-blob { position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; border-radius: 50%; opacity: 0.1; filter: blur(20px); }
+        
+        .sub-icon { 
+            width: 45px; height: 45px; border-radius: 14px; display: flex; align-items: center; justify-content: center; 
+            font-size: 1.5rem; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        
+        .sub-meta { position: relative; z-index: 2; }
+        .sub-name { font-weight: 800; font-size: 1.1rem; margin-bottom: 2px; }
+        .sub-room { font-size: 0.8rem; opacity: 0.7; font-weight: 500; }
+        
+        .sub-grade-pill {
+            position: absolute; top: 15px; right: 15px; font-size: 0.75rem; font-weight: 800; 
+            padding: 4px 10px; border-radius: 20px; background: var(--surface); box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Progress Bar */
+        .att-bar-bg { height: 6px; width: 100%; background: var(--bg); border-radius: 10px; margin-top: 15px; overflow: hidden; }
+        .att-bar-fill { height: 100%; border-radius: 10px; transition: width 0.5s ease; }
+
+        /* Detail View Header */
+        .det-hero { 
+            background: var(--surface); padding: 30px; border-radius: 24px; text-align: center; 
+            margin-bottom: 20px; border: 1px solid var(--border); position: relative; overflow: hidden;
+        }
+        .det-stats-row { display: flex; gap: 15px; margin-top: 20px; }
+        .det-stat-card { flex: 1; background: var(--bg); padding: 15px; border-radius: 16px; text-align: center; }
+        .stat-val { font-size: 1.5rem; font-weight: 800; display: block; }
+        .stat-lbl { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px; }
+
+        /* --- ⚙️ NEW SETTINGS (AESTHETIC) --- */
+        .settings-group { margin-bottom: 25px; }
+        .settings-label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; margin-left: 5px; }
+        
+        .settings-list { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; }
+        .settings-item { 
+            padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; 
+            border-bottom: 1px solid var(--border); transition: background 0.2s;
+        }
+        .settings-item:last-child { border-bottom: none; }
+        .settings-item:hover { background: var(--bg); }
+        
+        .item-icon { width: 32px; height: 32px; background: var(--bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1.1rem; }
+        .item-info { flex: 1; font-weight: 600; font-size: 0.95rem; }
+
+        /* iOS Toggle Switch */
+        .toggle-switch { position: relative; width: 50px; height: 28px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        input:checked + .slider { background-color: var(--success); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        /* Color Picker Circles */
+        .color-opt { width: 35px; height: 35px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: 0.2s; }
+        .color-opt.active { border-color: var(--text); transform: scale(1.1); }
+
+        /* --- DATE NAVIGATOR & TIMETABLE --- */
+        .date-nav { display: flex; align-items: center; justify-content: space-between; background: var(--surface); padding: 10px; border-radius: 18px; border: 1px solid var(--border); margin-bottom: 20px; box-shadow: var(--shadow); }
         .date-display { text-align: center; }
         .date-main { font-weight: 800; font-size: 1.1rem; }
         .date-sub { font-size: 0.8rem; color: var(--text-muted); }
-        .modified-badge { font-size: 0.7rem; background: var(--warning); color: #fff; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; }
-
-        /* --- TIMETABLE LIST --- */
-        .tt-list { display: flex; flex-direction: column; gap: 15px; }
-        .tt-item { display: flex; gap: 15px; position: relative; }
-        .tt-time-col { width: 60px; text-align: right; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; flex-direction: column; justify-content: space-between; padding: 5px 0; }
-        .tt-card { flex: 1; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); position: relative; overflow: hidden; display: flex; transition: transform 0.2s; box-shadow: var(--shadow); }
-        .tt-color-bar { width: 6px; flex-shrink: 0; }
-        .tt-info { padding: 12px 15px; flex: 1; }
-        .tt-subject { font-weight: 800; font-size: 1.1rem; margin-bottom: 2px; }
-        .tt-room { font-size: 0.85rem; opacity: 0.8; }
-        .tt-duration { font-size: 0.75rem; color: var(--text-muted); margin-top: 5px; display: flex; align-items: center; gap: 5px; }
-
-        .tt-item.now .tt-card { border: 2px solid var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
-        .tt-item.now .tt-card::after { content: 'NOW'; position: absolute; top: 10px; right: 10px; background: var(--danger); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
-        /* --- SCHOOL & AGENDA --- */
-        .gpa-hero { background: linear-gradient(135deg, var(--primary), #4f46e5); color: white; padding: 25px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .sub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
-        .sub-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px; cursor: pointer; border-top: 4px solid var(--text-muted); transition: 0.2s; }
         
-        .task-row { background: var(--surface); padding: 12px; border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; margin-bottom: 8px; }
-        .task-row.done { opacity: 0.5; text-decoration: line-through; }
-        .task-check { width: 24px; height: 24px; border: 2px solid var(--border); border-radius: 6px; margin-right: 10px; cursor: pointer; }
-        .task-row.done .task-check { background: var(--success); border-color: var(--success); }
+        .tt-item { display: flex; gap: 15px; margin-bottom: 15px; position: relative; }
+        .tt-time-col { width: 60px; text-align: right; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; flex-direction: column; justify-content: space-between; padding: 5px 0; }
+        .tt-card { flex: 1; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 15px; position: relative; overflow: hidden; box-shadow: var(--shadow); transition: 0.2s; }
+        .tt-card:active { transform: scale(0.98); }
+        .tt-subject { font-weight: 800; font-size: 1.1rem; }
+        .tt-room { font-size: 0.85rem; opacity: 0.8; }
 
-        /* FAB */
-        .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--text); color: var(--bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer; z-index: 500; }
+        /* --- DASHBOARD HERO --- */
+        .gpa-hero { background: linear-gradient(135deg, var(--primary), #8b5cf6); color: white; padding: 30px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; box-shadow: 0 10px 30px -10px var(--primary); }
 
         /* Modal */
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(4px); }
-        .modal-box { background: var(--surface); width: 90%; max-width: 400px; border-radius: 24px; padding: 25px; max-height: 90vh; overflow-y: auto; }
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(5px); }
+        .modal-box { background: var(--surface); width: 90%; max-width: 420px; border-radius: 28px; padding: 30px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+
+        /* FAB */
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 64px; height: 64px; background: var(--text); color: var(--bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer; z-index: 500; transition: transform 0.2s; }
+        .fab:hover { transform: scale(1.1) rotate(90deg); }
 
         @media (max-width: 768px) {
             body { flex-direction: column; }
-            .sidebar { position: fixed; bottom: 0; left: 0; width: 100%; height: 65px; flex-direction: row; padding: 0; justify-content: space-evenly; border-top: 1px solid var(--border); }
-            .main-content { padding: 15px; margin-bottom: 65px; }
-            .fab { bottom: 85px; right: 20px; }
+            .sidebar { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; flex-direction: row; padding: 0; justify-content: space-evenly; border-top: 1px solid var(--border); border-right: none; padding-bottom: 10px; }
+            .main-content { padding: 20px; margin-bottom: 75px; }
+            .fab { bottom: 90px; right: 20px; }
         }
     </style>
 </head>
@@ -109,7 +173,7 @@
         <div style="font-weight:900; color:var(--primary); font-size:1.5rem; margin-bottom:20px;">V</div>
         <button class="nav-item active" onclick="nav('dashboard')">🏠</button>
         <button class="nav-item" onclick="nav('timetable')">📅</button>
-        <button class="nav-item" onclick="nav('school')">🎓</button>
+        <button class="nav-item" onclick="nav('school')">🎒</button>
         <button class="nav-item" onclick="nav('agenda')">✅</button>
         <button class="nav-item" onclick="nav('settings')">⚙️</button>
     </nav>
@@ -118,17 +182,17 @@
         
         <div class="header">
             <h1 id="page-title">Dashboard</h1>
-            <div id="clock" style="font-weight:700; color:var(--primary);">00:00</div>
+            <div id="clock" style="font-weight:700; color:var(--primary); font-size:1.1rem;">00:00</div>
         </div>
 
         <section id="dashboard" class="section active">
             <div class="gpa-hero">
                 <div>
-                    <div style="opacity:0.9; font-size:0.8rem;">ACADEMIC PERFORMANCE</div>
-                    <div style="font-size:2.5rem; font-weight:800; margin-top:5px;" id="dash-gpa">0%</div>
-                    <div style="opacity:0.9; font-size:0.9rem;" id="dash-grade">Grade: -</div>
+                    <div style="opacity:0.9; font-size:0.85rem; font-weight:600; letter-spacing:1px;">ACADEMIC PERFORMANCE</div>
+                    <div style="font-size:3rem; font-weight:800; line-height:1.1;" id="dash-gpa">0%</div>
+                    <div style="opacity:0.9; font-size:0.9rem;" id="dash-grade">Current Grade: -</div>
                 </div>
-                <div style="font-size:3rem;">📊</div>
+                <div style="font-size:3.5rem; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));">📊</div>
             </div>
 
             <div class="card">
@@ -136,10 +200,10 @@
                     <h3>Up Next</h3>
                     <div style="font-size:0.8rem; color:var(--text-muted);" id="now-time">--:--</div>
                 </div>
-                <div style="display:flex; align-items:center; gap:15px;">
-                    <div style="width:50px; height:50px; background:var(--primary-light); color:var(--primary); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">🏫</div>
+                <div style="display:flex; align-items:center; gap:20px;">
+                    <div style="width:60px; height:60px; background:var(--primary-light); color:var(--primary); border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:1.8rem;">🏫</div>
                     <div>
-                        <div style="font-size:1.2rem; font-weight:700;" id="now-activity">No Classes</div>
+                        <div style="font-size:1.3rem; font-weight:800;" id="now-activity">No Classes</div>
                         <div style="font-size:0.9rem; color:var(--text-muted);" id="now-room">Enjoy your free time</div>
                     </div>
                 </div>
@@ -154,47 +218,61 @@
                 <div class="date-display">
                     <div class="date-main" id="tt-date-main">Today</div>
                     <div class="date-sub" id="tt-date-sub">Loading...</div>
-                    <div id="tt-modifier-badge" style="display:none;" class="modified-badge">CUSTOM DAY</div>
+                    <div id="tt-modifier-badge" style="display:none; font-size:0.7rem; background:var(--warning); color:#fff; padding:2px 8px; border-radius:6px; margin-top:4px;">CUSTOM DAY</div>
                 </div>
                 <button class="btn-icon" onclick="changeDate(1)">▶</button>
             </div>
 
-            <div style="display:none; justify-content:center; margin-bottom:15px;" id="reset-day-container">
-                <button class="btn-sm btn-ghost" onclick="resetCurrentDay()" style="color:var(--danger); border-color:var(--danger);">↩ Reset to Weekly Default</button>
+            <div style="display:none; justify-content:center; margin-bottom:20px;" id="reset-day-container">
+                <button class="btn-sm btn-ghost" onclick="resetCurrentDay()" style="color:var(--danger); border-color:var(--danger);">↩ Restore Weekly Schedule</button>
             </div>
 
             <div class="tt-list" id="timetable-list"></div>
             
-            <div style="text-align:center; margin-top:30px; color:var(--text-muted);">
+            <div style="text-align:center; margin-top:40px; color:var(--text-muted);">
                 <small>Tap + to add a class to <span id="tt-add-hint">this day</span></small>
             </div>
         </section>
 
         <section id="school" class="section">
+            
             <div id="school-grid">
                 <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-                    <h3>My Subjects</h3>
-                    <button class="btn btn-sm" onclick="openSubjectModal()">+ Add</button>
+                    <h3 style="margin:0">My Courses</h3>
+                    <button class="btn btn-sm" onclick="openSubjectModal()">+ Add Course</button>
                 </div>
                 <div class="sub-grid" id="subject-list"></div>
             </div>
             
-            <div id="school-detail" style="display:none; animation: fadeScale 0.2s;">
-                <div style="display:flex; gap:10px; margin-bottom:20px;">
-                    <button class="btn-ghost" onclick="closeDetail()" style="font-size:1.2rem;">←</button>
-                    <div>
-                        <h2 id="det-name">Math</h2>
-                        <div style="color:var(--text-muted);" id="det-room">Room 101</div>
+            <div id="school-detail" style="display:none; animation: slideUp 0.3s;">
+                <button class="btn-ghost" onclick="closeDetail()" style="margin-bottom:15px;">← Back to Courses</button>
+                
+                <div class="det-hero">
+                    <div class="sub-bg-blob" id="det-blob"></div>
+                    <h1 id="det-name" style="color:var(--primary);">Math</h1>
+                    <div style="color:var(--text-muted); font-weight:600;" id="det-room">Room 101</div>
+                    
+                    <div class="det-stats-row">
+                        <div class="det-stat-card">
+                            <span class="stat-val" id="det-grade-val">95%</span>
+                            <span class="stat-lbl">Grade</span>
+                        </div>
+                        <div class="det-stat-card">
+                            <span class="stat-val" id="det-att-val">100%</span>
+                            <span class="stat-lbl">Attendance</span>
+                        </div>
                     </div>
                 </div>
+
                 <div class="card">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                         <h3>Grades</h3>
-                        <button class="btn-sm btn-ghost" onclick="openGradeModal()">+ Grade</button>
+                        <button class="btn-sm btn-ghost" onclick="openGradeModal()">+ New</button>
                     </div>
                     <div id="det-grades"></div>
                 </div>
-                <button class="btn-ghost" style="width:100%; color:var(--danger); border-color:var(--danger);" onclick="deleteSubject()">Delete Subject</button>
+
+                <button class="btn-ghost" style="width:100%; color:var(--danger); border-color:var(--border);" onclick="deleteSubject()">Delete Course</button>
             </div>
         </section>
 
@@ -204,10 +282,52 @@
         </section>
 
         <section id="settings" class="section">
-            <div class="card">
-                <h3>Settings</h3>
-                <button class="btn-ghost" style="width:100%; margin-top:10px;" onclick="toggleTheme()">Dark Mode 🌗</button>
-                <button class="btn-ghost" style="width:100%; margin-top:10px; color:var(--danger);" onclick="resetApp()">Factory Reset 🗑️</button>
+            
+            <div class="settings-group">
+                <div class="settings-label">Appearance</div>
+                <div class="settings-list">
+                    <div class="settings-item">
+                        <div style="display:flex; align-items:center;">
+                            <div class="item-icon">🌙</div>
+                            <div class="item-info">Dark Mode</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="settings-item" style="flex-direction: column; align-items: flex-start;">
+                        <div style="display:flex; align-items:center; margin-bottom:10px;">
+                            <div class="item-icon">🎨</div>
+                            <div class="item-info">Accent Color</div>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <div class="color-opt" style="background:#4f46e5" onclick="setAccent('#4f46e5')"></div>
+                            <div class="color-opt" style="background:#0ea5e9" onclick="setAccent('#0ea5e9')"></div>
+                            <div class="color-opt" style="background:#10b981" onclick="setAccent('#10b981')"></div>
+                            <div class="color-opt" style="background:#f59e0b" onclick="setAccent('#f59e0b')"></div>
+                            <div class="color-opt" style="background:#ef4444" onclick="setAccent('#ef4444')"></div>
+                            <div class="color-opt" style="background:#ec4899" onclick="setAccent('#ec4899')"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <div class="settings-label">System</div>
+                <div class="settings-list">
+                    <div class="settings-item" onclick="resetApp()" style="cursor:pointer;">
+                        <div style="display:flex; align-items:center;">
+                            <div class="item-icon" style="color:var(--danger);">🗑️</div>
+                            <div class="item-info" style="color:var(--danger);">Factory Reset</div>
+                        </div>
+                        <span style="color:var(--text-muted);">❯</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align:center; color:var(--text-muted); font-size:0.8rem; margin-top:30px;">
+                Vidyarthi Platinum v2.5
             </div>
         </section>
 
@@ -218,14 +338,14 @@
     <div id="modal-class" class="modal">
         <div class="modal-box">
             <h3>Add Class</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:15px;">
-                Adding to: <span id="class-modal-date" style="font-weight:bold;">Today</span>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">
+                <span id="class-modal-date" style="font-weight:bold; color:var(--primary);">Today</span>
             </p>
             
             <label style="font-size:0.8rem; font-weight:bold;">Subject</label>
-            <select id="c-sub" style="margin-bottom:10px;"></select>
+            <select id="c-sub" style="margin-bottom:15px;"></select>
             
-            <div style="display:flex; gap:10px; margin-bottom:15px;">
+            <div style="display:flex; gap:15px; margin-bottom:20px;">
                 <div style="flex:1">
                     <label style="font-size:0.8rem; font-weight:bold;">Start</label>
                     <input type="time" id="c-start">
@@ -236,13 +356,13 @@
                 </div>
             </div>
 
-            <div style="background:var(--bg); padding:10px; border-radius:10px; margin-bottom:15px;">
+            <div style="background:var(--bg); padding:15px; border-radius:16px; margin-bottom:20px;">
                 <label style="display:flex; align-items:center; cursor:pointer;">
                     <input type="checkbox" id="c-repeat" checked style="width:auto; margin-right:10px;">
-                    <span style="font-size:0.9rem;">Repeat Weekly?</span>
+                    <span style="font-weight:600;">Repeat Weekly</span>
                 </label>
                 <div style="font-size:0.75rem; color:var(--text-muted); margin-top:5px; margin-left:25px;">
-                    Uncheck to add for <b>this date only</b>.
+                    Uncheck to add just for this date (override).
                 </div>
             </div>
 
@@ -255,54 +375,58 @@
 
     <div id="modal-task" class="modal">
         <div class="modal-box">
-            <h3>Add Task</h3>
-            <input type="text" id="t-desc" placeholder="Task Name" style="margin:10px 0;">
-            <select id="t-sub" style="margin-bottom:10px;"></select>
-            <input type="date" id="t-date" style="margin-bottom:10px;">
+            <h3>New Task</h3>
+            <input type="text" id="t-desc" placeholder="What do you need to do?" style="margin:15px 0;">
+            <select id="t-sub" style="margin-bottom:15px;"></select>
+            <input type="date" id="t-date" style="margin-bottom:20px;">
             <div style="display:flex; gap:10px;">
                 <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-task')">Cancel</button>
-                <button class="btn" style="flex:1" onclick="saveTask()">Save</button>
+                <button class="btn" style="flex:1" onclick="saveTask()">Create Task</button>
             </div>
         </div>
     </div>
 
     <div id="modal-sub" class="modal">
         <div class="modal-box">
-            <h3>New Subject</h3>
-            <input type="text" id="s-name" placeholder="Name" style="margin:10px 0;">
-            <input type="text" id="s-room" placeholder="Room/Teacher" style="margin-bottom:10px;">
-            <input type="color" id="s-color" value="#6366f1" style="width:100%; height:40px; margin-bottom:10px;">
+            <h3>Add Course</h3>
+            <input type="text" id="s-name" placeholder="Course Name (e.g. Physics)" style="margin:15px 0;">
+            <input type="text" id="s-room" placeholder="Room / Teacher" style="margin-bottom:15px;">
+            <label style="font-size:0.8rem; font-weight:bold;">Color Tag</label>
+            <input type="color" id="s-color" value="#4f46e5" style="width:100%; height:50px; margin-bottom:20px; cursor:pointer;">
             <div style="display:flex; gap:10px;">
                 <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-sub')">Cancel</button>
-                <button class="btn" style="flex:1" onclick="saveSubject()">Save</button>
+                <button class="btn" style="flex:1" onclick="saveSubject()">Create Course</button>
             </div>
         </div>
     </div>
 
     <div id="modal-grade" class="modal">
         <div class="modal-box">
-            <h3>Add Grade</h3>
-            <input type="text" id="g-name" placeholder="Exam Name" style="margin:10px 0;">
-            <div style="display:flex; gap:10px; margin-bottom:10px;">
-                <input type="number" id="g-score" placeholder="Score">
-                <input type="number" id="g-total" placeholder="Total" value="100">
+            <h3>Record Grade</h3>
+            <input type="text" id="g-name" placeholder="Exam / Assignment Name" style="margin:15px 0;">
+            <div style="display:flex; gap:15px; margin-bottom:20px;">
+                <div style="flex:1">
+                    <label style="font-size:0.8rem;">Score</label>
+                    <input type="number" id="g-score" placeholder="0">
+                </div>
+                <div style="flex:1">
+                    <label style="font-size:0.8rem;">Total</label>
+                    <input type="number" id="g-total" placeholder="100">
+                </div>
             </div>
-            <button class="btn" onclick="saveGrade()" style="width:100%;">Save</button>
-            <button class="btn-ghost" onclick="closeModal('modal-grade')" style="width:100%; margin-top:5px;">Cancel</button>
+            <button class="btn" onclick="saveGrade()" style="width:100%;">Save Grade</button>
         </div>
     </div>
 
     <script>
         // --- DATA ---
         let db = {
-            // Weekly Template: { day: 1, subId: 1, start: '09:00', end: '10:00', id: 123 }
-            timetable: JSON.parse(localStorage.getItem('vs2Timetable')) || [],
-            // One-Time Changes: { "2026-01-24": [ ...classObjects... ] }
-            overrides: JSON.parse(localStorage.getItem('vs2Overrides')) || {},
-            subjects: JSON.parse(localStorage.getItem('vs2Subs')) || [],
-            tasks: JSON.parse(localStorage.getItem('vs2Tasks')) || [],
-            grades: JSON.parse(localStorage.getItem('vs2Grades')) || [],
-            settings: JSON.parse(localStorage.getItem('vs2Sets')) || { theme: 'light' }
+            timetable: JSON.parse(localStorage.getItem('vs3Timetable')) || [],
+            overrides: JSON.parse(localStorage.getItem('vs3Overrides')) || {},
+            subjects: JSON.parse(localStorage.getItem('vs3Subs')) || [],
+            tasks: JSON.parse(localStorage.getItem('vs3Tasks')) || [],
+            grades: JSON.parse(localStorage.getItem('vs3Grades')) || [],
+            settings: JSON.parse(localStorage.getItem('vs3Sets')) || { theme: 'light', accent: '#4f46e5' }
         };
 
         let selectedDate = new Date();
@@ -310,59 +434,93 @@
         let currentPage = 'dashboard';
 
         function init() {
-            if(db.settings.theme === 'dark') document.body.setAttribute('data-theme', 'dark');
+            applySettings();
             renderAll();
             setInterval(updateClock, 1000);
             setInterval(checkLiveStatus, 5000);
         }
 
-        // --- TIMETABLE ENGINE (Hybrid) ---
-        
-        function changeDate(delta) {
-            selectedDate.setDate(selectedDate.getDate() + delta);
-            renderTimetable();
+        function applySettings() {
+            if(db.settings.theme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                document.getElementById('theme-toggle').checked = true;
+            }
+            document.documentElement.style.setProperty('--primary', db.settings.accent);
+            // Simple light variant approximation
+            document.documentElement.style.setProperty('--primary-light', db.settings.accent + '20'); 
         }
 
-        function getClassesForDate(date) {
-            const dateStr = date.toISOString().split('T')[0];
+        // --- RENDERERS ---
+        
+        // 1. SCHOOL (NEW DESIGN)
+        function renderSchool() {
+            const grid = document.getElementById('subject-list');
+            grid.innerHTML = '';
             
-            // 1. Check for Override
-            if (db.overrides[dateStr]) {
-                return { classes: db.overrides[dateStr], isOverride: true };
+            // Dropdowns
+            const options = db.subjects.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+            document.getElementById('t-sub').innerHTML = options;
+            document.getElementById('c-sub').innerHTML = options;
+
+            if(db.subjects.length === 0) {
+                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted);">No courses added yet.<br>Tap + to start.</div>`;
+                return;
             }
-            
-            // 2. Fallback to Weekly Template
-            const dayIdx = date.getDay(); // 0-6
-            const templateClasses = db.timetable.filter(c => c.day === dayIdx);
-            
-            // Return copies to avoid reference issues
-            return { classes: JSON.parse(JSON.stringify(templateClasses)), isOverride: false };
+
+            db.subjects.forEach(s => {
+                const sGrades = db.grades.filter(g => g.subId == s.id);
+                let total=0, max=0;
+                sGrades.forEach(g => { total+=parseFloat(g.score); max+=parseFloat(g.total); });
+                const pct = max > 0 ? Math.round((total/max)*100) : 0;
+
+                grid.innerHTML += `
+                    <div class="sub-card" onclick="openDetail(${s.id})" style="border-color:${s.color}">
+                        <div class="sub-bg-blob" style="background:${s.color}"></div>
+                        <div class="sub-grade-pill" style="color:${s.color}">${pct}%</div>
+                        <div class="sub-icon" style="background:${s.color}20; color:${s.color};">📚</div>
+                        <div class="sub-meta">
+                            <div class="sub-name">${s.name}</div>
+                            <div class="sub-room">${s.room}</div>
+                        </div>
+                        <div class="att-bar-bg">
+                            <div class="att-bar-fill" style="width:${pct}%; background:${s.color}"></div>
+                        </div>
+                    </div>`;
+            });
+            updateGPA();
         }
+
+        // 2. TIMETABLE (SMART DATE LOGIC)
+        function changeDate(delta) { selectedDate.setDate(selectedDate.getDate() + delta); renderTimetable(); }
 
         function renderTimetable() {
             const list = document.getElementById('timetable-list');
             list.innerHTML = '';
 
-            // Header Update
             const options = { weekday: 'long', month: 'short', day: 'numeric' };
-            document.getElementById('tt-date-main').innerText = new Date().toDateString() === selectedDate.toDateString() ? "Today" : selectedDate.toLocaleDateString('en-US', {weekday:'long'});
+            const isToday = new Date().toDateString() === selectedDate.toDateString();
+            document.getElementById('tt-date-main').innerText = isToday ? "Today" : selectedDate.toLocaleDateString('en-US', {weekday:'long'});
             document.getElementById('tt-date-sub').innerText = selectedDate.toLocaleDateString('en-US', {month:'long', day:'numeric'});
-            document.getElementById('tt-add-hint').innerText = selectedDate.toLocaleDateString('en-US', {weekday:'long'});
+            document.getElementById('tt-add-hint').innerText = isToday ? "Today" : selectedDate.toLocaleDateString('en-US', {weekday:'long'});
 
-            // Get Data
-            const { classes, isOverride } = getClassesForDate(selectedDate);
-            
-            // UI Indicators
-            const badge = document.getElementById('tt-modifier-badge');
-            const resetBtn = document.getElementById('reset-day-container');
-            
-            if (isOverride) {
-                badge.style.display = 'inline-block';
-                resetBtn.style.display = 'flex';
+            // Logic: Override vs Template
+            const dateStr = selectedDate.toISOString().split('T')[0];
+            let classes = [];
+            let isOverride = false;
+
+            if (db.overrides[dateStr]) {
+                classes = db.overrides[dateStr];
+                isOverride = true;
             } else {
-                badge.style.display = 'none';
-                resetBtn.style.display = 'none';
+                const dayIdx = selectedDate.getDay();
+                classes = db.timetable.filter(c => c.day === dayIdx);
+                // Deep copy to prevent ref issues
+                classes = JSON.parse(JSON.stringify(classes));
             }
+
+            // UI State
+            document.getElementById('tt-modifier-badge').style.display = isOverride ? 'inline-block' : 'none';
+            document.getElementById('reset-day-container').style.display = isOverride ? 'flex' : 'none';
 
             if (classes.length === 0) {
                 list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);">No classes scheduled.</div>`;
@@ -370,10 +528,8 @@
             }
 
             classes.sort((a,b) => a.start.localeCompare(b.start));
-
             const now = new Date();
             const curTime = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
-            const isToday = (selectedDate.toDateString() === now.toDateString());
 
             classes.forEach(c => {
                 const sub = db.subjects.find(s => s.id == c.subId) || { name: 'Unknown', color: '#ccc', room: '?' };
@@ -390,72 +546,51 @@
                             <div class="tt-info">
                                 <div class="tt-subject" style="color:${sub.color}">${sub.name}</div>
                                 <div class="tt-room">${sub.room}</div>
-                                <div class="tt-duration">
-                                    <span>⏱️</span>
-                                    <span>${c.start} - ${c.end}</span>
-                                </div>
                             </div>
-                            <button onclick="deleteClass(${c.id}, '${c.start}')" style="position:absolute; top:5px; right:5px; border:none; background:none; color:var(--text-muted); cursor:pointer;">&times;</button>
+                            <button onclick="deleteClass(${c.id})" style="position:absolute; top:10px; right:10px; border:none; background:none; color:var(--text-muted); cursor:pointer;">&times;</button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
-        // --- ADD/DELETE LOGIC (The Smart Part) ---
-
+        // --- LOGIC ---
         function saveClass() {
             const subId = document.getElementById('c-sub').value;
             const start = document.getElementById('c-start').value;
             const end = document.getElementById('c-end').value;
             const repeat = document.getElementById('c-repeat').checked;
-            const dayIdx = selectedDate.getDay();
-            const dateStr = selectedDate.toISOString().split('T')[0];
-
-            if (subId && start && end) {
-                const newClass = { id: Date.now(), day: dayIdx, subId, start, end };
-
-                if (repeat) {
-                    // Weekly Template Mode
-                    db.timetable.push(newClass);
-                    // Also check if today is overridden; if so, we should probably add it there too or ask. 
-                    // Simpler: Just add to template. If today is overridden, the template change won't show until reset.
-                    // This is standard behavior.
+            
+            if(subId && start && end) {
+                const newC = { id:Date.now(), day:selectedDate.getDay(), subId, start, end };
+                if(repeat) {
+                    db.timetable.push(newC);
                 } else {
-                    // One-Time Mode
-                    ensureOverrideExists(dateStr);
-                    db.overrides[dateStr].push(newClass);
+                    const dateStr = selectedDate.toISOString().split('T')[0];
+                    if(!db.overrides[dateStr]) {
+                        // Init override with current template
+                        const dayIdx = selectedDate.getDay();
+                        db.overrides[dateStr] = JSON.parse(JSON.stringify(db.timetable.filter(c => c.day === dayIdx)));
+                    }
+                    db.overrides[dateStr].push(newC);
                 }
-                
                 save(); closeModal('modal-class'); renderTimetable();
             }
         }
 
-        function deleteClass(id, start) {
+        function deleteClass(id) {
             const dateStr = selectedDate.toISOString().split('T')[0];
             const isOverride = !!db.overrides[dateStr];
 
-            if (confirm(isOverride ? "Remove this class from this date?" : "Delete for every " + selectedDate.toLocaleDateString('en-US',{weekday:'long'}) + "?")) {
-                if (isOverride) {
-                    // Just remove from override array
+            if(confirm(isOverride ? "Remove from this specific day?" : "Remove from weekly schedule?")) {
+                if(isOverride) {
                     db.overrides[dateStr] = db.overrides[dateStr].filter(c => c.id !== id);
                 } else {
-                    // We are looking at template, but user might want to delete JUST for today.
-                    // Let's ask via a smart logic:
-                    // Actually, simpler UI: If looking at template, Delete removes from template.
-                    // To delete just one instance from a template, we must first "Materialize" the day.
-                    
-                    // Let's change behavior: When deleting from a Template view, offer choice?
-                    // No, keeping it simple:
-                    // If you want to delete just for today, we must convert today to an override first.
-                    
-                    if(confirm("Click OK to delete for ALL weeks.\nClick Cancel to delete for JUST TODAY.")) {
+                    if(confirm("Delete for ALL weeks (OK) or just TODAY (Cancel)?")) {
                         db.timetable = db.timetable.filter(c => c.id !== id);
                     } else {
-                        // "Cancel" -> Just Today
-                        ensureOverrideExists(dateStr);
-                        // Now delete from the newly created override
-                        // Note: IDs in override are copied from template, so they match
+                        // Convert to override
+                        const dayIdx = selectedDate.getDay();
+                        db.overrides[dateStr] = JSON.parse(JSON.stringify(db.timetable.filter(c => c.day === dayIdx)));
                         db.overrides[dateStr] = db.overrides[dateStr].filter(c => c.id !== id);
                     }
                 }
@@ -463,28 +598,21 @@
             }
         }
 
-        function ensureOverrideExists(dateStr) {
-            if (!db.overrides[dateStr]) {
-                const dayIdx = new Date(dateStr).getDay();
-                // Copy template classes to this specific date
-                const templateClasses = db.timetable.filter(c => c.day === dayIdx);
-                db.overrides[dateStr] = JSON.parse(JSON.stringify(templateClasses));
-            }
-        }
-
         function resetCurrentDay() {
             const dateStr = selectedDate.toISOString().split('T')[0];
-            if(confirm("Discard custom changes for this date?")) {
-                delete db.overrides[dateStr];
-                save(); renderTimetable();
-            }
+            if(confirm("Discard custom changes?")) { delete db.overrides[dateStr]; save(); renderTimetable(); }
         }
 
+        // --- DASHBOARD & UTILS ---
         function checkLiveStatus() {
             const now = new Date();
             const cur = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+            const dateStr = now.toISOString().split('T')[0];
             
-            const { classes } = getClassesForDate(now);
+            // Get classes for TODAY (handling overrides)
+            let classes = db.overrides[dateStr];
+            if(!classes) classes = db.timetable.filter(c => c.day === now.getDay());
+
             const active = classes.find(c => cur >= c.start && cur < c.end);
 
             if (active) {
@@ -494,50 +622,21 @@
                 document.getElementById('now-time').innerText = active.end;
             } else {
                 document.getElementById('now-activity').innerText = "Free Time";
-                document.getElementById('now-room').innerText = "No class right now";
+                document.getElementById('now-room').innerText = "Relax";
                 document.getElementById('now-time').innerText = "--:--";
             }
-            
-            // Refresh timetable highlights if viewing today
             if(selectedDate.toDateString() === now.toDateString()) renderTimetable();
-        }
-
-        // --- STANDARD RENDERERS ---
-        function renderSchool() {
-            const grid = document.getElementById('subject-list');
-            grid.innerHTML = '';
-            
-            // Populate Dropdowns
-            const options = db.subjects.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-            document.getElementById('t-sub').innerHTML = options;
-            document.getElementById('c-sub').innerHTML = options;
-
-            db.subjects.forEach(s => {
-                const sGrades = db.grades.filter(g => g.subId == s.id);
-                let total=0, max=0;
-                sGrades.forEach(g => { total+=parseFloat(g.score); max+=parseFloat(g.total); });
-                const pct = max > 0 ? Math.round((total/max)*100) : '-';
-
-                grid.innerHTML += `
-                    <div class="sub-card" style="border-top:4px solid ${s.color}" onclick="openDetail(${s.id})">
-                        <h3 style="color:${s.color}">${s.name}</h3>
-                        <div style="font-size:0.8rem; color:var(--text-muted);">${s.room}</div>
-                        <div style="margin-top:10px; font-weight:700;">${pct}%</div>
-                    </div>`;
-            });
-            updateGPA();
         }
 
         function renderTasks() {
             const list = document.getElementById('agenda-container');
-            list.innerHTML = '';
             const preview = document.getElementById('dash-agenda-preview');
-            preview.innerHTML = '';
-
+            list.innerHTML = ''; preview.innerHTML = '';
             const today = new Date().toISOString().split('T')[0];
-            db.tasks.sort((a,b) => a.date.localeCompare(b.date));
             
+            db.tasks.sort((a,b) => a.date.localeCompare(b.date));
             const buckets = { Overdue:[], Today:[], Upcoming:[] };
+            
             db.tasks.forEach(t => {
                 if(t.done) return;
                 if(t.date < today) buckets.Overdue.push(t);
@@ -547,65 +646,47 @@
 
             const renderBucket = (title, items, isPreview) => {
                 if(items.length === 0) return;
-                const html = `<div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin:10px 0;">${title}</div>` + items.map(t => {
+                const html = `<div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin:15px 0 5px 0; text-transform:uppercase;">${title}</div>` + items.map(t => {
                     const s = db.subjects.find(x => x.id == t.subId);
                     return `
                     <div class="task-row">
                         <div class="task-check" onclick="toggleTask(${t.id})"></div>
                         <div style="flex:1;">
-                            <div style="font-size:0.7rem; font-weight:800; color:${s?s.color:'#ccc'}">${s?s.name:'GENERAL'}</div>
+                            <div style="font-size:0.7rem; font-weight:800; color:${s?s.color:'#ccc'}; text-transform:uppercase;">${s?s.name:'GENERAL'}</div>
                             <div style="font-weight:600;">${t.desc}</div>
                             <div style="font-size:0.8rem; color:var(--text-muted);">${t.date}</div>
                         </div>
-                        <button onclick="delTask(${t.id})" style="border:none;background:none;">&times;</button>
+                        <button onclick="delTask(${t.id})" class="btn-icon">×</button>
                     </div>`;
                 }).join('');
                 if(!isPreview) list.innerHTML += html;
                 if(title === 'Today' || title === 'Overdue') preview.innerHTML += html;
             };
-
             renderBucket('⚠️ Overdue', buckets.Overdue, true);
             renderBucket('🔥 Today', buckets.Today, true);
             renderBucket('📅 Upcoming', buckets.Upcoming, false);
         }
 
-        // --- UTILS ---
-        function save() {
-            localStorage.setItem('vs2Timetable', JSON.stringify(db.timetable));
-            localStorage.setItem('vs2Overrides', JSON.stringify(db.overrides));
-            localStorage.setItem('vs2Subs', JSON.stringify(db.subjects));
-            localStorage.setItem('vs2Tasks', JSON.stringify(db.tasks));
-            localStorage.setItem('vs2Grades', JSON.stringify(db.grades));
-            localStorage.setItem('vs2Sets', JSON.stringify(db.settings));
-            renderAll();
-        }
-
-        function renderAll() { renderSchool(); renderTimetable(); renderTasks(); }
-        
-        function openDetail(id) {
-            currentSubId = id;
-            const s = db.subjects.find(x => x.id == id);
-            document.getElementById('school-grid').style.display='none';
-            document.getElementById('school-detail').style.display='block';
-            document.getElementById('det-name').innerText = s.name;
-            document.getElementById('det-room').innerText = s.room;
-            renderDetailGrades();
-        }
-        function closeDetail() { document.getElementById('school-detail').style.display='none'; document.getElementById('school-grid').style.display='block'; renderSchool(); }
-        function renderDetailGrades() {
-            const list = document.getElementById('det-grades'); list.innerHTML = '';
-            db.grades.filter(g => g.subId == currentSubId).forEach(g => {
-                list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border);"><span>${g.name}</span><span><strong>${g.score}/${g.total}</strong> <button onclick="delGrade(${g.id})" style="border:none;background:none;color:red;">&times;</button></span></div>`;
-            });
-        }
         function updateGPA() {
-            let total=0, max=0; db.grades.forEach(g => { total+=parseFloat(g.score); max+=parseFloat(g.total); });
+            let total=0, max=0;
+            db.grades.forEach(g => { total+=parseFloat(g.score); max+=parseFloat(g.total); });
             const pct = max > 0 ? Math.round((total/max)*100) : 0;
             document.getElementById('dash-gpa').innerText = pct + "%";
             let l='F'; if(pct>=90)l='A'; else if(pct>=80)l='B'; else if(pct>=70)l='C'; else if(pct>=60)l='D';
             document.getElementById('dash-grade').innerText = "Grade: " + l;
         }
 
+        // System
+        function save() {
+            localStorage.setItem('vs3Timetable', JSON.stringify(db.timetable));
+            localStorage.setItem('vs3Overrides', JSON.stringify(db.overrides));
+            localStorage.setItem('vs3Subs', JSON.stringify(db.subjects));
+            localStorage.setItem('vs3Tasks', JSON.stringify(db.tasks));
+            localStorage.setItem('vs3Grades', JSON.stringify(db.grades));
+            localStorage.setItem('vs3Sets', JSON.stringify(db.settings));
+            renderAll();
+        }
+        function renderAll() { renderSchool(); renderTimetable(); renderTasks(); }
         function nav(id) {
             currentPage = id;
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -616,32 +697,33 @@
             document.getElementById('page-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
             document.querySelector('.fab').style.display = (id === 'agenda' || id === 'timetable') ? 'flex' : 'none';
         }
-
         function handleFab() {
-            if (currentPage === 'timetable') {
-                const options = { weekday: 'long', month: 'short', day: 'numeric' };
-                document.getElementById('class-modal-date').innerText = selectedDate.toLocaleDateString('en-US', options);
+            if(currentPage === 'timetable') {
+                document.getElementById('class-modal-date').innerText = selectedDate.toLocaleDateString('en-US', {weekday:'long', month:'short', day:'numeric'});
                 document.getElementById('modal-class').style.display='flex';
-            } else {
-                openTaskModal();
-            }
+            } else openTaskModal();
         }
-
-        // CRUD
-        function saveSubject() { const name=document.getElementById('s-name').value, room=document.getElementById('s-room').value, color=document.getElementById('s-color').value; if(name){db.subjects.push({id:Date.now(), name, room, color}); save(); closeModal('modal-sub');} }
-        function deleteSubject() { if(confirm("Delete Subject?")) { db.subjects=db.subjects.filter(x=>x.id!=currentSubId); db.timetable=db.timetable.filter(x=>x.subId!=currentSubId); save(); closeDetail(); } }
-        function saveGrade() { const name=document.getElementById('g-name').value, score=document.getElementById('g-score').value, total=document.getElementById('g-total').value; if(name&&score){db.grades.push({id:Date.now(), subId:currentSubId, name, score, total}); save(); closeModal('modal-grade'); renderDetailGrades();} }
-        function delGrade(id) { db.grades=db.grades.filter(x=>x.id!==id); save(); renderDetailGrades(); }
-        function saveTask() { const desc=document.getElementById('t-desc').value, sub=document.getElementById('t-sub').value, date=document.getElementById('t-date').value; if(desc&&date){db.tasks.push({id:Date.now(), desc, subId:sub, date, done:false}); save(); closeModal('modal-task');} }
+        
+        function setAccent(c) { db.settings.accent = c; save(); applySettings(); }
+        function toggleTheme() { db.settings.theme = db.settings.theme==='dark'?'light':'dark'; save(); applySettings(); }
+        function resetApp() { if(confirm("Reset?")) { localStorage.clear(); location.reload(); } }
+        
+        // CRUD Wrappers
+        function saveSubject() { const n=document.getElementById('s-name').value; if(n){db.subjects.push({id:Date.now(), name:n, room:document.getElementById('s-room').value, color:document.getElementById('s-color').value}); save(); closeModal('modal-sub');} }
+        function saveTask() { const d=document.getElementById('t-desc').value; if(d){db.tasks.push({id:Date.now(), desc:d, subId:document.getElementById('t-sub').value, date:document.getElementById('t-date').value, done:false}); save(); closeModal('modal-task');} }
+        function saveGrade() { const n=document.getElementById('g-name').value; if(n){db.grades.push({id:Date.now(), subId:currentSubId, name:n, score:document.getElementById('g-score').value, total:document.getElementById('g-total').value}); save(); closeModal('modal-grade'); renderDetailGrades();} }
         function toggleTask(id) { const t=db.tasks.find(x=>x.id==id); if(t)t.done=!t.done; save(); }
         function delTask(id) { db.tasks=db.tasks.filter(x=>x.id!=id); save(); }
+        function deleteSubject() { if(confirm("Delete Course?")) { db.subjects=db.subjects.filter(x=>x.id!=currentSubId); db.timetable=db.timetable.filter(x=>x.subId!=currentSubId); save(); closeDetail(); } }
+        
+        function openDetail(id) { currentSubId=id; const s=db.subjects.find(x=>x.id==id); document.getElementById('school-grid').style.display='none'; document.getElementById('school-detail').style.display='block'; document.getElementById('det-name').innerText=s.name; document.getElementById('det-room').innerText=s.room; document.getElementById('det-name').style.color=s.color; document.getElementById('det-blob').style.background=s.color; renderDetailGrades(); }
+        function closeDetail() { document.getElementById('school-detail').style.display='none'; document.getElementById('school-grid').style.display='grid'; }
+        function renderDetailGrades() { const l=document.getElementById('det-grades'); l.innerHTML=''; db.grades.filter(g=>g.subId==currentSubId).forEach(g=>{ l.innerHTML+=`<div style="padding:10px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;"><span>${g.name}</span><strong>${g.score}/${g.total}</strong></div>`; }); }
 
         function closeModal(id) { document.getElementById(id).style.display='none'; }
         function openTaskModal() { document.getElementById('t-date').value = new Date().toISOString().split('T')[0]; document.getElementById('modal-task').style.display='flex'; }
         function openSubjectModal() { document.getElementById('modal-sub').style.display='flex'; }
         function openGradeModal() { document.getElementById('modal-grade').style.display='flex'; }
-        function resetApp() { if(confirm("Reset?")) { localStorage.clear(); location.reload(); } }
-        function toggleTheme() { db.settings.theme = db.settings.theme==='dark'?'light':'dark'; document.body.setAttribute('data-theme', db.settings.theme); save(); }
         function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([],{hour:'2-digit', minute:'2-digit'}); }
 
         init();
