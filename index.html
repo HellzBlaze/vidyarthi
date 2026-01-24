@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - Platinum</title>
+    <title>Vidyarthi - Platinum Fixed</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -41,7 +41,7 @@
         .nav-item { 
             width: 50px; height: 50px; border-radius: 18px; color: var(--text-muted); font-size: 1.6rem; 
             margin-bottom: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); border: none; background: transparent;
+            transition: 0.2s; border: none; background: transparent;
         }
         .nav-item:hover { background: var(--bg); color: var(--primary); transform: scale(1.05); }
         .nav-item.active { background: var(--primary); color: white; box-shadow: 0 10px 20px -5px var(--primary-light); transform: scale(1.1); }
@@ -65,19 +65,40 @@
         input, select { padding: 12px 15px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; transition: 0.2s; }
         input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); background: var(--surface); }
 
+        /* --- DASHBOARD HERO --- */
+        .gpa-hero { 
+            background: linear-gradient(135deg, var(--primary), #8b5cf6); 
+            color: white; padding: 30px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 25px; box-shadow: 0 10px 30px -10px var(--primary); 
+        }
+
         /* --- SCHOOL HUB --- */
         .sub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
-        
         .sub-card { 
             background: var(--surface); border-radius: 24px; padding: 20px; cursor: pointer; 
             transition: all 0.3s; border: 1px solid var(--border); position: relative; overflow: hidden; 
             display: flex; flex-direction: column; justify-content: space-between; min-height: 160px;
         }
         .sub-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1); }
-        .sub-bg-blob { position: absolute; top: -20px; right: -20px; width: 100px; height: 100px; border-radius: 50%; opacity: 0.1; filter: blur(20px); }
         .sub-grade-pill { position: absolute; top: 15px; right: 15px; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; background: var(--surface); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .att-bar-bg { height: 6px; width: 100%; background: var(--bg); border-radius: 10px; margin-top: 15px; overflow: hidden; }
         .att-bar-fill { height: 100%; border-radius: 10px; }
+
+        /* --- TIMETABLE --- */
+        .date-nav { display: flex; align-items: center; justify-content: space-between; background: var(--surface); padding: 10px; border-radius: 18px; border: 1px solid var(--border); margin-bottom: 20px; box-shadow: var(--shadow); }
+        .tt-item { display: flex; gap: 15px; margin-bottom: 15px; position: relative; }
+        .tt-time-col { width: 60px; text-align: right; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; flex-direction: column; justify-content: space-between; padding: 5px 0; }
+        .tt-card { flex: 1; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 15px; position: relative; overflow: hidden; box-shadow: var(--shadow); transition: 0.2s; }
+        
+        .tt-item.now .tt-card { border: 2px solid var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
+        .tt-item.now .tt-card::after { content: 'NOW'; position: absolute; top: 10px; right: 10px; background: var(--danger); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        /* --- AGENDA --- */
+        .task-row { background: var(--surface); padding: 12px; border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; margin-bottom: 8px; }
+        .task-row.done { opacity: 0.5; text-decoration: line-through; }
+        .task-check { width: 24px; height: 24px; border: 2px solid var(--border); border-radius: 6px; margin-right: 10px; cursor: pointer; }
+        .task-row.done .task-check { background: var(--success); border-color: var(--success); }
 
         /* --- DETAIL VIEW --- */
         .det-hero { background: var(--surface); padding: 30px; border-radius: 24px; text-align: center; margin-bottom: 20px; border: 1px solid var(--border); position: relative; overflow: hidden; }
@@ -87,36 +108,21 @@
         .stat-lbl { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px; }
 
         /* --- SETTINGS --- */
-        .settings-group { margin-bottom: 25px; }
-        .settings-label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; margin-left: 5px; }
-        .settings-list { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; }
+        .settings-list { background: var(--surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 25px; }
         .settings-item { padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); transition: background 0.2s; cursor: pointer; }
         .settings-item:last-child { border-bottom: none; }
         .settings-item:hover { background: var(--bg); }
-        .item-icon { width: 32px; height: 32px; background: var(--bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1.1rem; }
-        .item-info { flex: 1; font-weight: 600; font-size: 0.95rem; }
-
+        
         .toggle-switch { position: relative; width: 50px; height: 28px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .4s; border-radius: 34px; }
         .slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         input:checked + .slider { background-color: var(--success); }
         input:checked + .slider:before { transform: translateX(22px); }
-        .color-opt { width: 35px; height: 35px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: 0.2s; }
-        .color-opt.active { border-color: var(--text); transform: scale(1.1); }
 
-        /* --- TIMETABLE --- */
-        .date-nav { display: flex; align-items: center; justify-content: space-between; background: var(--surface); padding: 10px; border-radius: 18px; border: 1px solid var(--border); margin-bottom: 20px; box-shadow: var(--shadow); }
-        .tt-item { display: flex; gap: 15px; margin-bottom: 15px; position: relative; }
-        .tt-time-col { width: 60px; text-align: right; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; flex-direction: column; justify-content: space-between; padding: 5px 0; }
-        .tt-card { flex: 1; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 15px; position: relative; overflow: hidden; box-shadow: var(--shadow); transition: 0.2s; }
-        .gpa-hero { background: linear-gradient(135deg, var(--primary), #8b5cf6); color: white; padding: 30px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; box-shadow: 0 10px 30px -10px var(--primary); }
-
-        /* Modal */
+        /* Modal & FAB */
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(5px); }
         .modal-box { background: var(--surface); width: 90%; max-width: 420px; border-radius: 28px; padding: 30px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
-
-        /* FAB */
         .fab { position: fixed; bottom: 30px; right: 30px; width: 64px; height: 64px; background: var(--text); color: var(--bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); cursor: pointer; z-index: 500; transition: transform 0.2s; }
         .fab:hover { transform: scale(1.1) rotate(90deg); }
 
@@ -153,7 +159,7 @@
                     <div style="font-size:3rem; font-weight:800; line-height:1.1;" id="dash-gpa">0%</div>
                     <div style="opacity:0.9; font-size:0.9rem;" id="dash-grade">Current Grade: -</div>
                 </div>
-                <div style="font-size:3.5rem; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));">📊</div>
+                <div style="font-size:3.5rem;">📊</div>
             </div>
 
             <div class="card">
@@ -176,7 +182,7 @@
         <section id="timetable" class="section">
             <div class="date-nav">
                 <button class="btn-icon" onclick="changeDate(-1)">◀</button>
-                <div class="date-display">
+                <div class="date-display" style="text-align:center;">
                     <div class="date-main" id="tt-date-main">Today</div>
                     <div class="date-sub" id="tt-date-sub">Loading...</div>
                     <div id="tt-modifier-badge" style="display:none; font-size:0.7rem; background:var(--warning); color:#fff; padding:2px 8px; border-radius:6px; margin-top:4px;">CUSTOM DAY</div>
@@ -206,20 +212,13 @@
             
             <div id="school-detail" style="display:none; animation: slideUp 0.3s;">
                 <button class="btn-ghost" onclick="closeDetail()" style="margin-bottom:15px;">← Back to Courses</button>
-                
                 <div class="det-hero">
-                    <div class="sub-bg-blob" id="det-blob"></div>
                     <h1 id="det-name" style="color:var(--primary);">Math</h1>
                     <div style="color:var(--text-muted); font-weight:600;" id="det-room">Room 101</div>
-                    
                     <div class="det-stats-row">
-                        <div class="det-stat-card">
-                            <span class="stat-val" id="det-grade-val">95%</span>
-                            <span class="stat-lbl">Grade</span>
-                        </div>
+                        <div class="det-stat-card"><span class="stat-val" id="det-grade-val">95%</span><span class="stat-lbl">Grade</span></div>
                     </div>
                 </div>
-
                 <div class="card">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                         <h3>Grades</h3>
@@ -227,7 +226,6 @@
                     </div>
                     <div id="det-grades"></div>
                 </div>
-
                 <button class="btn-ghost" style="width:100%; color:var(--danger); border-color:var(--border);" onclick="deleteSubject()">Delete Course</button>
             </div>
         </section>
@@ -238,72 +236,47 @@
         </section>
 
         <section id="settings" class="section">
-            
-            <div class="settings-group">
-                <div class="settings-label">Appearance</div>
-                <div class="settings-list">
-                    <div class="settings-item">
-                        <div style="display:flex; align-items:center;">
-                            <div class="item-icon">🌙</div>
-                            <div class="item-info">Dark Mode</div>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
-                            <span class="slider"></span>
-                        </label>
+            <h3 style="margin-left:10px; margin-bottom:10px; font-size:0.9rem; color:var(--text-muted); text-transform:uppercase;">Appearance</h3>
+            <div class="settings-list">
+                <div class="settings-item">
+                    <div style="display:flex; align-items:center;">
+                        <div style="font-size:1.2rem; margin-right:15px;">🌙</div>
+                        <div class="item-info">Dark Mode</div>
                     </div>
-                    <div class="settings-item" style="flex-direction: column; align-items: flex-start;">
-                        <div style="display:flex; align-items:center; margin-bottom:10px;">
-                            <div class="item-icon">🎨</div>
-                            <div class="item-info">Accent Color</div>
-                        </div>
-                        <div style="display:flex; gap:10px;">
-                            <div class="color-opt" style="background:#4f46e5" onclick="setAccent('#4f46e5')"></div>
-                            <div class="color-opt" style="background:#0ea5e9" onclick="setAccent('#0ea5e9')"></div>
-                            <div class="color-opt" style="background:#10b981" onclick="setAccent('#10b981')"></div>
-                            <div class="color-opt" style="background:#f59e0b" onclick="setAccent('#f59e0b')"></div>
-                            <div class="color-opt" style="background:#ef4444" onclick="setAccent('#ef4444')"></div>
-                            <div class="color-opt" style="background:#ec4899" onclick="setAccent('#ec4899')"></div>
-                        </div>
-                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </div>
 
-            <div class="settings-group">
-                <div class="settings-label">Data Management</div>
-                <div class="settings-list">
-                    <div class="settings-item" onclick="exportData()">
-                        <div style="display:flex; align-items:center;">
-                            <div class="item-icon">💾</div>
-                            <div class="item-info">Backup Data</div>
-                        </div>
-                        <span style="color:var(--text-muted);">⬇️</span>
+            <h3 style="margin-left:10px; margin-bottom:10px; font-size:0.9rem; color:var(--text-muted); text-transform:uppercase;">Data</h3>
+            <div class="settings-list">
+                <div class="settings-item" onclick="exportData()">
+                    <div style="display:flex; align-items:center;">
+                        <div style="font-size:1.2rem; margin-right:15px;">💾</div>
+                        <div class="item-info">Backup Data</div>
                     </div>
-                    <div class="settings-item" onclick="document.getElementById('restore-input').click()">
-                        <div style="display:flex; align-items:center;">
-                            <div class="item-icon">📂</div>
-                            <div class="item-info">Restore Data</div>
-                        </div>
-                        <span style="color:var(--text-muted);">⬆️</span>
-                    </div>
-                    <input type="file" id="restore-input" style="display:none;" accept=".json" onchange="importData(this)">
+                    <span style="color:var(--text-muted);">⬇️</span>
                 </div>
+                <div class="settings-item" onclick="document.getElementById('restore-input').click()">
+                    <div style="display:flex; align-items:center;">
+                        <div style="font-size:1.2rem; margin-right:15px;">📂</div>
+                        <div class="item-info">Restore Data</div>
+                    </div>
+                    <span style="color:var(--text-muted);">⬆️</span>
+                </div>
+                <input type="file" id="restore-input" style="display:none;" accept=".json" onchange="importData(this)">
             </div>
 
-            <div class="settings-group">
-                <div class="settings-label">System</div>
-                <div class="settings-list">
-                    <div class="settings-item" onclick="resetApp()">
-                        <div style="display:flex; align-items:center;">
-                            <div class="item-icon" style="color:var(--danger); background:var(--bg);">🗑️</div>
-                            <div class="item-info" style="color:var(--danger);">Factory Reset</div>
-                        </div>
+            <h3 style="margin-left:10px; margin-bottom:10px; font-size:0.9rem; color:var(--text-muted); text-transform:uppercase;">System</h3>
+            <div class="settings-list">
+                <div class="settings-item" onclick="resetApp()">
+                    <div style="display:flex; align-items:center;">
+                        <div style="font-size:1.2rem; margin-right:15px;">🗑️</div>
+                        <div class="item-info" style="color:var(--danger);">Factory Reset</div>
                     </div>
                 </div>
-            </div>
-
-            <div style="text-align:center; color:var(--text-muted); font-size:0.8rem; margin-top:30px;">
-                Vidyarthi Platinum v3.0
             </div>
         </section>
 
@@ -314,31 +287,19 @@
     <div id="modal-class" class="modal">
         <div class="modal-box">
             <h3>Add Class</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">
-                <span id="class-modal-date" style="font-weight:bold; color:var(--primary);">Today</span>
-            </p>
-            
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;"><span id="class-modal-date" style="font-weight:bold; color:var(--primary);">Today</span></p>
             <label style="font-size:0.8rem; font-weight:bold;">Subject</label>
             <select id="c-sub" style="margin-bottom:15px;"></select>
-            
             <div style="display:flex; gap:15px; margin-bottom:20px;">
-                <div style="flex:1">
-                    <label style="font-size:0.8rem; font-weight:bold;">Start</label>
-                    <input type="time" id="c-start">
-                </div>
-                <div style="flex:1">
-                    <label style="font-size:0.8rem; font-weight:bold;">End</label>
-                    <input type="time" id="c-end">
-                </div>
+                <div style="flex:1"><label style="font-size:0.8rem; font-weight:bold;">Start</label><input type="time" id="c-start"></div>
+                <div style="flex:1"><label style="font-size:0.8rem; font-weight:bold;">End</label><input type="time" id="c-end"></div>
             </div>
-
             <div style="background:var(--bg); padding:15px; border-radius:16px; margin-bottom:20px;">
                 <label style="display:flex; align-items:center; cursor:pointer;">
                     <input type="checkbox" id="c-repeat" checked style="width:auto; margin-right:10px;">
                     <span style="font-weight:600;">Repeat Weekly</span>
                 </label>
             </div>
-
             <div style="display:flex; gap:10px;">
                 <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-class')">Cancel</button>
                 <button class="btn" style="flex:1" onclick="saveClass()">Save</button>
@@ -354,7 +315,7 @@
             <input type="date" id="t-date" style="margin-bottom:20px;">
             <div style="display:flex; gap:10px;">
                 <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-task')">Cancel</button>
-                <button class="btn" style="flex:1" onclick="saveTask()">Create Task</button>
+                <button class="btn" style="flex:1" onclick="saveTask()">Save</button>
             </div>
         </div>
     </div>
@@ -368,7 +329,7 @@
             <input type="color" id="s-color" value="#4f46e5" style="width:100%; height:50px; margin-bottom:20px; cursor:pointer;">
             <div style="display:flex; gap:10px;">
                 <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-sub')">Cancel</button>
-                <button class="btn" style="flex:1" onclick="saveSubject()">Create Course</button>
+                <button class="btn" style="flex:1" onclick="saveSubject()">Save</button>
             </div>
         </div>
     </div>
@@ -378,14 +339,8 @@
             <h3>Record Grade</h3>
             <input type="text" id="g-name" placeholder="Exam / Assignment Name" style="margin:15px 0;">
             <div style="display:flex; gap:15px; margin-bottom:20px;">
-                <div style="flex:1">
-                    <label style="font-size:0.8rem;">Score</label>
-                    <input type="number" id="g-score" placeholder="0">
-                </div>
-                <div style="flex:1">
-                    <label style="font-size:0.8rem;">Total</label>
-                    <input type="number" id="g-total" placeholder="100">
-                </div>
+                <div style="flex:1"><label style="font-size:0.8rem;">Score</label><input type="number" id="g-score" placeholder="0"></div>
+                <div style="flex:1"><label style="font-size:0.8rem;">Total</label><input type="number" id="g-total" placeholder="100"></div>
             </div>
             <button class="btn" onclick="saveGrade()" style="width:100%;">Save Grade</button>
         </div>
@@ -394,13 +349,14 @@
     <script>
         // --- DATA ---
         let db = {
-            timetable: JSON.parse(localStorage.getItem('vs3Timetable')) || [],
-            overrides: JSON.parse(localStorage.getItem('vs3Overrides')) || {},
-            subjects: JSON.parse(localStorage.getItem('vs3Subs')) || [],
-            tasks: JSON.parse(localStorage.getItem('vs3Tasks')) || [],
-            grades: JSON.parse(localStorage.getItem('vs3Grades')) || [],
-            settings: JSON.parse(localStorage.getItem('vs3Sets')) || { theme: 'light', accent: '#4f46e5' }
+            timetable: [], overrides: {}, subjects: [], tasks: [], grades: [], settings: { theme: 'light' }
         };
+
+        // LOAD DATA SAFELY
+        try {
+            const saved = localStorage.getItem('vPro_Data'); // NEW KEY for Fresh Start
+            if(saved) db = JSON.parse(saved);
+        } catch(e) { console.log('Data reset due to error'); }
 
         let selectedDate = new Date();
         let currentSubId = null;
@@ -416,13 +372,12 @@
         function applySettings() {
             if(db.settings.theme === 'dark') {
                 document.body.setAttribute('data-theme', 'dark');
-                document.getElementById('theme-toggle').checked = true;
+                const t = document.getElementById('theme-toggle');
+                if(t) t.checked = true;
             }
-            document.documentElement.style.setProperty('--primary', db.settings.accent);
-            document.documentElement.style.setProperty('--primary-light', db.settings.accent + '20'); 
         }
 
-        // --- BACKUP & RESTORE LOGIC ---
+        // --- BACKUP & RESTORE ---
         function exportData() {
             const dataStr = JSON.stringify(db, null, 2);
             const blob = new Blob([dataStr], {type: "application/json"});
@@ -441,7 +396,6 @@
             reader.onload = function(e) {
                 try {
                     const imported = JSON.parse(e.target.result);
-                    // Validasi sederhana
                     if (imported.timetable && imported.subjects) {
                         db = imported;
                         save();
@@ -479,7 +433,6 @@
 
                 grid.innerHTML += `
                     <div class="sub-card" onclick="openDetail(${s.id})" style="border-color:${s.color}">
-                        <div class="sub-bg-blob" style="background:${s.color}"></div>
                         <div class="sub-grade-pill" style="color:${s.color}">${pct}%</div>
                         <div class="sub-icon" style="background:${s.color}20; color:${s.color};">📚</div>
                         <div class="sub-meta">
@@ -500,7 +453,6 @@
             const list = document.getElementById('timetable-list');
             list.innerHTML = '';
 
-            const options = { weekday: 'long', month: 'short', day: 'numeric' };
             const isToday = new Date().toDateString() === selectedDate.toDateString();
             document.getElementById('tt-date-main').innerText = isToday ? "Today" : selectedDate.toLocaleDateString('en-US', {weekday:'long'});
             document.getElementById('tt-date-sub').innerText = selectedDate.toLocaleDateString('en-US', {month:'long', day:'numeric'});
@@ -537,22 +489,17 @@
 
                 list.innerHTML += `
                     <div class="tt-item ${isNow ? 'now' : ''}">
-                        <div class="tt-time-col">
-                            <span>${c.start}</span>
-                            <span style="opacity:0.6">${c.end}</span>
-                        </div>
+                        <div class="tt-time-col"><span>${c.start}</span><span style="opacity:0.6">${c.end}</span></div>
                         <div class="tt-card">
                             <div class="tt-color-bar" style="background:${sub.color}"></div>
-                            <div class="tt-info">
-                                <div class="tt-subject" style="color:${sub.color}">${sub.name}</div>
-                                <div class="tt-room">${sub.room}</div>
-                            </div>
+                            <div class="tt-info"><div class="tt-subject" style="color:${sub.color}">${sub.name}</div><div class="tt-room">${sub.room}</div></div>
                             <button onclick="deleteClass(${c.id})" style="position:absolute; top:10px; right:10px; border:none; background:none; color:var(--text-muted); cursor:pointer;">&times;</button>
                         </div>
                     </div>`;
             });
         }
 
+        // --- LOGIC ---
         function saveClass() {
             const subId = document.getElementById('c-sub').value;
             const start = document.getElementById('c-start').value;
@@ -672,12 +619,7 @@
         }
 
         function save() {
-            localStorage.setItem('vs3Timetable', JSON.stringify(db.timetable));
-            localStorage.setItem('vs3Overrides', JSON.stringify(db.overrides));
-            localStorage.setItem('vs3Subs', JSON.stringify(db.subjects));
-            localStorage.setItem('vs3Tasks', JSON.stringify(db.tasks));
-            localStorage.setItem('vs3Grades', JSON.stringify(db.grades));
-            localStorage.setItem('vs3Sets', JSON.stringify(db.settings));
+            localStorage.setItem('vPro_Data', JSON.stringify(db));
             renderAll();
         }
         function renderAll() { renderSchool(); renderTimetable(); renderTasks(); }
@@ -702,6 +644,7 @@
         function toggleTheme() { db.settings.theme = db.settings.theme==='dark'?'light':'dark'; save(); applySettings(); }
         function resetApp() { if(confirm("Reset?")) { localStorage.clear(); location.reload(); } }
         
+        // CRUD Wrappers
         function saveSubject() { const n=document.getElementById('s-name').value; if(n){db.subjects.push({id:Date.now(), name:n, room:document.getElementById('s-room').value, color:document.getElementById('s-color').value}); save(); closeModal('modal-sub');} }
         function saveTask() { const d=document.getElementById('t-desc').value; if(d){db.tasks.push({id:Date.now(), desc:d, subId:document.getElementById('t-sub').value, date:document.getElementById('t-date').value, done:false}); save(); closeModal('modal-task');} }
         function saveGrade() { const n=document.getElementById('g-name').value; if(n){db.grades.push({id:Date.now(), subId:currentSubId, name:n, score:document.getElementById('g-score').value, total:document.getElementById('g-total').value}); save(); closeModal('modal-grade'); renderDetailGrades();} }
@@ -709,7 +652,7 @@
         function delTask(id) { db.tasks=db.tasks.filter(x=>x.id!=id); save(); }
         function deleteSubject() { if(confirm("Delete Course?")) { db.subjects=db.subjects.filter(x=>x.id!=currentSubId); db.timetable=db.timetable.filter(x=>x.subId!=currentSubId); save(); closeDetail(); } }
         
-        function openDetail(id) { currentSubId=id; const s=db.subjects.find(x=>x.id==id); document.getElementById('school-grid').style.display='none'; document.getElementById('school-detail').style.display='block'; document.getElementById('det-name').innerText=s.name; document.getElementById('det-room').innerText=s.room; document.getElementById('det-name').style.color=s.color; document.getElementById('det-blob').style.background=s.color; renderDetailGrades(); }
+        function openDetail(id) { currentSubId=id; const s=db.subjects.find(x=>x.id==id); document.getElementById('school-grid').style.display='none'; document.getElementById('school-detail').style.display='block'; document.getElementById('det-name').innerText=s.name; document.getElementById('det-room').innerText=s.room; document.getElementById('det-name').style.color=s.color; renderDetailGrades(); }
         function closeDetail() { document.getElementById('school-detail').style.display='none'; document.getElementById('school-grid').style.display='grid'; }
         function renderDetailGrades() { const l=document.getElementById('det-grades'); l.innerHTML=''; db.grades.filter(g=>g.subId==currentSubId).forEach(g=>{ l.innerHTML+=`<div style="padding:10px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;"><span>${g.name}</span><strong>${g.score}/${g.total}</strong></div>`; }); }
 
@@ -717,3 +660,10 @@
         function openTaskModal() { document.getElementById('t-date').value = new Date().toISOString().split('T')[0]; document.getElementById('modal-task').style.display='flex'; }
         function openSubjectModal() { document.getElementById('modal-sub').style.display='flex'; }
         function openGradeModal() { document.getElementById('modal-grade').style.display='flex'; }
+        function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([],{hour:'2-digit', minute:'2-digit'}); }
+
+        init();
+        nav('dashboard');
+    </script>
+</body>
+</html>
