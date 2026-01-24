@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - School Edition</title>
+    <title>Vidyarthi - Smart School</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -15,9 +15,9 @@
             --border: #e2e8f0;
             --radius: 16px;
             --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-            
-            --success: #10b981;
             --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
         }
 
         [data-theme="dark"] {
@@ -52,33 +52,30 @@
         .btn { padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.95rem; }
         .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
         .btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 8px; }
+        .btn-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: none; background: transparent; cursor: pointer; color: var(--text-muted); }
 
         input, select { padding: 12px 15px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; }
 
-        /* --- 📅 NEW TIMETABLE DESIGN --- */
-        .day-tabs { display: flex; justify-content: space-between; background: var(--surface); padding: 5px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 20px; overflow-x: auto; }
-        .day-tab { flex: 1; text-align: center; padding: 10px 5px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: 0.2s; min-width: 40px; }
-        .day-tab.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); }
+        /* --- DATE NAVIGATOR --- */
+        .date-nav { display: flex; align-items: center; justify-content: space-between; background: var(--surface); padding: 10px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 20px; }
+        .date-display { text-align: center; }
+        .date-main { font-weight: 800; font-size: 1.1rem; }
+        .date-sub { font-size: 0.8rem; color: var(--text-muted); }
+        .modified-badge { font-size: 0.7rem; background: var(--warning); color: #fff; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-top: 4px; }
 
+        /* --- TIMETABLE LIST --- */
         .tt-list { display: flex; flex-direction: column; gap: 15px; }
         .tt-item { display: flex; gap: 15px; position: relative; }
-        
-        /* Time Column */
         .tt-time-col { width: 60px; text-align: right; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; flex-direction: column; justify-content: space-between; padding: 5px 0; }
-        
-        /* Class Card */
         .tt-card { flex: 1; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); position: relative; overflow: hidden; display: flex; transition: transform 0.2s; box-shadow: var(--shadow); }
-        .tt-card:active { transform: scale(0.98); }
         .tt-color-bar { width: 6px; flex-shrink: 0; }
         .tt-info { padding: 12px 15px; flex: 1; }
         .tt-subject { font-weight: 800; font-size: 1.1rem; margin-bottom: 2px; }
         .tt-room { font-size: 0.85rem; opacity: 0.8; }
         .tt-duration { font-size: 0.75rem; color: var(--text-muted); margin-top: 5px; display: flex; align-items: center; gap: 5px; }
 
-        /* Current Class Indicator */
         .tt-item.now .tt-card { border: 2px solid var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
         .tt-item.now .tt-card::after { content: 'NOW'; position: absolute; top: 10px; right: 10px; background: var(--danger); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; animation: pulse 2s infinite; }
-        
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         /* --- SCHOOL & AGENDA --- */
@@ -152,21 +149,24 @@
         </section>
 
         <section id="timetable" class="section">
-            <div class="day-tabs">
-                <div class="day-tab" onclick="switchDay(1)" id="day-1">Mon</div>
-                <div class="day-tab" onclick="switchDay(2)" id="day-2">Tue</div>
-                <div class="day-tab" onclick="switchDay(3)" id="day-3">Wed</div>
-                <div class="day-tab" onclick="switchDay(4)" id="day-4">Thu</div>
-                <div class="day-tab" onclick="switchDay(5)" id="day-5">Fri</div>
-                <div class="day-tab" onclick="switchDay(6)" id="day-6">Sat</div>
-                <div class="day-tab" onclick="switchDay(0)" id="day-0">Sun</div>
+            <div class="date-nav">
+                <button class="btn-icon" onclick="changeDate(-1)">◀</button>
+                <div class="date-display">
+                    <div class="date-main" id="tt-date-main">Today</div>
+                    <div class="date-sub" id="tt-date-sub">Loading...</div>
+                    <div id="tt-modifier-badge" style="display:none;" class="modified-badge">CUSTOM DAY</div>
+                </div>
+                <button class="btn-icon" onclick="changeDate(1)">▶</button>
             </div>
 
-            <div class="tt-list" id="timetable-list">
-                </div>
+            <div style="display:none; justify-content:center; margin-bottom:15px;" id="reset-day-container">
+                <button class="btn-sm btn-ghost" onclick="resetCurrentDay()" style="color:var(--danger); border-color:var(--danger);">↩ Reset to Weekly Default</button>
+            </div>
+
+            <div class="tt-list" id="timetable-list"></div>
             
             <div style="text-align:center; margin-top:30px; color:var(--text-muted);">
-                <small>Tap + to add a class to this day</small>
+                <small>Tap + to add a class to <span id="tt-add-hint">this day</span></small>
             </div>
         </section>
 
@@ -218,7 +218,9 @@
     <div id="modal-class" class="modal">
         <div class="modal-box">
             <h3>Add Class</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:10px;">Adding to <span id="class-modal-day" style="font-weight:bold;">Monday</span></p>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:15px;">
+                Adding to: <span id="class-modal-date" style="font-weight:bold;">Today</span>
+            </p>
             
             <label style="font-size:0.8rem; font-weight:bold;">Subject</label>
             <select id="c-sub" style="margin-bottom:10px;"></select>
@@ -231,6 +233,16 @@
                 <div style="flex:1">
                     <label style="font-size:0.8rem; font-weight:bold;">End</label>
                     <input type="time" id="c-end">
+                </div>
+            </div>
+
+            <div style="background:var(--bg); padding:10px; border-radius:10px; margin-bottom:15px;">
+                <label style="display:flex; align-items:center; cursor:pointer;">
+                    <input type="checkbox" id="c-repeat" checked style="width:auto; margin-right:10px;">
+                    <span style="font-size:0.9rem;">Repeat Weekly?</span>
+                </label>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:5px; margin-left:25px;">
+                    Uncheck to add for <b>this date only</b>.
                 </div>
             </div>
 
@@ -283,53 +295,85 @@
     <script>
         // --- DATA ---
         let db = {
-            // New Timetable Structure: { day: 1, subId: 1, start: '09:00', end: '10:00' }
-            timetable: JSON.parse(localStorage.getItem('vseTimetable')) || [],
-            subjects: JSON.parse(localStorage.getItem('vseSubs')) || [],
-            tasks: JSON.parse(localStorage.getItem('vseTasks')) || [],
-            grades: JSON.parse(localStorage.getItem('vseGrades')) || [],
-            settings: JSON.parse(localStorage.getItem('vseSets')) || { theme: 'light' }
+            // Weekly Template: { day: 1, subId: 1, start: '09:00', end: '10:00', id: 123 }
+            timetable: JSON.parse(localStorage.getItem('vs2Timetable')) || [],
+            // One-Time Changes: { "2026-01-24": [ ...classObjects... ] }
+            overrides: JSON.parse(localStorage.getItem('vs2Overrides')) || {},
+            subjects: JSON.parse(localStorage.getItem('vs2Subs')) || [],
+            tasks: JSON.parse(localStorage.getItem('vs2Tasks')) || [],
+            grades: JSON.parse(localStorage.getItem('vs2Grades')) || [],
+            settings: JSON.parse(localStorage.getItem('vs2Sets')) || { theme: 'light' }
         };
 
-        let currentDayIdx = new Date().getDay(); // 0-6
+        let selectedDate = new Date();
         let currentSubId = null;
         let currentPage = 'dashboard';
 
         function init() {
             if(db.settings.theme === 'dark') document.body.setAttribute('data-theme', 'dark');
             renderAll();
-            switchDay(currentDayIdx); // Select today by default
             setInterval(updateClock, 1000);
             setInterval(checkLiveStatus, 5000);
         }
 
-        // --- TIMETABLE ENGINE ---
-        function switchDay(dayIdx) {
-            currentDayIdx = dayIdx;
-            
-            // Update Tabs
-            document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(`day-${dayIdx}`).classList.add('active');
-            
+        // --- TIMETABLE ENGINE (Hybrid) ---
+        
+        function changeDate(delta) {
+            selectedDate.setDate(selectedDate.getDate() + delta);
             renderTimetable();
+        }
+
+        function getClassesForDate(date) {
+            const dateStr = date.toISOString().split('T')[0];
+            
+            // 1. Check for Override
+            if (db.overrides[dateStr]) {
+                return { classes: db.overrides[dateStr], isOverride: true };
+            }
+            
+            // 2. Fallback to Weekly Template
+            const dayIdx = date.getDay(); // 0-6
+            const templateClasses = db.timetable.filter(c => c.day === dayIdx);
+            
+            // Return copies to avoid reference issues
+            return { classes: JSON.parse(JSON.stringify(templateClasses)), isOverride: false };
         }
 
         function renderTimetable() {
             const list = document.getElementById('timetable-list');
             list.innerHTML = '';
 
-            // Filter classes for selected day
-            const classes = db.timetable.filter(c => c.day === currentDayIdx);
-            classes.sort((a,b) => a.start.localeCompare(b.start));
+            // Header Update
+            const options = { weekday: 'long', month: 'short', day: 'numeric' };
+            document.getElementById('tt-date-main').innerText = new Date().toDateString() === selectedDate.toDateString() ? "Today" : selectedDate.toLocaleDateString('en-US', {weekday:'long'});
+            document.getElementById('tt-date-sub').innerText = selectedDate.toLocaleDateString('en-US', {month:'long', day:'numeric'});
+            document.getElementById('tt-add-hint').innerText = selectedDate.toLocaleDateString('en-US', {weekday:'long'});
+
+            // Get Data
+            const { classes, isOverride } = getClassesForDate(selectedDate);
+            
+            // UI Indicators
+            const badge = document.getElementById('tt-modifier-badge');
+            const resetBtn = document.getElementById('reset-day-container');
+            
+            if (isOverride) {
+                badge.style.display = 'inline-block';
+                resetBtn.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+                resetBtn.style.display = 'none';
+            }
 
             if (classes.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);">No classes on this day.</div>`;
+                list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);">No classes scheduled.</div>`;
                 return;
             }
 
+            classes.sort((a,b) => a.start.localeCompare(b.start));
+
             const now = new Date();
             const curTime = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
-            const isToday = (currentDayIdx === now.getDay());
+            const isToday = (selectedDate.toDateString() === now.toDateString());
 
             classes.forEach(c => {
                 const sub = db.subjects.find(s => s.id == c.subId) || { name: 'Unknown', color: '#ccc', room: '?' };
@@ -351,38 +395,96 @@
                                     <span>${c.start} - ${c.end}</span>
                                 </div>
                             </div>
-                            <button onclick="deleteClass(${c.id})" style="position:absolute; top:5px; right:5px; border:none; background:none; color:var(--text-muted); cursor:pointer;">&times;</button>
+                            <button onclick="deleteClass(${c.id}, '${c.start}')" style="position:absolute; top:5px; right:5px; border:none; background:none; color:var(--text-muted); cursor:pointer;">&times;</button>
                         </div>
                     </div>
                 `;
             });
         }
 
+        // --- ADD/DELETE LOGIC (The Smart Part) ---
+
         function saveClass() {
             const subId = document.getElementById('c-sub').value;
             const start = document.getElementById('c-start').value;
             const end = document.getElementById('c-end').value;
+            const repeat = document.getElementById('c-repeat').checked;
+            const dayIdx = selectedDate.getDay();
+            const dateStr = selectedDate.toISOString().split('T')[0];
 
             if (subId && start && end) {
-                db.timetable.push({ id: Date.now(), day: currentDayIdx, subId, start, end });
+                const newClass = { id: Date.now(), day: dayIdx, subId, start, end };
+
+                if (repeat) {
+                    // Weekly Template Mode
+                    db.timetable.push(newClass);
+                    // Also check if today is overridden; if so, we should probably add it there too or ask. 
+                    // Simpler: Just add to template. If today is overridden, the template change won't show until reset.
+                    // This is standard behavior.
+                } else {
+                    // One-Time Mode
+                    ensureOverrideExists(dateStr);
+                    db.overrides[dateStr].push(newClass);
+                }
+                
                 save(); closeModal('modal-class'); renderTimetable();
             }
         }
 
-        function deleteClass(id) {
-            if(confirm("Remove this class?")) {
-                db.timetable = db.timetable.filter(c => c.id !== id);
+        function deleteClass(id, start) {
+            const dateStr = selectedDate.toISOString().split('T')[0];
+            const isOverride = !!db.overrides[dateStr];
+
+            if (confirm(isOverride ? "Remove this class from this date?" : "Delete for every " + selectedDate.toLocaleDateString('en-US',{weekday:'long'}) + "?")) {
+                if (isOverride) {
+                    // Just remove from override array
+                    db.overrides[dateStr] = db.overrides[dateStr].filter(c => c.id !== id);
+                } else {
+                    // We are looking at template, but user might want to delete JUST for today.
+                    // Let's ask via a smart logic:
+                    // Actually, simpler UI: If looking at template, Delete removes from template.
+                    // To delete just one instance from a template, we must first "Materialize" the day.
+                    
+                    // Let's change behavior: When deleting from a Template view, offer choice?
+                    // No, keeping it simple:
+                    // If you want to delete just for today, we must convert today to an override first.
+                    
+                    if(confirm("Click OK to delete for ALL weeks.\nClick Cancel to delete for JUST TODAY.")) {
+                        db.timetable = db.timetable.filter(c => c.id !== id);
+                    } else {
+                        // "Cancel" -> Just Today
+                        ensureOverrideExists(dateStr);
+                        // Now delete from the newly created override
+                        // Note: IDs in override are copied from template, so they match
+                        db.overrides[dateStr] = db.overrides[dateStr].filter(c => c.id !== id);
+                    }
+                }
+                save(); renderTimetable();
+            }
+        }
+
+        function ensureOverrideExists(dateStr) {
+            if (!db.overrides[dateStr]) {
+                const dayIdx = new Date(dateStr).getDay();
+                // Copy template classes to this specific date
+                const templateClasses = db.timetable.filter(c => c.day === dayIdx);
+                db.overrides[dateStr] = JSON.parse(JSON.stringify(templateClasses));
+            }
+        }
+
+        function resetCurrentDay() {
+            const dateStr = selectedDate.toISOString().split('T')[0];
+            if(confirm("Discard custom changes for this date?")) {
+                delete db.overrides[dateStr];
                 save(); renderTimetable();
             }
         }
 
         function checkLiveStatus() {
-            // Dashboard Status Update
             const now = new Date();
             const cur = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
-            const day = now.getDay();
-
-            const classes = db.timetable.filter(c => c.day === day);
+            
+            const { classes } = getClassesForDate(now);
             const active = classes.find(c => cur >= c.start && cur < c.end);
 
             if (active) {
@@ -390,21 +492,17 @@
                 document.getElementById('now-activity').innerText = sub.name;
                 document.getElementById('now-room').innerText = sub.room;
                 document.getElementById('now-time').innerText = active.end;
-                document.getElementById('now-icon').style.background = sub.color + '20'; // light opacity
-                document.getElementById('now-icon').style.color = sub.color;
             } else {
                 document.getElementById('now-activity').innerText = "Free Time";
                 document.getElementById('now-room').innerText = "No class right now";
                 document.getElementById('now-time').innerText = "--:--";
-                document.getElementById('now-icon').style.background = "var(--primary-light)";
-                document.getElementById('now-icon').style.color = "var(--primary)";
             }
-
-            // If we are looking at the timetable for today, refresh highlights
-            if(currentDayIdx === day) renderTimetable();
+            
+            // Refresh timetable highlights if viewing today
+            if(selectedDate.toDateString() === now.toDateString()) renderTimetable();
         }
 
-        // --- SCHOOL HUB ---
+        // --- STANDARD RENDERERS ---
         function renderSchool() {
             const grid = document.getElementById('subject-list');
             grid.innerHTML = '';
@@ -415,7 +513,6 @@
             document.getElementById('c-sub').innerHTML = options;
 
             db.subjects.forEach(s => {
-                // Grades Logic
                 const sGrades = db.grades.filter(g => g.subId == s.id);
                 let total=0, max=0;
                 sGrades.forEach(g => { total+=parseFloat(g.score); max+=parseFloat(g.total); });
@@ -426,81 +523,11 @@
                         <h3 style="color:${s.color}">${s.name}</h3>
                         <div style="font-size:0.8rem; color:var(--text-muted);">${s.room}</div>
                         <div style="margin-top:10px; font-weight:700;">${pct}%</div>
-                    </div>
-                `;
+                    </div>`;
             });
             updateGPA();
         }
 
-        function openDetail(id) {
-            currentSubId = id;
-            const s = db.subjects.find(x => x.id == id);
-            document.getElementById('school-grid').style.display='none';
-            document.getElementById('school-detail').style.display='block';
-            document.getElementById('det-name').innerText = s.name;
-            document.getElementById('det-room').innerText = s.room;
-            renderDetailGrades();
-        }
-        
-        function closeDetail() {
-            document.getElementById('school-detail').style.display='none';
-            document.getElementById('school-grid').style.display='block';
-            renderSchool();
-        }
-
-        function renderDetailGrades() {
-            const list = document.getElementById('det-grades');
-            list.innerHTML = '';
-            const grads = db.grades.filter(g => g.subId == currentSubId);
-            grads.forEach(g => {
-                list.innerHTML += `
-                    <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border);">
-                        <span>${g.name}</span>
-                        <span><strong>${g.score}/${g.total}</strong> <button onclick="delGrade(${g.id})" style="border:none;background:none;color:red;">&times;</button></span>
-                    </div>
-                `;
-            });
-        }
-
-        function updateGPA() {
-            let total=0, max=0;
-            db.grades.forEach(g => { total+=parseFloat(g.score); max+=parseFloat(g.total); });
-            const pct = max > 0 ? Math.round((total/max)*100) : 0;
-            document.getElementById('dash-gpa').innerText = pct + "%";
-            
-            let l='F';
-            if(pct>=90)l='A'; else if(pct>=80)l='B'; else if(pct>=70)l='C'; else if(pct>=60)l='D';
-            document.getElementById('dash-grade').innerText = "Grade: " + l;
-        }
-
-        function saveSubject() {
-            const name = document.getElementById('s-name').value;
-            const room = document.getElementById('s-room').value;
-            const color = document.getElementById('s-color').value;
-            if(name) { db.subjects.push({id:Date.now(), name, room, color}); save(); closeModal('modal-sub'); }
-        }
-
-        function deleteSubject() {
-            if(confirm("Delete Subject and all its classes?")) {
-                db.subjects = db.subjects.filter(x=>x.id != currentSubId);
-                db.timetable = db.timetable.filter(x=>x.subId != currentSubId);
-                db.grades = db.grades.filter(x=>x.subId != currentSubId);
-                save(); closeDetail();
-            }
-        }
-
-        function saveGrade() {
-            const name = document.getElementById('g-name').value;
-            const score = document.getElementById('g-score').value;
-            const total = document.getElementById('g-total').value;
-            if(name && score) {
-                db.grades.push({id:Date.now(), subId:currentSubId, name, score, total});
-                save(); closeModal('modal-grade'); renderDetailGrades();
-            }
-        }
-        function delGrade(id) { db.grades=db.grades.filter(x=>x.id!==id); save(); renderDetailGrades(); }
-
-        // --- TASKS ---
         function renderTasks() {
             const list = document.getElementById('agenda-container');
             list.innerHTML = '';
@@ -511,7 +538,6 @@
             db.tasks.sort((a,b) => a.date.localeCompare(b.date));
             
             const buckets = { Overdue:[], Today:[], Upcoming:[] };
-            
             db.tasks.forEach(t => {
                 if(t.done) return;
                 if(t.date < today) buckets.Overdue.push(t);
@@ -521,20 +547,19 @@
 
             const renderBucket = (title, items, isPreview) => {
                 if(items.length === 0) return;
-                const html = `<div class="agenda-label">${title}</div>` + items.map(t => {
+                const html = `<div style="font-size:0.75rem; font-weight:800; color:var(--text-muted); margin:10px 0;">${title}</div>` + items.map(t => {
                     const s = db.subjects.find(x => x.id == t.subId);
                     return `
                     <div class="task-row">
                         <div class="task-check" onclick="toggleTask(${t.id})"></div>
                         <div style="flex:1;">
                             <div style="font-size:0.7rem; font-weight:800; color:${s?s.color:'#ccc'}">${s?s.name:'GENERAL'}</div>
-                            <div class="task-title">${t.desc}</div>
+                            <div style="font-weight:600;">${t.desc}</div>
                             <div style="font-size:0.8rem; color:var(--text-muted);">${t.date}</div>
                         </div>
                         <button onclick="delTask(${t.id})" style="border:none;background:none;">&times;</button>
                     </div>`;
                 }).join('');
-                
                 if(!isPreview) list.innerHTML += html;
                 if(title === 'Today' || title === 'Overdue') preview.innerHTML += html;
             };
@@ -544,32 +569,41 @@
             renderBucket('📅 Upcoming', buckets.Upcoming, false);
         }
 
-        function saveTask() {
-            const desc = document.getElementById('t-desc').value;
-            const sub = document.getElementById('t-sub').value;
-            const date = document.getElementById('t-date').value;
-            if(desc && date) {
-                db.tasks.push({id:Date.now(), desc, subId:sub, date, done:false});
-                save(); closeModal('modal-task');
-            }
-        }
-        function toggleTask(id) { const t=db.tasks.find(x=>x.id==id); if(t)t.done=!t.done; save(); }
-        function delTask(id) { db.tasks=db.tasks.filter(x=>x.id!=id); save(); }
-
-        // --- SYSTEM ---
+        // --- UTILS ---
         function save() {
-            localStorage.setItem('vseTimetable', JSON.stringify(db.timetable));
-            localStorage.setItem('vseSubs', JSON.stringify(db.subjects));
-            localStorage.setItem('vseTasks', JSON.stringify(db.tasks));
-            localStorage.setItem('vseGrades', JSON.stringify(db.grades));
-            localStorage.setItem('vseSets', JSON.stringify(db.settings));
+            localStorage.setItem('vs2Timetable', JSON.stringify(db.timetable));
+            localStorage.setItem('vs2Overrides', JSON.stringify(db.overrides));
+            localStorage.setItem('vs2Subs', JSON.stringify(db.subjects));
+            localStorage.setItem('vs2Tasks', JSON.stringify(db.tasks));
+            localStorage.setItem('vs2Grades', JSON.stringify(db.grades));
+            localStorage.setItem('vs2Sets', JSON.stringify(db.settings));
             renderAll();
         }
 
-        function renderAll() {
-            renderSchool();
-            renderTimetable();
-            renderTasks();
+        function renderAll() { renderSchool(); renderTimetable(); renderTasks(); }
+        
+        function openDetail(id) {
+            currentSubId = id;
+            const s = db.subjects.find(x => x.id == id);
+            document.getElementById('school-grid').style.display='none';
+            document.getElementById('school-detail').style.display='block';
+            document.getElementById('det-name').innerText = s.name;
+            document.getElementById('det-room').innerText = s.room;
+            renderDetailGrades();
+        }
+        function closeDetail() { document.getElementById('school-detail').style.display='none'; document.getElementById('school-grid').style.display='block'; renderSchool(); }
+        function renderDetailGrades() {
+            const list = document.getElementById('det-grades'); list.innerHTML = '';
+            db.grades.filter(g => g.subId == currentSubId).forEach(g => {
+                list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid var(--border);"><span>${g.name}</span><span><strong>${g.score}/${g.total}</strong> <button onclick="delGrade(${g.id})" style="border:none;background:none;color:red;">&times;</button></span></div>`;
+            });
+        }
+        function updateGPA() {
+            let total=0, max=0; db.grades.forEach(g => { total+=parseFloat(g.score); max+=parseFloat(g.total); });
+            const pct = max > 0 ? Math.round((total/max)*100) : 0;
+            document.getElementById('dash-gpa').innerText = pct + "%";
+            let l='F'; if(pct>=90)l='A'; else if(pct>=80)l='B'; else if(pct>=70)l='C'; else if(pct>=60)l='D';
+            document.getElementById('dash-grade').innerText = "Grade: " + l;
         }
 
         function nav(id) {
@@ -579,39 +613,39 @@
             document.getElementById(id).classList.add('active');
             const btn = Array.from(document.querySelectorAll('.nav-item')).find(b => b.onclick.toString().includes(id));
             if(btn) btn.classList.add('active');
-            
-            const titles = {dashboard:'Dashboard', timetable:'Timetable', school:'School', agenda:'Agenda', settings:'Settings'};
-            document.getElementById('page-title').innerText = titles[id];
-            
-            // FAB Logic
-            const fab = document.querySelector('.fab');
-            if(id === 'timetable' || id === 'agenda') fab.style.display = 'flex';
-            else fab.style.display = 'none';
+            document.getElementById('page-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
+            document.querySelector('.fab').style.display = (id === 'agenda' || id === 'timetable') ? 'flex' : 'none';
         }
 
         function handleFab() {
             if (currentPage === 'timetable') {
-                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                document.getElementById('class-modal-day').innerText = days[currentDayIdx];
+                const options = { weekday: 'long', month: 'short', day: 'numeric' };
+                document.getElementById('class-modal-date').innerText = selectedDate.toLocaleDateString('en-US', options);
                 document.getElementById('modal-class').style.display='flex';
-            } else if (currentPage === 'agenda') {
+            } else {
                 openTaskModal();
             }
         }
 
+        // CRUD
+        function saveSubject() { const name=document.getElementById('s-name').value, room=document.getElementById('s-room').value, color=document.getElementById('s-color').value; if(name){db.subjects.push({id:Date.now(), name, room, color}); save(); closeModal('modal-sub');} }
+        function deleteSubject() { if(confirm("Delete Subject?")) { db.subjects=db.subjects.filter(x=>x.id!=currentSubId); db.timetable=db.timetable.filter(x=>x.subId!=currentSubId); save(); closeDetail(); } }
+        function saveGrade() { const name=document.getElementById('g-name').value, score=document.getElementById('g-score').value, total=document.getElementById('g-total').value; if(name&&score){db.grades.push({id:Date.now(), subId:currentSubId, name, score, total}); save(); closeModal('modal-grade'); renderDetailGrades();} }
+        function delGrade(id) { db.grades=db.grades.filter(x=>x.id!==id); save(); renderDetailGrades(); }
+        function saveTask() { const desc=document.getElementById('t-desc').value, sub=document.getElementById('t-sub').value, date=document.getElementById('t-date').value; if(desc&&date){db.tasks.push({id:Date.now(), desc, subId:sub, date, done:false}); save(); closeModal('modal-task');} }
+        function toggleTask(id) { const t=db.tasks.find(x=>x.id==id); if(t)t.done=!t.done; save(); }
+        function delTask(id) { db.tasks=db.tasks.filter(x=>x.id!=id); save(); }
+
         function closeModal(id) { document.getElementById(id).style.display='none'; }
-        
         function openTaskModal() { document.getElementById('t-date').value = new Date().toISOString().split('T')[0]; document.getElementById('modal-task').style.display='flex'; }
         function openSubjectModal() { document.getElementById('modal-sub').style.display='flex'; }
         function openGradeModal() { document.getElementById('modal-grade').style.display='flex'; }
-        
         function resetApp() { if(confirm("Reset?")) { localStorage.clear(); location.reload(); } }
         function toggleTheme() { db.settings.theme = db.settings.theme==='dark'?'light':'dark'; document.body.setAttribute('data-theme', db.settings.theme); save(); }
         function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([],{hour:'2-digit', minute:'2-digit'}); }
 
         init();
         nav('dashboard');
-
     </script>
 </body>
 </html>
