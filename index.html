@@ -3,148 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - LifeOS v2.2</title>
+    <title>Vidyarthi - Full Release</title>
     <style>
         :root {
-            /* Theme Variables */
+            /* Dynamic Theme Variables */
             --primary: #6366f1;
-            --primary-rgb: 99, 102, 241;
-            --primary-light: rgba(99, 102, 241, 0.15);
+            --primary-rgb: 99, 102, 241; 
+            --primary-light: rgba(99, 102, 241, 0.12);
+            --primary-glow: rgba(99, 102, 241, 0.3);
             
             --bg: #f8fafc;
             --surface: #ffffff;
-            --surface-2: #f1f5f9;
+            --surface-glass: rgba(255, 255, 255, 0.85);
             --text: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
             
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+            --radius-xl: 28px;
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            
+            --shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 20px 40px -10px rgba(var(--primary-rgb), 0.15);
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         [data-theme="dark"] {
             --bg: #020617;
             --surface: #0f172a;
-            --surface-2: #1e293b;
+            --surface-glass: rgba(15, 23, 42, 0.85);
             --text: #f8fafc;
             --text-muted: #94a3b8;
-            --border: #334155;
+            --border: #1e293b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
         
-        body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: background 0.3s; }
+        body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: background 0.4s ease; }
 
-        /* --- SIDEBAR --- */
-        .sidebar { width: 80px; background: var(--surface); display: flex; flex-direction: column; border-right: 1px solid var(--border); z-index: 100; align-items: center; padding-top: 30px; }
-        .logo { width: 45px; height: 45px; background: linear-gradient(135deg, var(--primary), #a855f7); border-radius: 14px; display: grid; place-items: center; color: white; font-weight: 900; font-size: 1.5rem; margin-bottom: 40px; box-shadow: 0 8px 20px -5px rgba(var(--primary-rgb), 0.5); }
-        .nav-item { width: 50px; height: 50px; border-radius: 16px; color: var(--text-muted); font-size: 1.4rem; margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); border: none; background: transparent; position: relative; }
-        .nav-item:hover { background: var(--surface-2); color: var(--primary); transform: translateY(-2px); }
-        .nav-item.active { background: var(--primary-light); color: var(--primary); }
-        .nav-item.active::after { content:''; position: absolute; right: -15px; height: 30px; width: 4px; background: var(--primary); border-radius: 4px 0 0 4px; }
+        /* --- SIDEBAR (Glass) --- */
+        .sidebar { 
+            width: 85px; background: var(--surface-glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            display: flex; flex-direction: column; border-right: 1px solid var(--border); z-index: 100; 
+            align-items: center; padding-top: 30px; transition: 0.3s;
+        }
+        .logo { 
+            width: 45px; height: 45px; background: linear-gradient(135deg, var(--primary), #a855f7); 
+            border-radius: 14px; display: grid; place-items: center; color: white; font-weight: 900; 
+            font-size: 1.5rem; margin-bottom: 40px; box-shadow: 0 8px 20px -5px var(--primary-glow);
+        }
+        .nav-item { 
+            width: 50px; height: 50px; border-radius: 16px; color: var(--text-muted); font-size: 1.4rem; 
+            margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            transition: var(--transition); border: none; background: transparent; position: relative;
+        }
+        .nav-item:hover { background: var(--primary-light); color: var(--primary); transform: translateY(-2px); }
+        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 10px 20px -5px var(--primary-glow); }
 
-        /* --- CONTENT --- */
+        /* --- MAIN CONTENT --- */
         .main-content { flex: 1; padding: 30px; overflow-y: auto; scroll-behavior: smooth; position: relative; max-width: 1200px; margin: 0 auto; width: 100%; }
+        
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; }
-        .section { display: none; animation: fadeIn 0.4s ease-out; padding-bottom: 120px; }
+        h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; margin: 0; }
+        h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; }
+
+        .section { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 120px; }
         .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- UI ELEMENTS --- */
-        .card { background: var(--surface); border-radius: var(--radius-lg); padding: 25px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 20px; }
-        .btn { padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition); font-size: 0.95rem; }
+        /* --- CARDS & UI --- */
+        .card { 
+            background: var(--surface); border-radius: var(--radius-lg); padding: 25px; 
+            border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 20px; 
+            transition: var(--transition);
+        }
+        .card:hover { border-color: var(--primary); transform: translateY(-2px); }
+
+        .btn { 
+            padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 14px; 
+            font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            gap: 8px; transition: var(--transition); font-size: 0.95rem; box-shadow: 0 4px 15px var(--primary-glow);
+        }
         .btn:active { transform: scale(0.96); }
-        .btn-ghost { background: transparent; color: var(--text-muted); border: 2px solid var(--border); }
-        .btn-ghost:hover { border-color: var(--primary); color: var(--primary); background: var(--surface-2); }
+        .btn-ghost { background: transparent; color: var(--text-muted); border: 2px solid var(--border); box-shadow: none; }
+        .btn-ghost:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
         .btn-sm { padding: 8px 16px; font-size: 0.85rem; border-radius: 10px; }
-        .btn-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: var(--surface-2); color: var(--text); border: none; cursor: pointer; }
-        input, select { padding: 12px 15px; border: 2px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 0.95rem; transition: 0.2s; }
-        input:focus { border-color: var(--primary); background: var(--surface); }
+        .btn-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: var(--primary-light); color: var(--primary); border: none; cursor: pointer; transition: 0.2s; }
+        .btn-icon:hover { transform: scale(1.1); }
 
-        /* --- 🚀 NEW TIMELINE --- */
-        .tl-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: var(--surface); padding: 10px 15px; border-radius: 16px; border: 1px solid var(--border); position: sticky; top: 0; z-index: 10; box-shadow: var(--shadow); }
-        
-        .timeline-container { position: relative; padding-left: 60px; margin-top: 10px; }
-        /* Vertical Line */
-        .timeline-container::before { content: ''; position: absolute; left: 24px; top: 0; bottom: 0; width: 2px; background: var(--border); z-index: 0; }
-        
-        /* Time Indicator Line */
-        .now-line { position: absolute; left: 0; right: 0; border-top: 2px solid var(--primary); z-index: 5; pointer-events: none; display: flex; align-items: center; }
-        .now-line::before { content: ''; width: 10px; height: 10px; background: var(--primary); border-radius: 50%; position: absolute; left: 20px; transform: translateX(-50%); }
+        input, select { 
+            padding: 14px 18px; border: 2px solid var(--border); border-radius: 14px; 
+            background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 1rem; transition: 0.2s; 
+        }
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); background: var(--surface); }
 
-        .tl-block { display: flex; margin-bottom: 5px; position: relative; z-index: 1; cursor: pointer; transition: var(--transition); }
-        .tl-block:hover { transform: scale(1.01); }
-        
-        /* Time Column */
-        .tl-time-col { position: absolute; left: -60px; width: 50px; text-align: right; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); top: 15px; }
-        
-        /* Card Body */
+        /* --- 💎 HERO SECTION --- */
+        .hero-card { 
+            background: linear-gradient(135deg, var(--primary), #a855f7); color: white; border: none; 
+            padding: 35px; border-radius: 28px; display: flex; justify-content: space-between; align-items: center;
+            position: relative; overflow: hidden;
+        }
+        .hero-card::after {
+            content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px;
+            background: rgba(255,255,255,0.1); border-radius: 50%; filter: blur(40px);
+        }
+
+        /* --- 🎒 SUBJECT CARDS (3D Folder) --- */
+        .sub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        .sub-card { 
+            background: var(--surface); border-radius: 24px; padding: 20px; cursor: pointer; 
+            border: 1px solid var(--border); position: relative; overflow: hidden; 
+            display: flex; flex-direction: column; justify-content: space-between; min-height: 160px;
+            transition: var(--transition); border-left: 6px solid var(--color);
+        }
+        .sub-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+        .sub-icon { 
+            width: 45px; height: 45px; border-radius: 14px; display: grid; place-items: center; 
+            font-size: 1.5rem; background: var(--bg); margin-bottom: 10px;
+        }
+
+        /* --- 🔄 TIMELINE (Universal Flow) --- */
+        .timeline-container { position: relative; padding-left: 20px; }
+        .timeline-line { position: absolute; left: 45px; top: 15px; bottom: 15px; width: 2px; background: var(--border); z-index: 0; }
+        .tl-block { display: flex; margin-bottom: 20px; position: relative; z-index: 1; gap: 15px; }
+        .tl-time { width: 50px; text-align: right; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); padding-top: 12px; }
+        .tl-node { 
+            width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 2px solid var(--border); 
+            display: grid; place-items: center; font-size: 1.1rem; flex-shrink: 0; transition: var(--transition); 
+        }
         .tl-card { 
-            flex: 1; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); 
-            padding: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02); min-height: 70px;
+            flex: 1; background: var(--surface); border-radius: var(--radius-md); border: 1px solid var(--border); 
+            padding: 15px; display: flex; justify-content: space-between; align-items: center; transition: var(--transition);
         }
-        .tl-block.gap .tl-card { 
-            background: transparent; border: 1px dashed var(--border); opacity: 0.6; min-height: 40px; padding: 10px 15px; 
-        }
-        .tl-block.gap:hover .tl-card { border-color: var(--primary); background: var(--surface-2); opacity: 1; }
+        .tl-block.active .tl-node { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.15); box-shadow: 0 0 0 5px var(--primary-light); }
+        .tl-block.active .tl-card { border-color: var(--primary); background: linear-gradient(to right, var(--primary-light), var(--surface)); }
 
-        .tl-icon { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-size: 1.2rem; background: var(--surface-2); flex-shrink: 0; }
-        
-        /* Quick Add Bar */
-        .quick-add-bar { 
-            position: fixed; bottom: 20px; left: 100px; right: 20px; background: var(--surface); 
-            border: 1px solid var(--border); border-radius: 20px; padding: 10px; display: flex; gap: 10px; 
-            overflow-x: auto; box-shadow: var(--shadow); z-index: 90; max-width: 800px; margin: 0 auto;
-        }
-        .chip { 
-            padding: 8px 16px; background: var(--bg); border-radius: 30px; font-size: 0.85rem; font-weight: 700; 
-            white-space: nowrap; cursor: pointer; border: 1px solid transparent; transition: 0.2s; 
-        }
-        .chip:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
-        .chip-add { background: var(--primary); color: white; }
-
-        /* --- OTHER SECTIONS (Minimized for focus) --- */
+        /* --- 🛠️ TOOLS GRID --- */
         .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .tool-card { background: var(--surface); padding: 25px; border-radius: var(--radius-lg); border: 1px solid var(--border); cursor: pointer; text-align: center; height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: var(--transition); }
-        .tool-card:hover { border-color: var(--primary); background: var(--primary-light); transform: translateY(-5px); }
-        
-        .sub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
-        .sub-folder { background: var(--surface); border-radius: 20px; padding: 20px; border: 1px solid var(--border); position: relative; overflow: hidden; border-left: 5px solid var(--color); }
+        .tool-card { 
+            background: var(--surface); padding: 25px; border-radius: var(--radius-lg); border: 1px solid var(--border); 
+            cursor: pointer; transition: var(--transition); text-align: center; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; height: 160px;
+        }
+        .tool-card:hover { transform: translateY(-5px); border-color: var(--primary); background: var(--primary-light); }
+        .tool-icon { font-size: 2.5rem; margin-bottom: 10px; }
 
-        /* --- MODALS --- */
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(5px); }
-        .modal-box { background: var(--surface); width: 90%; max-width: 450px; border-radius: 24px; padding: 30px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: popIn 0.3s; max-height: 90vh; overflow-y: auto; }
-        @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-        /* --- FLASHCARDS --- */
+        /* --- FLASHCARDS & WHEEL --- */
         .deck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
-        .deck-card { background: var(--surface-2); padding: 20px; border-radius: 16px; text-align: center; cursor: pointer; border: 1px solid var(--border); }
+        .deck-card { background: var(--surface); padding: 20px; border-radius: 16px; text-align: center; cursor: pointer; border: 1px solid var(--border); transition: 0.2s; }
+        .deck-card:hover { border-color: var(--primary); transform: translateY(-3px); }
+        
         .flashcard-container { perspective: 1000px; width: 100%; height: 250px; cursor: pointer; margin-bottom: 20px; }
         .flashcard-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
         .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
-        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 20px; font-size: 1.2rem; font-weight: 700; border: 1px solid var(--border); box-shadow: var(--shadow); background: var(--surface); }
+        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 20px; font-size: 1.3rem; font-weight: 700; border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow); }
         .flashcard-back { background: var(--primary); color: white; transform: rotateY(180deg); }
 
-        /* Calculator */
-        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
-        .calc-btn { aspect-ratio: 1; border-radius: 12px; border: none; background: var(--surface-2); font-size: 1.2rem; font-weight: 600; color: var(--text); cursor: pointer; }
-        .calc-btn.op { background: var(--primary-light); color: var(--primary); }
-        .calc-btn.eq { background: var(--primary); color: white; grid-column: span 2; aspect-ratio: auto; }
-        #calc-display { width: 100%; height: 60px; background: var(--bg); border-radius: 12px; border: 1px solid var(--border); text-align: right; font-size: 2rem; padding: 10px; color: var(--text); }
+        /* --- SETTINGS --- */
+        .color-grid { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
+        .color-dot { width: 45px; height: 45px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: 0.2s; position: relative; }
+        .color-dot:hover { transform: scale(1.1); }
+        .color-dot.active { border-color: var(--text); }
+        
+        /* --- MODALS --- */
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(8px); }
+        .modal-box { background: var(--surface); width: 90%; max-width: 450px; border-radius: 28px; padding: 35px; box-shadow: 0 30px 60px rgba(0,0,0,0.3); animation: popIn 0.3s; max-height: 90vh; overflow-y: auto; }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-        /* Wheel */
-        #wheel-canvas { width: 100%; height: 100%; border-radius: 50%; transition: transform 4s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        /* FAB */
+        .fab { position: fixed; bottom: 35px; right: 35px; width: 65px; height: 65px; background: var(--text); color: var(--bg); border-radius: 20px; display: grid; place-items: center; font-size: 2rem; box-shadow: 0 15px 30px rgba(0,0,0,0.25); cursor: pointer; z-index: 500; transition: var(--transition); }
+        .fab:hover { transform: scale(1.1) rotate(90deg); border-radius: 50%; }
 
         @media (max-width: 768px) {
             body { flex-direction: column; }
             .sidebar { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; flex-direction: row; padding: 0; justify-content: space-evenly; border-top: 1px solid var(--border); border-right: none; padding-top: 0; }
             .logo { display: none; }
             .main-content { padding: 20px; margin-bottom: 75px; }
-            .quick-add-bar { left: 20px; bottom: 90px; }
+            .fab { bottom: 95px; right: 25px; }
             .tools-grid { grid-template-columns: 1fr; }
         }
     </style>
@@ -154,7 +189,7 @@
     <nav class="sidebar">
         <div class="logo">V</div>
         <button class="nav-item active" onclick="nav('dashboard')" title="Home">🏠</button>
-        <button class="nav-item" onclick="nav('timeline')" title="Timeline">⏱️</button>
+        <button class="nav-item" onclick="nav('timeline')" title="My Day">⏱️</button>
         <button class="nav-item" onclick="nav('school')" title="School">🎒</button>
         <button class="nav-item" onclick="nav('tasks')" title="Tasks">✅</button>
         <button class="nav-item" onclick="nav('tools')" title="Tools">🛠️</button>
@@ -163,29 +198,37 @@
 
     <main class="main-content">
         <div class="header">
-            <div><div style="font-size:0.9rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">LifeOS</div><h1 id="page-title">Dashboard</h1></div>
-            <div id="clock" style="font-family:monospace; font-weight:700; color:var(--primary);">00:00</div>
+            <div>
+                <div style="font-size:0.9rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">LifeOS v3</div>
+                <h1 id="page-title">Dashboard</h1>
+            </div>
+            <div id="clock" style="font-family:monospace; font-weight:700; color:var(--primary); background:var(--primary-light); padding:8px 12px; border-radius:12px;">00:00</div>
         </div>
 
         <section id="dashboard" class="section active">
-            <div class="card" style="background: linear-gradient(135deg, var(--primary), #8b5cf6); color: white; border: none; padding: 30px;">
-                <div style="opacity:0.8; font-size:0.9rem; font-weight:700;">HAPPENING NOW</div>
-                <div style="font-size:2.5rem; font-weight:800; margin-top:5px;" id="dash-now-title">Free Time</div>
-                <div style="opacity:0.9;" id="dash-now-time">Until --:--</div>
+            <div class="hero-card">
+                <div>
+                    <div style="opacity:0.9; font-size:0.9rem; font-weight:700; letter-spacing:1px;">HAPPENING NOW</div>
+                    <div style="font-size:2.5rem; font-weight:900; margin-top:5px;" id="dash-now-title">Free Time</div>
+                    <div style="opacity:0.9; font-weight:600;" id="dash-now-time">Until --:--</div>
+                </div>
+                <div style="font-size:4rem; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));">⏳</div>
             </div>
+            
             <div class="tools-grid" style="margin-top:20px;">
-                <div class="card" style="margin:0; height:120px; justify-content:center; align-items:center; display:flex; flex-direction:column;">
-                    <div style="font-size:2.5rem; font-weight:900;" id="dash-task-count">0</div>
+                <div class="card" style="margin:0; justify-content:center; align-items:center; display:flex; flex-direction:column; cursor:pointer;" onclick="nav('tasks')">
+                    <div style="font-size:2.5rem; font-weight:900; color:var(--text);" id="dash-task-count">0</div>
                     <div style="color:var(--text-muted); font-size:0.8rem; font-weight:700;">TASKS DUE</div>
                 </div>
-                <div class="card" onclick="openTool('focus')" style="margin:0; height:120px; justify-content:center; align-items:center; display:flex; cursor:pointer; background:var(--primary-light);">
-                    <span style="font-size:2rem; margin-right:10px;">🍅</span><span style="font-weight:700; color:var(--primary);">Focus Mode</span>
+                <div class="card" onclick="openTool('focus')" style="margin:0; justify-content:center; align-items:center; display:flex; cursor:pointer; background:var(--primary-light); border-color:var(--primary);">
+                    <span style="font-size:2rem; margin-right:10px;">🍅</span>
+                    <span style="font-weight:700; color:var(--primary);">Focus Mode</span>
                 </div>
             </div>
         </section>
 
         <section id="timeline" class="section">
-            <div class="tl-header">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; background:var(--surface); padding:10px 15px; border-radius:16px; border:1px solid var(--border); box-shadow:var(--shadow);">
                 <button class="btn-icon" onclick="changeDate(-1)">◀</button>
                 <div style="text-align:center;">
                     <div style="font-weight:800;" id="tl-date-main">Today</div>
@@ -193,26 +236,18 @@
                 </div>
                 <button class="btn-icon" onclick="changeDate(1)">▶</button>
             </div>
-
-            <div class="timeline-container" id="timeline-flow">
-                </div>
-
-            <div class="quick-add-bar">
-                <div class="chip chip-add" onclick="openBlockModal()">+ Custom</div>
-                <div class="chip" onclick="quickAdd('Study', '📚', 60)">+ 1h Study</div>
-                <div class="chip" onclick="quickAdd('Class', '🏫', 45)">+ 45m Class</div>
-                <div class="chip" onclick="quickAdd('Break', '☕', 15)">+ 15m Break</div>
-                <div class="chip" onclick="quickAdd('Gym', '💪', 60)">+ 1h Gym</div>
-                <div class="chip" onclick="quickAdd('Sleep', '💤', 480)">+ 8h Sleep</div>
-            </div>
+            <div class="timeline-container"><div class="timeline-line"></div><div id="timeline-list"></div></div>
         </section>
 
         <section id="school" class="section">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;"><h3>My Subjects</h3><button class="btn-sm btn-ghost" onclick="openSubjectModal()">+ Add Subject</button></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3>My Subjects</h3>
+                <button class="btn-sm btn-ghost" onclick="openSubjectModal()">+ Add Subject</button>
+            </div>
             <div id="subject-list" class="sub-grid"></div>
         </section>
 
-        <section id="tasks" class="section"><div id="task-list"></div><div style="text-align:center; margin-top:20px;"><button class="btn" onclick="openTaskModal()">+ Add Task</button></div></section>
+        <section id="tasks" class="section"><div id="task-list"></div></section>
 
         <section id="tools" class="section">
             <div class="tools-grid">
@@ -220,73 +255,104 @@
                 <div class="tool-card" onclick="openTool('flashcards')"><div class="tool-icon">🗂️</div><div class="tool-title">Flashcards</div></div>
                 <div class="tool-card" onclick="openTool('calc')"><div class="tool-icon">🧮</div><div class="tool-title">Calculator</div></div>
                 <div class="tool-card" onclick="openTool('wheel')"><div class="tool-icon">🎲</div><div class="tool-title">Picker Wheel</div></div>
+                <div class="tool-card" onclick="openTool('breathe')"><div class="tool-icon">🌬️</div><div class="tool-title">Breathe</div></div>
             </div>
         </section>
 
         <section id="settings" class="section">
+            
             <div class="card">
-                <h3>Theme</h3>
+                <h3>Appearance</h3>
                 <button class="btn-ghost" style="width:100%; margin:15px 0;" onclick="toggleTheme()">Toggle Dark Mode 🌗</button>
-                <div style="font-size:0.9rem; font-weight:700; margin-bottom:10px;">Accent Color</div>
-                <div class="color-grid" id="settings-colors">
-                    </div>
+                <div style="font-size:0.9rem; font-weight:700; margin-bottom:15px;">Accent Theme</div>
+                <div class="color-grid" id="settings-colors"></div>
             </div>
-            <div class="card"><button class="btn-ghost" style="width:100%; color:var(--danger); border-color:var(--danger);" onclick="resetApp()">Factory Reset 🗑️</button></div>
+            
+            <div class="card">
+                <h3>Data Management</h3>
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button class="btn-ghost" style="flex:1;" onclick="exportData()">Backup 💾</button>
+                    <button class="btn-ghost" style="flex:1;" onclick="document.getElementById('restore-input').click()">Restore 📂</button>
+                    <input type="file" id="restore-input" hidden onchange="importData(this)">
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>System</h3>
+                <button class="btn-ghost" style="width:100%; margin-top:10px; color:var(--danger); border-color:var(--danger);" onclick="resetApp()">Factory Reset 🗑️</button>
+            </div>
         </section>
 
     </main>
 
-    <div id="modal-block" class="modal">
+    <button class="fab" onclick="handleFab()">+</button>
+
+    <div id="modal-tool-breathe" class="modal">
+        <div class="modal-box" style="text-align:center; padding:50px 20px;">
+            <div style="width:180px; height:180px; background:var(--primary-light); border-radius:50%; margin:0 auto 40px auto; animation: breathe 4s infinite ease-in-out; border: 4px solid var(--primary);"></div>
+            <h2 style="color:var(--primary);">Breathe In...</h2>
+            <p style="color:var(--text-muted); margin-top:10px;">Follow the rhythm to relax.</p>
+            <button class="btn-ghost" onclick="closeModal('modal-tool-breathe')" style="margin-top:40px; width:100%;">Close</button>
+        </div>
+        <style> @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.4); opacity: 1; } } </style>
+    </div>
+
+    <div id="modal-tool-flashcards" class="modal">
         <div class="modal-box">
-            <h3>Activity Details</h3>
-            <input type="hidden" id="b-id">
-            <div style="display:flex; gap:10px; margin:20px 0;">
-                <button class="btn" id="btn-type-school" onclick="setBlockType('school')">School</button>
-                <button class="btn-ghost" id="btn-type-life" onclick="setBlockType('life')">Life</button>
+            <div id="fc-deck-view">
+                <h3 style="margin-bottom:20px;">My Decks</h3>
+                <div class="deck-grid" id="fc-deck-list"></div>
+                <button class="btn" style="width:100%; margin-top:25px;" onclick="createDeck()">+ New Deck</button>
+                <button class="btn-ghost" style="width:100%; margin-top:10px;" onclick="closeModal('modal-tool-flashcards')">Close</button>
             </div>
-            <div id="input-school"><select id="b-sub" style="margin-bottom:15px;"></select></div>
-            <div id="input-life" style="display:none;">
-                <input id="b-name" placeholder="Name (e.g. Gym)" style="margin-bottom:15px;">
-                <select id="b-icon" style="margin-bottom:15px;">
-                    <option value="🧘">🧘 Yoga/Gym</option><option value="🎮">🎮 Gaming</option><option value="💤">💤 Sleep</option><option value="🥪">🥪 Eat</option><option value="☕">☕ Break</option><option value="📚">📚 Study</option>
-                </select>
+            <div id="fc-study-view" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <button class="btn-sm btn-ghost" onclick="showDeckList()">← Back</button>
+                    <h3 id="fc-study-title">Deck</h3>
+                    <button class="btn-sm btn" onclick="addCardMode()">+ Add</button>
+                </div>
+                <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front" id="fc-front">?</div>
+                        <div class="flashcard-back" id="fc-back">!</div>
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <button class="btn-icon" onclick="nextCard(-1)">◀</button>
+                    <span id="fc-count" style="font-weight:700; color:var(--text-muted);">0/0</span>
+                    <button class="btn-icon" onclick="nextCard(1)">▶</button>
+                </div>
+                <div id="fc-add-area" style="display:none; border-top:1px solid var(--border); padding-top:20px; margin-top:20px;">
+                    <input id="fc-new-q" placeholder="Question (Front)" style="margin-bottom:10px;">
+                    <input id="fc-new-a" placeholder="Answer (Back)" style="margin-bottom:15px;">
+                    <button class="btn" style="width:100%;" onclick="saveNewCard()">Save Card</button>
+                </div>
             </div>
-            <div style="display:flex; gap:15px; margin-bottom:20px;">
-                <div style="flex:1"><label style="font-size:0.8rem; font-weight:700;">Start</label><input type="time" id="b-start"></div>
-                <div style="flex:1"><label style="font-size:0.8rem; font-weight:700;">End</label><input type="time" id="b-end"></div>
-            </div>
-            <div style="display:flex; gap:10px;">
-                <button class="btn-ghost" style="flex:1" onclick="closeModal('modal-block')">Cancel</button>
-                <button class="btn" style="flex:1" onclick="saveBlock()">Save</button>
-            </div>
-            <button class="btn-ghost" onclick="delBlock()" style="width:100%; margin-top:10px; color:var(--danger); border-color:var(--border);">Delete Block</button>
         </div>
     </div>
 
     <div id="modal-tool-calc" class="modal"><div class="modal-box"><h3 style="margin-bottom:15px;">Calculator</h3><div id="calc-display">0</div><div class="calc-grid"><button class="calc-btn op" onclick="calcClear()">C</button><button class="calc-btn op" onclick="calcInput('/')">÷</button><button class="calc-btn op" onclick="calcInput('*')">×</button><button class="calc-btn op" onclick="calcInputBack()">⌫</button><button class="calc-btn" onclick="calcInput('7')">7</button><button class="calc-btn" onclick="calcInput('8')">8</button><button class="calc-btn" onclick="calcInput('9')">9</button><button class="calc-btn op" onclick="calcInput('-')">-</button><button class="calc-btn" onclick="calcInput('4')">4</button><button class="calc-btn" onclick="calcInput('5')">5</button><button class="calc-btn" onclick="calcInput('6')">6</button><button class="calc-btn op" onclick="calcInput('+')">+</button><button class="calc-btn" onclick="calcInput('1')">1</button><button class="calc-btn" onclick="calcInput('2')">2</button><button class="calc-btn" onclick="calcInput('3')">3</button><button class="calc-btn eq" onclick="calcResult()">=</button><button class="calc-btn" onclick="calcInput('0')" style="grid-column:span 2; aspect-ratio:auto;">0</button><button class="calc-btn" onclick="calcInput('.')">.</button></div><button class="btn-ghost" style="width:100%; margin-top:20px;" onclick="closeModal('modal-tool-calc')">Close</button></div></div>
 
-    <div id="modal-tool-flashcards" class="modal"><div class="modal-box"><div id="fc-deck-view"><h3 style="margin-bottom:15px;">My Decks</h3><div class="deck-grid" id="fc-deck-list"></div><button class="btn" style="width:100%; margin-top:20px;" onclick="createDeck()">+ New Deck</button><button class="btn-ghost" style="width:100%; margin-top:10px;" onclick="closeModal('modal-tool-flashcards')">Close</button></div><div id="fc-study-view" style="display:none;"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"><button class="btn-sm btn-ghost" onclick="showDeckList()">←</button><h3 id="fc-study-title">Deck</h3><button class="btn-sm btn" onclick="addCardMode()">+ Card</button></div><div id="fc-study-area"><div class="flashcard-container" onclick="this.classList.toggle('flipped')"><div class="flashcard-inner"><div class="flashcard-front" id="fc-front">?</div><div class="flashcard-back" id="fc-back">!</div></div></div><div style="display:flex; justify-content:space-between; align-items:center;"><button class="btn-ghost" onclick="nextCard(-1)">Prev</button><span id="fc-count">0/0</span><button class="btn" onclick="nextCard(1)">Next</button></div></div><div id="fc-add-area" style="display:none; border-top:1px solid var(--border); padding-top:15px; margin-top:15px;"><input id="fc-new-q" placeholder="Question"><input id="fc-new-a" placeholder="Answer"><button class="btn" style="width:100%;" onclick="saveNewCard()">Save Card</button></div></div></div></div>
-
+    <div id="modal-tool-focus" class="modal"><div class="modal-box" style="text-align:center;"><div style="font-size:4rem; font-weight:900; color:var(--primary); margin:30px 0;" id="focus-display">25:00</div><div style="display:flex; justify-content:center; gap:10px; margin-bottom:30px;"><button class="btn-sm btn-ghost" onclick="setFocusTime(25)">25m</button><button class="btn-sm btn-ghost" onclick="setFocusTime(45)">45m</button></div><button class="btn" id="focus-btn" style="width:100%;" onclick="toggleFocus()">START FOCUS</button><button class="btn-ghost" style="width:100%; margin-top:10px;" onclick="closeModal('modal-tool-focus')">Exit</button></div></div>
     <div id="modal-tool-wheel" class="modal"><div class="modal-box" style="text-align:center;"><h3 style="margin-bottom:20px;">Picker Wheel</h3><div style="position:relative; width:280px; height:280px; margin:0 auto;"><div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:15px solid transparent; border-right:15px solid transparent; border-top:30px solid var(--text); z-index:10;"></div><canvas id="wheel-canvas" width="280" height="280"></canvas></div><button class="btn" onclick="spinWheel()" style="width:100%; margin:20px 0;">SPIN!</button><div style="display:flex; gap:5px;"><input id="wheel-opt" placeholder="Add option"><button class="btn-sm btn" onclick="addWheelOption()">+</button></div><div id="wheel-list" style="display:flex; flex-wrap:wrap; gap:5px; margin-top:10px;"></div><button class="btn-ghost" onclick="closeModal('modal-tool-wheel')" style="width:100%; margin-top:15px;">Close</button></div></div>
-
+    <div id="modal-block" class="modal"><div class="modal-box"><h3>Add Activity</h3><div style="display:flex; gap:10px; margin:20px 0;"><button class="btn" id="btn-type-school" onclick="setBlockType('school')">School</button><button class="btn-ghost" id="btn-type-life" onclick="setBlockType('life')">Life</button></div><div id="input-school"><select id="b-sub" style="margin-bottom:15px;"></select></div><div id="input-life" style="display:none;"><input id="b-name" placeholder="Activity Name" style="margin-bottom:15px;"><select id="b-icon" style="margin-bottom:15px;"><option value="🧘">🧘 Yoga</option><option value="🎮">🎮 Game</option><option value="💤">💤 Sleep</option></select></div><div style="display:flex; gap:10px; margin-bottom:20px;"><input type="time" id="b-start"><input type="time" id="b-end"></div><div style="display:flex; gap:10px;"><button class="btn-ghost" style="flex:1;" onclick="closeModal('modal-block')">Cancel</button><button class="btn" style="flex:1;" onclick="saveBlock()">Save</button></div></div></div>
     <div id="modal-sub" class="modal"><div class="modal-box"><h3>Add Subject</h3><input id="s-name" placeholder="Name" style="margin:10px 0;"><input id="s-room" placeholder="Room" style="margin-bottom:10px;"><input type="color" id="s-color" value="#6366f1" style="width:100%; height:40px; margin-bottom:20px;"><button class="btn" onclick="saveSubject()" style="width:100%;">Save</button><button class="btn-ghost" onclick="closeModal('modal-sub')" style="width:100%; margin-top:10px;">Cancel</button></div></div>
     <div id="modal-task" class="modal"><div class="modal-box"><h3>Add Task</h3><input id="t-desc" placeholder="Task" style="margin:10px 0;"><select id="t-sub" style="margin-bottom:10px;"></select><input type="date" id="t-date" style="margin-bottom:20px;"><button class="btn" onclick="saveTask()" style="width:100%;">Save</button><button class="btn-ghost" onclick="closeModal('modal-task')" style="width:100%; margin-top:10px;">Cancel</button></div></div>
-    <div id="modal-tool-focus" class="modal"><div class="modal-box" style="text-align:center;"><div style="font-size:4rem; font-weight:900; color:var(--primary); margin:20px 0;" id="focus-display">25:00</div><button class="btn" id="focus-btn" style="width:100%;" onclick="toggleFocus()">START</button><button class="btn-ghost" style="width:100%; margin-top:10px;" onclick="closeModal('modal-tool-focus')">Exit</button></div></div>
 
     <script>
-        // --- DATA ---
+        // --- CORE DATA STORE ---
         let db = {
-            days: JSON.parse(localStorage.getItem('v21Days')) || {},
-            subjects: JSON.parse(localStorage.getItem('v21Subs')) || [],
-            tasks: JSON.parse(localStorage.getItem('v21Tasks')) || [],
-            flashcardSets: JSON.parse(localStorage.getItem('v21Decks')) || [],
-            wheelOptions: JSON.parse(localStorage.getItem('v21Wheel')) || ["Study", "Sleep", "Play"],
-            settings: JSON.parse(localStorage.getItem('v21Sets')) || { theme: 'light', accent: '#6366f1' }
+            days: JSON.parse(localStorage.getItem('v3Days')) || {},
+            subjects: JSON.parse(localStorage.getItem('v3Subs')) || [],
+            tasks: JSON.parse(localStorage.getItem('v3Tasks')) || [],
+            settings: JSON.parse(localStorage.getItem('v3Sets')) || { theme: 'light', accent: '#6366f1' },
+            flashcardSets: JSON.parse(localStorage.getItem('v3Decks')) || [],
+            wheelOptions: JSON.parse(localStorage.getItem('v3Wheel')) || ["Study", "Sleep", "Play"]
         };
 
         let selectedDate = new Date();
         let currentBlockType = 'school';
-        let currentEditBlockId = null;
+        let currentPage = 'dashboard';
 
         function init() {
             applyTheme();
@@ -296,190 +362,58 @@
             setInterval(checkLiveStatus, 5000);
         }
 
-        // --- THEME ---
+        // --- THEME ENGINE ---
         function applyTheme() {
             if(db.settings.theme === 'dark') document.body.setAttribute('data-theme', 'dark');
             else document.body.removeAttribute('data-theme');
             setAccentVars(db.settings.accent);
         }
-        function setAccent(hex) { db.settings.accent=hex; setAccentVars(hex); save(); }
+        function setAccent(hex) { db.settings.accent = hex; setAccentVars(hex); save(); }
         function setAccentVars(hex) {
             document.documentElement.style.setProperty('--primary', hex);
             const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
             document.documentElement.style.setProperty('--primary-rgb', `${r}, ${g}, ${b}`);
-            document.documentElement.style.setProperty('--primary-light', `rgba(${r}, ${g}, ${b}, 0.15)`);
+            document.documentElement.style.setProperty('--primary-light', `rgba(${r}, ${g}, ${b}, 0.12)`);
+            document.documentElement.style.setProperty('--primary-glow', `rgba(${r}, ${g}, ${b}, 0.35)`);
         }
         function setupColorGrid() {
-            const colors = ['#6366f1', '#f43f5e', '#06b6d4', '#f59e0b', '#10b981', '#8b5cf6'];
+            const colors = ['#6366f1', '#ec4899', '#f43f5e', '#f59e0b', '#10b981', '#06b6d4', '#8b5cf6', '#64748b'];
             document.getElementById('settings-colors').innerHTML = colors.map(c => 
-                `<div class="color-dot" style="background:${c}" onclick="setAccent('${c}')"></div>`
+                `<div class="color-dot" style="background:${c}; border-color:${db.settings.accent===c?'var(--text)':'transparent'}" onclick="setAccent('${c}')"></div>`
             ).join('');
         }
 
-        // --- TIMELINE ENGINE (FLOW V2) ---
-        function changeDate(d) { selectedDate.setDate(selectedDate.getDate()+d); renderTimeline(); }
-        
-        function renderTimeline() {
-            const list = document.getElementById('timeline-flow');
-            list.innerHTML = '';
-            
-            const isToday = new Date().toDateString() === selectedDate.toDateString();
-            document.getElementById('tl-date-main').innerText = isToday ? "Today" : selectedDate.toLocaleDateString('en-US', {weekday:'short'});
-            document.getElementById('tl-date-sub').innerText = selectedDate.toLocaleDateString('en-US', {day:'numeric', month:'short'});
-
-            const key = selectedDate.toISOString().split('T')[0];
-            const blocks = db.days[key] || [];
-            
-            if(blocks.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-muted);">Empty day.<br>Tap quick add below.</div>`;
-                return;
-            }
-
-            blocks.sort((a,b) => a.start.localeCompare(b.start));
-            
-            const now = new Date();
-            const curTime = now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0');
-
-            // Render with Gaps and Current Line
-            let lastEnd = "00:00";
-
-            blocks.forEach(b => {
-                // Gap detection
-                if(b.start > lastEnd) {
-                    list.innerHTML += `
-                        <div class="tl-block gap" onclick="quickAddGap('${lastEnd}', '${b.start}')">
-                            <div class="tl-time-col" style="font-weight:400; opacity:0.5;">${lastEnd}</div>
-                            <div class="tl-card" style="border:1px dashed var(--border); background:transparent; color:var(--text-muted); justify-content:center; min-height:40px;">
-                                <small>Free Time</small>
-                            </div>
-                        </div>`;
-                }
-
-                // Render Block
-                let title, icon, color;
-                if(b.type === 'school') {
-                    const sub = db.subjects.find(s => s.id == b.subId) || {name:'?', color:'#ccc'};
-                    title = sub.name; icon = '📚'; color = sub.color;
-                } else {
-                    title = b.name; icon = b.icon; color = 'var(--text-muted)';
-                }
-
-                const isActive = isToday && (curTime >= b.start && curTime < b.end);
-                
-                list.innerHTML += `
-                    <div class="tl-block ${isActive?'active':''}" onclick="openBlockModal('${b.id}')">
-                        <div class="tl-time-col">${b.start}</div>
-                        <div class="tl-card" style="border-left:4px solid ${color};">
-                            <div class="tl-icon">${icon}</div>
-                            <div style="flex:1;">
-                                <div style="font-weight:700;">${title}</div>
-                                <div style="font-size:0.8rem; color:var(--text-muted);">${b.start} - ${b.end}</div>
-                            </div>
-                        </div>
-                    </div>`;
-                
-                // Show current time line if inside this block
-                if(isActive) {
-                    // Approximate position (simplified visual)
-                    list.innerHTML += `<div class="now-line" style="position:relative; margin-top:-30px; margin-bottom:30px;"></div>`;
-                }
-
-                lastEnd = b.end > lastEnd ? b.end : lastEnd;
-            });
+        // --- BACKUP & RESTORE ---
+        function exportData() {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([JSON.stringify(db)], {type: 'application/json'}));
+            a.download = `vidyarthi_backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+        }
+        function importData(el) {
+            const fr = new FileReader();
+            fr.onload = e => {
+                try {
+                    db = JSON.parse(e.target.result);
+                    save(); location.reload();
+                } catch(err) { alert("Invalid File"); }
+            };
+            fr.readAsText(el.files[0]);
         }
 
-        // --- QUICK ADD & EDIT ---
-        function quickAdd(name, icon, durationMins) {
-            const key = selectedDate.toISOString().split('T')[0];
-            const blocks = db.days[key] || [];
-            
-            // Find next available slot
-            blocks.sort((a,b) => a.start.localeCompare(b.start));
-            let start = blocks.length > 0 ? blocks[blocks.length-1].end : "08:00"; // Default 8am
-            
-            // Calc End Time
-            let [h, m] = start.split(':').map(Number);
-            let dateObj = new Date(2000, 0, 1, h, m + durationMins);
-            let end = dateObj.getHours().toString().padStart(2,'0') + ":" + dateObj.getMinutes().toString().padStart(2,'0');
-
-            if(!db.days[key]) db.days[key] = [];
-            db.days[key].push({ id:Date.now(), type:'life', name, icon, start, end });
-            save(); renderTimeline();
-        }
-
-        function quickAddGap(start, end) {
-            document.getElementById('b-start').value = start;
-            document.getElementById('b-end').value = end;
-            openBlockModal();
-        }
-
-        function openBlockModal(editId = null) {
-            currentEditBlockId = editId;
-            const key = selectedDate.toISOString().split('T')[0];
-            
-            if(editId) {
-                const b = db.days[key].find(x => x.id == editId);
-                setBlockType(b.type);
-                document.getElementById('b-start').value = b.start;
-                document.getElementById('b-end').value = b.end;
-                if(b.type==='school') document.getElementById('b-sub').value = b.subId;
-                else { document.getElementById('b-name').value = b.name; document.getElementById('b-icon').value = b.icon; }
-            } else {
-                // Default new
-                setBlockType('life');
-                if(!document.getElementById('b-start').value) document.getElementById('b-start').value = "09:00";
-            }
-            document.getElementById('modal-block').style.display = 'flex';
-        }
-
-        function saveBlock() {
-            const start = document.getElementById('b-start').value;
-            const end = document.getElementById('b-end').value;
-            const key = selectedDate.toISOString().split('T')[0];
-            if(!db.days[key]) db.days[key] = [];
-
-            const newBlock = { id: currentEditBlockId || Date.now(), type: currentBlockType, start, end };
-            if(currentBlockType==='school') newBlock.subId = document.getElementById('b-sub').value;
-            else { newBlock.name = document.getElementById('b-name').value; newBlock.icon = document.getElementById('b-icon').value; }
-
-            if(currentEditBlockId) {
-                const idx = db.days[key].findIndex(x=>x.id==currentEditBlockId);
-                db.days[key][idx] = newBlock;
-            } else {
-                db.days[key].push(newBlock);
-            }
-            save(); closeModal('modal-block'); renderTimeline();
-        }
-
-        function delBlock() {
-            if(currentEditBlockId && confirm("Delete?")) {
-                const key = selectedDate.toISOString().split('T')[0];
-                db.days[key] = db.days[key].filter(x=>x.id != currentEditBlockId);
-                save(); closeModal('modal-block'); renderTimeline();
-            }
-        }
-
-        function setBlockType(t) {
-            currentBlockType = t;
-            document.getElementById('btn-type-school').className = t==='school'?'btn':'btn-ghost';
-            document.getElementById('btn-type-life').className = t==='life'?'btn':'btn-ghost';
-            document.getElementById('input-school').style.display = t==='school'?'block':'none';
-            document.getElementById('input-life').style.display = t==='life'?'block':'none';
-        }
-
-        // --- OTHER TOOLS ---
-        // Flashcards, Wheel, Calculator, etc. (Same logic as v2.1, retained)
+        // --- FLASHCARD LOGIC ---
         let activeDeckId=null, cardIndex=0;
         function renderDeckList() {
-            const g = document.getElementById('fc-deck-list'); g.innerHTML='';
-            db.flashcardSets.forEach(d => g.innerHTML+=`<div class="deck-card" onclick="openDeck(${d.id})"><div style="font-weight:700;">${d.name}</div><div class="deck-count">${d.cards.length} cards</div></div>`);
+            const g=document.getElementById('fc-deck-list'); g.innerHTML='';
+            if(db.flashcardSets.length===0) g.innerHTML=`<div style="grid-column:1/-1; text-align:center; color:var(--text-muted);">No decks yet.</div>`;
+            db.flashcardSets.forEach(d => g.innerHTML+=`<div class="deck-card" onclick="openDeck(${d.id})"><div style="font-weight:800; font-size:1.1rem; margin-bottom:5px;">${d.name}</div><div style="font-size:0.8rem; color:var(--text-muted);">${d.cards.length} cards</div></div>`);
         }
-        function createDeck(){ const n=prompt("Name:"); if(n){db.flashcardSets.push({id:Date.now(), name:n, cards:[]}); save(); renderDeckList();} }
+        function createDeck(){ const n=prompt("Deck Name:"); if(n){db.flashcardSets.push({id:Date.now(), name:n, cards:[]}); save(); renderDeckList();} }
         function openDeck(id){ activeDeckId=id; cardIndex=0; document.getElementById('fc-deck-view').style.display='none'; document.getElementById('fc-study-view').style.display='block'; document.getElementById('fc-study-title').innerText=db.flashcardSets.find(d=>d.id==id).name; renderStudyCard(); }
         function showDeckList(){ document.getElementById('fc-study-view').style.display='none'; document.getElementById('fc-deck-view').style.display='block'; }
         function renderStudyCard(){ 
             const d=db.flashcardSets.find(x=>x.id==activeDeckId); 
-            if(!d.cards.length) return document.getElementById('fc-front').innerText="Empty"; 
+            if(!d.cards.length) { document.getElementById('fc-front').innerText="Empty"; return; }
             if(cardIndex>=d.cards.length) cardIndex=0; if(cardIndex<0) cardIndex=d.cards.length-1;
             const c=d.cards[cardIndex];
             document.getElementById('fc-front').innerText=c.q; document.getElementById('fc-back').innerText=c.a; document.getElementById('fc-count').innerText=`${cardIndex+1}/${d.cards.length}`;
@@ -487,9 +421,48 @@
         }
         function nextCard(d){cardIndex+=d; renderStudyCard();}
         function addCardMode(){document.getElementById('fc-add-area').style.display='block';}
-        function saveNewCard(){ const q=document.getElementById('fc-new-q').value, a=document.getElementById('fc-new-a').value; if(q&&a){ db.flashcardSets.find(d=>d.id==activeDeckId).cards.push({q,a}); save(); document.getElementById('fc-add-area').style.display='none'; renderStudyCard(); } }
+        function saveNewCard(){ const q=document.getElementById('fc-new-q').value, a=document.getElementById('fc-new-a').value; if(q&&a){ db.flashcardSets.find(d=>d.id==activeDeckId).cards.push({q,a}); save(); document.getElementById('fc-new-q').value=''; document.getElementById('fc-new-a').value=''; document.getElementById('fc-add-area').style.display='none'; renderStudyCard(); } }
 
-        // Wheel & Calc (Condensed)
+        // --- CALCULATOR ---
+        let cv=""; function calcInput(c){cv+=c;document.getElementById('calc-display').innerText=cv;} function calcInputBack(){cv=cv.slice(0,-1);document.getElementById('calc-display').innerText=cv||"0";} function calcClear(){cv="";document.getElementById('calc-display').innerText="0";} function calcResult(){try{cv=eval(cv).toString();document.getElementById('calc-display').innerText=cv;}catch{cv="";document.getElementById('calc-display').innerText="Err";}}
+
+        // --- TIMELINE, SCHOOL, TASKS ---
+        function changeDate(d) { selectedDate.setDate(selectedDate.getDate()+d); renderTimeline(); }
+        function renderTimeline() {
+            const list=document.getElementById('timeline-list'); list.innerHTML='';
+            const isToday = new Date().toDateString() === selectedDate.toDateString();
+            document.getElementById('tl-date-main').innerText = isToday ? "Today" : selectedDate.toLocaleDateString('en-US', {weekday:'short'});
+            document.getElementById('tl-date-sub').innerText = selectedDate.toLocaleDateString('en-US', {day:'numeric', month:'short'});
+            const key=selectedDate.toISOString().split('T')[0]; const blocks=db.days[key]||[];
+            if(blocks.length===0) { list.innerHTML=`<div style="text-align:center; padding:40px; color:var(--text-muted);">No plans.<br>Tap + to add.</div>`; return; }
+            blocks.sort((a,b)=>a.start.localeCompare(b.start));
+            const now=new Date(), cur=now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0');
+            blocks.forEach(b=>{
+                let t,i,c; if(b.type==='school'){const s=db.subjects.find(x=>x.id==b.subId)||{name:'?',color:'#ccc'};t=s.name;i='📚';c=s.color;} else {t=b.name;i=b.icon;c='var(--text-muted)';}
+                const act=isToday&&cur>=b.start&&cur<b.end;
+                list.innerHTML+=`<div class="tl-block ${b.type} ${act?'active':''}"><div class="tl-time">${b.start}</div><div class="tl-node" style="color:${c}; border-color:${act?'var(--primary)':c}">${i}</div><div class="tl-card" style="border-left:4px solid ${c}"><div><div style="font-weight:800;">${t}</div><div style="font-size:0.8rem; color:var(--text-muted);">${b.start} - ${b.end}</div></div><button class="btn-icon" onclick="delBlock(${b.id})">🗑️</button></div></div>`;
+            });
+        }
+        function saveBlock(){ const s=document.getElementById('b-start').value, e=document.getElementById('b-end').value; if(!s)return; const k=selectedDate.toISOString().split('T')[0]; if(!db.days[k])db.days[k]=[]; const blk={id:Date.now(),type:currentBlockType,start:s,end:e}; if(currentBlockType==='school')blk.subId=document.getElementById('b-sub').value; else{blk.name=document.getElementById('b-name').value;blk.icon=document.getElementById('b-icon').value;} db.days[k].push(blk); save(); closeModal('modal-block'); renderTimeline(); }
+        function delBlock(id){ const k=selectedDate.toISOString().split('T')[0]; if(confirm("Delete?")){db.days[k]=db.days[k].filter(b=>b.id!==id); save(); renderTimeline();} }
+        
+        function renderSchool(){ const g=document.getElementById('subject-list'), s=document.getElementById('b-sub'), t=document.getElementById('t-sub'); g.innerHTML=''; s.innerHTML=''; t.innerHTML=''; db.subjects.forEach(sub=>{ s.innerHTML+=`<option value="${sub.id}">${sub.name}</option>`; t.innerHTML+=`<option value="${sub.id}">${sub.name}</option>`; g.innerHTML+=`<div class="sub-card" style="--color:${sub.color}"><div class="sub-icon" style="color:${sub.color}; background:${sub.color}15">📚</div><div><h3>${sub.name}</h3><p style="color:var(--text-muted);">${sub.room}</p></div></div>`; }); }
+        function renderTasks(){ const l=document.getElementById('task-list'); l.innerHTML=''; document.getElementById('dash-task-count').innerText=db.tasks.filter(t=>!t.done).length; db.tasks.forEach(t=>{ const s=db.subjects.find(x=>x.id==t.subId); l.innerHTML+=`<div class="card" style="padding:15px; display:flex; justify-content:space-between; align-items:center; opacity:${t.done?0.5:1}"><div><div style="font-size:0.75rem; font-weight:800; color:${s?s.color:'#ccc'}; text-transform:uppercase;">${s?s.name:'General'}</div><div style="font-weight:700; text-decoration:${t.done?'line-through':'none'}">${t.desc}</div></div><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" style="width:24px; height:24px;"></div>`; }); }
+        
+        // --- SYSTEM ---
+        function save(){ localStorage.setItem('v3Days',JSON.stringify(db.days)); localStorage.setItem('v3Subs',JSON.stringify(db.subjects)); localStorage.setItem('v3Tasks',JSON.stringify(db.tasks)); localStorage.setItem('v3Sets',JSON.stringify(db.settings)); localStorage.setItem('v3Decks',JSON.stringify(db.flashcardSets)); localStorage.setItem('v3Wheel',JSON.stringify(db.wheelOptions)); renderAll(); }
+        function renderAll(){ renderSchool(); renderTimeline(); renderTasks(); setupColorGrid(); }
+        function nav(id){ currentPage=id; document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); const b=Array.from(document.querySelectorAll('.nav-item')).find(b=>b.onclick.toString().includes(id)); if(b)b.classList.add('active'); document.querySelector('.fab').style.display=(id==='timeline'||id==='school'||id==='tasks')?'grid':'none'; }
+        function handleFab(){ if(currentPage==='timeline'){document.getElementById('modal-block').style.display='flex'; setBlockType('school');} if(currentPage==='school')document.getElementById('modal-sub').style.display='flex'; if(currentPage==='tasks')document.getElementById('modal-task').style.display='flex'; }
+        function openTool(t){ if(t==='focus')document.getElementById('modal-tool-focus').style.display='flex'; if(t==='calc')document.getElementById('modal-tool-calc').style.display='flex'; if(t==='flashcards'){document.getElementById('modal-tool-flashcards').style.display='flex';renderDeckList();} if(t==='wheel'){document.getElementById('modal-tool-wheel').style.display='flex';setTimeout(initWheel,100);} if(t==='breathe')document.getElementById('modal-tool-breathe').style.display='flex'; }
+        function closeModal(id){ document.getElementById(id).style.display='none'; }
+        function toggleTheme(){ db.settings.theme = db.settings.theme==='dark'?'light':'dark'; save(); applyTheme(); }
+        function resetApp(){ if(confirm("Reset?")) { localStorage.clear(); location.reload(); } }
+        function updateClock(){ document.getElementById('clock').innerText=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
+        function checkLiveStatus(){ const now=new Date(); const cur=now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0'); const k=now.toISOString().split('T')[0]; const b=db.days[k]||[]; const a=b.find(x=>cur>=x.start&&cur<x.end); if(a) { let name = a.type==='school'?(db.subjects.find(s=>s.id==a.subId)?.name):a.name; document.getElementById('dash-now-title').innerText=name; document.getElementById('dash-now-time').innerText=`Until ${a.end}`; } else { document.getElementById('dash-now-title').innerText="Free Time"; document.getElementById('dash-now-time').innerText="--:--"; } }
+        function setBlockType(t){ currentBlockType=t; document.getElementById('btn-type-school').className=t==='school'?'btn':'btn-ghost'; document.getElementById('btn-type-life').className=t==='life'?'btn':'btn-ghost'; document.getElementById('input-school').style.display=t==='school'?'block':'none'; document.getElementById('input-life').style.display=t==='life'?'block':'none'; }
+        
+        // Wheel
         let wheelCtx=null; function initWheel(){const c=document.getElementById('wheel-canvas'); wheelCtx=c.getContext('2d'); drawWheel(); renderWheelList();} 
         function drawWheel(r=0){ const ctx=wheelCtx, s=280, c=s/2, rad=c-10, step=(2*Math.PI)/db.wheelOptions.length, cols=['#f87171','#fbbf24','#34d399','#60a5fa','#a78bfa']; ctx.clearRect(0,0,s,s); db.wheelOptions.forEach((o,i)=>{ ctx.beginPath(); ctx.moveTo(c,c); ctx.arc(c,c,rad,i*step+r,(i+1)*step+r); ctx.fillStyle=cols[i%cols.length]; ctx.fill(); ctx.save(); ctx.translate(c,c); ctx.rotate(i*step+step/2+r); ctx.textAlign="right"; ctx.fillStyle="white"; ctx.font="bold 14px sans-serif"; ctx.fillText(o,rad-20,5); ctx.restore(); }); }
         function spinWheel(){ let r=0, s=0.5+Math.random(); const a=()=>{r+=s; s*=0.98; drawWheel(r); if(s>0.005)requestAnimationFrame(a);}; a(); }
@@ -497,33 +470,15 @@
         function removeWheelOpt(i){db.wheelOptions.splice(i,1); save(); drawWheel(); renderWheelList();}
         function renderWheelList(){document.getElementById('wheel-list').innerHTML=db.wheelOptions.map((o,i)=>`<button class="btn-sm btn-ghost" onclick="removeWheelOpt(${i})">${o} &times;</button>`).join('');}
         
-        let cv=""; function calcInput(c){cv+=c;document.getElementById('calc-display').innerText=cv;} function calcInputBack(){cv=cv.slice(0,-1);document.getElementById('calc-display').innerText=cv||"0";} function calcClear(){cv="";document.getElementById('calc-display').innerText="0";} function calcResult(){try{cv=eval(cv).toString();document.getElementById('calc-display').innerText=cv;}catch{cv="";document.getElementById('calc-display').innerText="Err";}}
-
-        // --- UTILS ---
-        function save(){ localStorage.setItem('v21Days',JSON.stringify(db.days)); localStorage.setItem('v21Subs',JSON.stringify(db.subjects)); localStorage.setItem('v21Tasks',JSON.stringify(db.tasks)); localStorage.setItem('v21Sets',JSON.stringify(db.settings)); localStorage.setItem('v21Decks',JSON.stringify(db.flashcardSets)); localStorage.setItem('v21Wheel',JSON.stringify(db.wheelOptions)); renderAll(); }
-        function renderAll(){ renderSchool(); renderTimeline(); renderTasks(); }
-        function nav(id){ 
-            currentPage=id; document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active')); 
-            document.getElementById(id).classList.add('active'); const b=Array.from(document.querySelectorAll('.nav-item')).find(b=>b.onclick.toString().includes(id)); if(b) b.classList.add('active');
-            document.querySelector('.fab').style.display=(id==='timeline'||id==='school'||id==='tasks')?'grid':'none';
-        }
-        function handleFab(){ if(currentPage==='timeline') { openBlockModal(); } if(currentPage==='school') document.getElementById('modal-sub').style.display='flex'; if(currentPage==='tasks') document.getElementById('modal-task').style.display='flex'; }
-        function openTool(t){ if(t==='focus')document.getElementById('modal-tool-focus').style.display='flex'; if(t==='calc')document.getElementById('modal-tool-calc').style.display='flex'; if(t==='flashcards'){document.getElementById('modal-tool-flashcards').style.display='flex';renderDeckList();} if(t==='wheel'){document.getElementById('modal-tool-wheel').style.display='flex';setTimeout(initWheel,100);} }
-        function closeModal(id){ document.getElementById(id).style.display='none'; }
-        function toggleTheme(){ db.settings.theme = db.settings.theme==='dark'?'light':'dark'; save(); location.reload(); }
-        function resetApp(){ if(confirm("Reset?")) { localStorage.clear(); location.reload(); } }
-        function updateClock(){ document.getElementById('clock').innerText=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
-        
-        function renderSchool(){ const g=document.getElementById('subject-list'), s=document.getElementById('b-sub'), t=document.getElementById('t-sub'); g.innerHTML=''; s.innerHTML=''; t.innerHTML=''; db.subjects.forEach(sub=>{ s.innerHTML+=`<option value="${sub.id}">${sub.name}</option>`; t.innerHTML+=`<option value="${sub.id}">${sub.name}</option>`; g.innerHTML+=`<div class="sub-folder" style="--color:${sub.color}"><h3 style="color:${sub.color}">${sub.name}</h3><p>${sub.room}</p></div>`; }); }
-        function renderTasks(){ const l=document.getElementById('task-list'); l.innerHTML=''; document.getElementById('dash-task-count').innerText=db.tasks.filter(t=>!t.done).length; db.tasks.forEach(t=>{ const s=db.subjects.find(x=>x.id==t.subId); l.innerHTML+=`<div class="card" style="padding:15px; display:flex; justify-content:space-between; align-items:center; opacity:${t.done?0.5:1}"><div><div style="font-size:0.8rem; font-weight:700; color:${s?s.color:'#ccc'}">${s?s.name:'General'}</div><div style="font-weight:600; text-decoration:${t.done?'line-through':'none'}">${t.desc}</div></div><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" style="width:24px; height:24px;"></div>`; }); }
-        function saveSubject(){ const n=document.getElementById('s-name').value; if(n){ db.subjects.push({id:Date.now(), name:n, room:document.getElementById('s-room').value, color:document.getElementById('s-color').value}); save(); closeModal('modal-sub'); } }
-        function saveTask(){ const d=document.getElementById('t-desc').value; if(d){ db.tasks.push({id:Date.now(), desc:d, subId:document.getElementById('t-sub').value, date:document.getElementById('t-date').value, done:false}); save(); closeModal('modal-task'); } }
-        function toggleTask(id){ const t=db.tasks.find(x=>x.id==id); if(t)t.done=!t.done; save(); }
-        function checkLiveStatus(){ const now=new Date(); const cur=now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0'); const k=now.toISOString().split('T')[0]; const b=db.days[k]||[]; const a=b.find(x=>cur>=x.start&&cur<x.end); if(a){ document.getElementById('dash-now-title').innerText=a.name||db.subjects.find(s=>s.id==a.subId)?.name; document.getElementById('dash-now-time').innerText=`Until ${a.end}`; } else { document.getElementById('dash-now-title').innerText="Free Time"; document.getElementById('dash-now-time').innerText="--:--"; } }
-        
+        // Focus
         let focusTimer=null, focusTime=1500;
         function setFocusTime(m){ focusTime=m*60; document.getElementById('focus-display').innerText=`${m}:00`; }
         function toggleFocus(){ const b=document.getElementById('focus-btn'); if(focusTimer){ clearInterval(focusTimer); focusTimer=null; b.innerText="START"; } else { b.innerText="STOP"; focusTimer=setInterval(()=>{ focusTime--; const m=Math.floor(focusTime/60).toString().padStart(2,'0'), s=(focusTime%60).toString().padStart(2,'0'); document.getElementById('focus-display').innerText=`${m}:${s}`; if(focusTime<=0) clearInterval(focusTimer); },1000); } }
+        
+        // CRUD Wrappers
+        function saveSubject(){ const n=document.getElementById('s-name').value; if(n){ db.subjects.push({id:Date.now(), name:n, room:document.getElementById('s-room').value, color:document.getElementById('s-color').value}); save(); closeModal('modal-sub'); } }
+        function saveTask(){ const d=document.getElementById('t-desc').value; if(d){ db.tasks.push({id:Date.now(), desc:d, subId:document.getElementById('t-sub').value, date:document.getElementById('t-date').value, done:false}); save(); closeModal('modal-task'); } }
+        function toggleTask(id){ const t=db.tasks.find(x=>x.id==id); if(t)t.done=!t.done; save(); }
 
         init();
         nav('dashboard');
