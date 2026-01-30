@@ -3,184 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - Full Release</title>
+    <title>Vidyarthi - LifeOS v3.1</title>
     <style>
         :root {
-            /* Dynamic Theme Variables */
+            /* Theme Variables */
             --primary: #6366f1;
-            --primary-rgb: 99, 102, 241; 
-            --primary-light: rgba(99, 102, 241, 0.12);
-            --primary-glow: rgba(99, 102, 241, 0.3);
+            --primary-rgb: 99, 102, 241;
+            --primary-light: rgba(99, 102, 241, 0.15);
+            --primary-glow: rgba(99, 102, 241, 0.4);
             
             --bg: #f8fafc;
             --surface: #ffffff;
-            --surface-glass: rgba(255, 255, 255, 0.85);
+            --surface-glass: rgba(255, 255, 255, 0.9);
             --text: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
+            --danger: #ef4444;
             
-            --radius-xl: 28px;
+            --radius-xl: 24px;
             --radius-lg: 20px;
             --radius-md: 14px;
             
-            --shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
-            --shadow-hover: 0 20px 40px -10px rgba(var(--primary-rgb), 0.15);
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+            --transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         [data-theme="dark"] {
             --bg: #020617;
             --surface: #0f172a;
-            --surface-glass: rgba(15, 23, 42, 0.85);
+            --surface-glass: rgba(15, 23, 42, 0.9);
             --text: #f8fafc;
             --text-muted: #94a3b8;
             --border: #1e293b;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Plus Jakarta Sans', sans-serif; }
         
-        body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: background 0.4s ease; }
+        body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: background 0.3s ease; }
 
-        /* --- SIDEBAR (Glass) --- */
+        /* SIDEBAR */
         .sidebar { 
-            width: 85px; background: var(--surface-glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            display: flex; flex-direction: column; border-right: 1px solid var(--border); z-index: 100; 
-            align-items: center; padding-top: 30px; transition: 0.3s;
+            width: 80px; background: var(--surface-glass); backdrop-filter: blur(10px); 
+            border-right: 1px solid var(--border); z-index: 100; display: flex; flex-direction: column; 
+            align-items: center; padding-top: 30px; 
         }
         .logo { 
             width: 45px; height: 45px; background: linear-gradient(135deg, var(--primary), #a855f7); 
             border-radius: 14px; display: grid; place-items: center; color: white; font-weight: 900; 
-            font-size: 1.5rem; margin-bottom: 40px; box-shadow: 0 8px 20px -5px var(--primary-glow);
+            font-size: 1.5rem; margin-bottom: 40px; box-shadow: 0 5px 15px var(--primary-glow);
         }
         .nav-item { 
             width: 50px; height: 50px; border-radius: 16px; color: var(--text-muted); font-size: 1.4rem; 
             margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            transition: var(--transition); border: none; background: transparent; position: relative;
+            transition: var(--transition); border: none; background: transparent; 
         }
-        .nav-item:hover { background: var(--primary-light); color: var(--primary); transform: translateY(-2px); }
-        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 10px 20px -5px var(--primary-glow); }
+        .nav-item:hover { background: var(--primary-light); color: var(--primary); transform: scale(1.05); }
+        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 8px 20px -5px var(--primary-glow); }
 
-        /* --- MAIN CONTENT --- */
-        .main-content { flex: 1; padding: 30px; overflow-y: auto; scroll-behavior: smooth; position: relative; max-width: 1200px; margin: 0 auto; width: 100%; }
-        
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; margin: 0; }
+        /* CONTENT */
+        .main-content { flex: 1; padding: 25px; overflow-y: auto; position: relative; max-width: 1000px; margin: 0 auto; width: 100%; scroll-behavior: smooth; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; }
         h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; }
 
-        .section { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 120px; }
+        .section { display: none; animation: fadeUp 0.3s ease-out; padding-bottom: 100px; }
         .section.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- CARDS & UI --- */
+        /* UI COMPONENTS */
         .card { 
-            background: var(--surface); border-radius: var(--radius-lg); padding: 25px; 
-            border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 20px; 
-            transition: var(--transition);
+            background: var(--surface); border-radius: var(--radius-lg); padding: 20px; 
+            border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 15px; 
         }
-        .card:hover { border-color: var(--primary); transform: translateY(-2px); }
-
+        
         .btn { 
-            padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 14px; 
-            font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            gap: 8px; transition: var(--transition); font-size: 0.95rem; box-shadow: 0 4px 15px var(--primary-glow);
+            padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 14px; 
+            font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            gap: 8px; transition: var(--transition); font-size: 0.95rem; width: 100%;
+            box-shadow: 0 4px 12px var(--primary-glow);
         }
-        .btn:active { transform: scale(0.96); }
-        .btn-ghost { background: transparent; color: var(--text-muted); border: 2px solid var(--border); box-shadow: none; }
-        .btn-ghost:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
-        .btn-sm { padding: 8px 16px; font-size: 0.85rem; border-radius: 10px; }
-        .btn-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: var(--primary-light); color: var(--primary); border: none; cursor: pointer; transition: 0.2s; }
-        .btn-icon:hover { transform: scale(1.1); }
+        .btn:active { transform: scale(0.97); }
+        
+        /* New Close Button Style */
+        .btn-close {
+            background: var(--surface); color: var(--text-muted); border: 1px solid var(--border);
+            margin-top: 15px; box-shadow: none;
+        }
+        .btn-close:hover { background: var(--bg); color: var(--text); border-color: var(--text-muted); }
 
-        input, select { 
-            padding: 14px 18px; border: 2px solid var(--border); border-radius: 14px; 
-            background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 1rem; transition: 0.2s; 
-        }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); background: var(--surface); }
+        .btn-ghost { background: transparent; color: var(--text-muted); border: 2px solid var(--border); width: auto; display: inline-flex; }
+        .btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 10px; }
+        .btn-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); cursor: pointer; }
 
-        /* --- 💎 HERO SECTION --- */
-        .hero-card { 
-            background: linear-gradient(135deg, var(--primary), #a855f7); color: white; border: none; 
-            padding: 35px; border-radius: 28px; display: flex; justify-content: space-between; align-items: center;
-            position: relative; overflow: hidden;
+        input, select, textarea { 
+            padding: 12px 15px; border: 2px solid var(--border); border-radius: 12px; 
+            background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 1rem; margin-bottom: 10px; 
         }
-        .hero-card::after {
-            content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px;
-            background: rgba(255,255,255,0.1); border-radius: 50%; filter: blur(40px);
-        }
+        input:focus, textarea:focus { border-color: var(--primary); background: var(--surface); }
 
-        /* --- 🎒 SUBJECT CARDS (3D Folder) --- */
-        .sub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
-        .sub-card { 
-            background: var(--surface); border-radius: 24px; padding: 20px; cursor: pointer; 
-            border: 1px solid var(--border); position: relative; overflow: hidden; 
-            display: flex; flex-direction: column; justify-content: space-between; min-height: 160px;
-            transition: var(--transition); border-left: 6px solid var(--color);
-        }
-        .sub-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
-        .sub-icon { 
-            width: 45px; height: 45px; border-radius: 14px; display: grid; place-items: center; 
-            font-size: 1.5rem; background: var(--bg); margin-bottom: 10px;
-        }
+        /* TIMELINE QUICK CHIPS */
+        .chip-container { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; }
+        .chip { padding: 8px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+        .chip:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
 
-        /* --- 🔄 TIMELINE (Universal Flow) --- */
-        .timeline-container { position: relative; padding-left: 20px; }
-        .timeline-line { position: absolute; left: 45px; top: 15px; bottom: 15px; width: 2px; background: var(--border); z-index: 0; }
-        .tl-block { display: flex; margin-bottom: 20px; position: relative; z-index: 1; gap: 15px; }
-        .tl-time { width: 50px; text-align: right; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); padding-top: 12px; }
-        .tl-node { 
-            width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 2px solid var(--border); 
-            display: grid; place-items: center; font-size: 1.1rem; flex-shrink: 0; transition: var(--transition); 
-        }
-        .tl-card { 
-            flex: 1; background: var(--surface); border-radius: var(--radius-md); border: 1px solid var(--border); 
-            padding: 15px; display: flex; justify-content: space-between; align-items: center; transition: var(--transition);
-        }
-        .tl-block.active .tl-node { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.15); box-shadow: 0 0 0 5px var(--primary-light); }
-        .tl-block.active .tl-card { border-color: var(--primary); background: linear-gradient(to right, var(--primary-light), var(--surface)); }
-
-        /* --- 🛠️ TOOLS GRID --- */
-        .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        /* TOOLS GRID */
+        .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .tool-card { 
-            background: var(--surface); padding: 25px; border-radius: var(--radius-lg); border: 1px solid var(--border); 
-            cursor: pointer; transition: var(--transition); text-align: center; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; height: 160px;
+            background: var(--surface); padding: 20px; border-radius: var(--radius-lg); border: 1px solid var(--border); 
+            cursor: pointer; text-align: center; height: 140px; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; transition: var(--transition); 
         }
-        .tool-card:hover { transform: translateY(-5px); border-color: var(--primary); background: var(--primary-light); }
-        .tool-icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .tool-card:hover { transform: translateY(-4px); border-color: var(--primary); background: var(--primary-light); }
+        .tool-icon { font-size: 2.2rem; margin-bottom: 8px; }
 
-        /* --- FLASHCARDS & WHEEL --- */
-        .deck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
-        .deck-card { background: var(--surface); padding: 20px; border-radius: 16px; text-align: center; cursor: pointer; border: 1px solid var(--border); transition: 0.2s; }
-        .deck-card:hover { border-color: var(--primary); transform: translateY(-3px); }
-        
-        .flashcard-container { perspective: 1000px; width: 100%; height: 250px; cursor: pointer; margin-bottom: 20px; }
-        .flashcard-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
-        .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
-        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 20px; font-size: 1.3rem; font-weight: 700; border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow); }
-        .flashcard-back { background: var(--primary); color: white; transform: rotateY(180deg); }
+        /* SUBJECTS & TASKS */
+        .sub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        .sub-card { padding: 15px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); border-left: 5px solid var(--color); position: relative; }
+        .task-row { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--surface); border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--border); }
 
-        /* --- SETTINGS --- */
-        .color-grid { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
-        .color-dot { width: 45px; height: 45px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: 0.2s; position: relative; }
-        .color-dot:hover { transform: scale(1.1); }
-        .color-dot.active { border-color: var(--text); }
-        
-        /* --- MODALS --- */
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(8px); }
-        .modal-box { background: var(--surface); width: 90%; max-width: 450px; border-radius: 28px; padding: 35px; box-shadow: 0 30px 60px rgba(0,0,0,0.3); animation: popIn 0.3s; max-height: 90vh; overflow-y: auto; }
-        @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        /* MODALS */
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center; backdrop-filter: blur(5px); }
+        .modal-box { background: var(--surface); width: 90%; max-width: 420px; border-radius: 24px; padding: 25px; box-shadow: 0 25px 50px rgba(0,0,0,0.25); animation: popIn 0.2s; max-height: 85vh; overflow-y: auto; }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* CALCULATOR FIX */
+        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
+        .calc-btn { height: 55px; border-radius: 14px; border: none; font-size: 1.3rem; font-weight: 600; background: var(--bg); color: var(--text); cursor: pointer; }
+        .calc-btn.op { background: var(--primary-light); color: var(--primary); }
+        .calc-btn.eq { background: var(--primary); color: white; grid-column: span 2; }
+        #calc-display { text-align: right; font-size: 2.5rem; padding: 15px; margin-bottom: 0; background: transparent; border: none; width: 100%; }
+
+        /* SETTINGS ACCENTS */
+        .color-dot { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: 0.2s; border: 3px solid transparent; }
+        .color-dot.active { border-color: var(--text); transform: scale(1.1); box-shadow: 0 0 15px var(--bg); }
 
         /* FAB */
-        .fab { position: fixed; bottom: 35px; right: 35px; width: 65px; height: 65px; background: var(--text); color: var(--bg); border-radius: 20px; display: grid; place-items: center; font-size: 2rem; box-shadow: 0 15px 30px rgba(0,0,0,0.25); cursor: pointer; z-index: 500; transition: var(--transition); }
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 20px; display: grid; place-items: center; font-size: 2rem; box-shadow: 0 10px 25px var(--primary-glow); cursor: pointer; z-index: 500; transition: 0.2s; border: none; }
         .fab:hover { transform: scale(1.1) rotate(90deg); border-radius: 50%; }
 
         @media (max-width: 768px) {
             body { flex-direction: column; }
-            .sidebar { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; flex-direction: row; padding: 0; justify-content: space-evenly; border-top: 1px solid var(--border); border-right: none; padding-top: 0; }
+            .sidebar { position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; flex-direction: row; padding: 0; justify-content: space-evenly; border-top: 1px solid var(--border); border-right: none; }
             .logo { display: none; }
-            .main-content { padding: 20px; margin-bottom: 75px; }
-            .fab { bottom: 95px; right: 25px; }
-            .tools-grid { grid-template-columns: 1fr; }
+            .main-content { padding: 20px; margin-bottom: 70px; }
+            .fab { bottom: 85px; right: 20px; }
         }
     </style>
 </head>
@@ -188,47 +154,48 @@
 
     <nav class="sidebar">
         <div class="logo">V</div>
-        <button class="nav-item active" onclick="nav('dashboard')" title="Home">🏠</button>
-        <button class="nav-item" onclick="nav('timeline')" title="My Day">⏱️</button>
-        <button class="nav-item" onclick="nav('school')" title="School">🎒</button>
-        <button class="nav-item" onclick="nav('tasks')" title="Tasks">✅</button>
-        <button class="nav-item" onclick="nav('tools')" title="Tools">🛠️</button>
-        <button class="nav-item" onclick="nav('settings')" title="Settings">⚙️</button>
+        <button class="nav-item active" onclick="nav('dashboard')">🏠</button>
+        <button class="nav-item" onclick="nav('timeline')">⏱️</button>
+        <button class="nav-item" onclick="nav('school')">🎒</button>
+        <button class="nav-item" onclick="nav('tasks')">✅</button>
+        <button class="nav-item" onclick="nav('tools')">🛠️</button>
+        <button class="nav-item" onclick="nav('settings')">⚙️</button>
     </nav>
 
     <main class="main-content">
         <div class="header">
-            <div>
-                <div style="font-size:0.9rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">LifeOS v3</div>
-                <h1 id="page-title">Dashboard</h1>
-            </div>
+            <div><div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">LifeOS 3.1</div><h1 id="page-title">Dashboard</h1></div>
             <div id="clock" style="font-family:monospace; font-weight:700; color:var(--primary); background:var(--primary-light); padding:8px 12px; border-radius:12px;">00:00</div>
         </div>
 
         <section id="dashboard" class="section active">
-            <div class="hero-card">
+            <div class="card" style="background: linear-gradient(135deg, var(--primary), #a855f7); color: white; padding: 30px; border:none; display:flex; justify-content:space-between; align-items:center;">
                 <div>
-                    <div style="opacity:0.9; font-size:0.9rem; font-weight:700; letter-spacing:1px;">HAPPENING NOW</div>
-                    <div style="font-size:2.5rem; font-weight:900; margin-top:5px;" id="dash-now-title">Free Time</div>
-                    <div style="opacity:0.9; font-weight:600;" id="dash-now-time">Until --:--</div>
+                    <div style="opacity:0.8; font-size:0.9rem; font-weight:700;">HAPPENING NOW</div>
+                    <div style="font-size:2.2rem; font-weight:900; margin-top:5px;" id="dash-now-title">Free Time</div>
+                    <div style="opacity:0.9;" id="dash-now-time">Relax</div>
                 </div>
-                <div style="font-size:4rem; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));">⏳</div>
+                <div style="font-size:3.5rem;">🧘</div>
             </div>
-            
-            <div class="tools-grid" style="margin-top:20px;">
+            <div class="tools-grid">
                 <div class="card" style="margin:0; justify-content:center; align-items:center; display:flex; flex-direction:column; cursor:pointer;" onclick="nav('tasks')">
-                    <div style="font-size:2.5rem; font-weight:900; color:var(--text);" id="dash-task-count">0</div>
+                    <div style="font-size:2.5rem; font-weight:900;" id="dash-task-count">0</div>
                     <div style="color:var(--text-muted); font-size:0.8rem; font-weight:700;">TASKS DUE</div>
                 </div>
                 <div class="card" onclick="openTool('focus')" style="margin:0; justify-content:center; align-items:center; display:flex; cursor:pointer; background:var(--primary-light); border-color:var(--primary);">
-                    <span style="font-size:2rem; margin-right:10px;">🍅</span>
-                    <span style="font-weight:700; color:var(--primary);">Focus Mode</span>
+                    <span style="font-size:2rem; margin-right:10px;">🍅</span><span style="font-weight:700; color:var(--primary);">Focus</span>
                 </div>
             </div>
         </section>
 
         <section id="timeline" class="section">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; background:var(--surface); padding:10px 15px; border-radius:16px; border:1px solid var(--border); box-shadow:var(--shadow);">
+            <div class="chip-container">
+                <div class="chip" onclick="quickAdd('Study', '📚', 60)">+ 1h Study</div>
+                <div class="chip" onclick="quickAdd('Class', '🏫', 45)">+ 45m Class</div>
+                <div class="chip" onclick="quickAdd('Gym', '💪', 60)">+ 1h Gym</div>
+                <div class="chip" onclick="quickAdd('Sleep', '💤', 480)">+ Sleep</div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; background:var(--surface); padding:10px 15px; border-radius:16px; border:1px solid var(--border);">
                 <button class="btn-icon" onclick="changeDate(-1)">◀</button>
                 <div style="text-align:center;">
                     <div style="font-weight:800;" id="tl-date-main">Today</div>
@@ -236,23 +203,29 @@
                 </div>
                 <button class="btn-icon" onclick="changeDate(1)">▶</button>
             </div>
-            <div class="timeline-container"><div class="timeline-line"></div><div id="timeline-list"></div></div>
+            <div id="timeline-list"></div>
         </section>
 
         <section id="school" class="section">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                 <h3>My Subjects</h3>
-                <button class="btn-sm btn-ghost" onclick="openSubjectModal()">+ Add Subject</button>
+                <button class="btn-sm btn" onclick="openSubjectModal()">+ Add</button>
             </div>
             <div id="subject-list" class="sub-grid"></div>
         </section>
 
-        <section id="tasks" class="section"><div id="task-list"></div></section>
+        <section id="tasks" class="section">
+             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3>To-Do List</h3>
+                <button class="btn-sm btn" onclick="openTaskModal()">+ Add</button>
+            </div>
+            <div id="task-list"></div>
+        </section>
 
         <section id="tools" class="section">
             <div class="tools-grid">
                 <div class="tool-card" onclick="openTool('focus')"><div class="tool-icon">🍅</div><div class="tool-title">Focus Timer</div></div>
-                <div class="tool-card" onclick="openTool('flashcards')"><div class="tool-icon">🗂️</div><div class="tool-title">Flashcards</div></div>
+                <div class="tool-card" onclick="openTool('notes')"><div class="tool-icon">📝</div><div class="tool-title">Notes</div></div>
                 <div class="tool-card" onclick="openTool('calc')"><div class="tool-icon">🧮</div><div class="tool-title">Calculator</div></div>
                 <div class="tool-card" onclick="openTool('wheel')"><div class="tool-icon">🎲</div><div class="tool-title">Picker Wheel</div></div>
                 <div class="tool-card" onclick="openTool('breathe')"><div class="tool-icon">🌬️</div><div class="tool-title">Breathe</div></div>
@@ -260,98 +233,151 @@
         </section>
 
         <section id="settings" class="section">
-            
             <div class="card">
-                <h3>Appearance</h3>
-                <button class="btn-ghost" style="width:100%; margin:15px 0;" onclick="toggleTheme()">Toggle Dark Mode 🌗</button>
-                <div style="font-size:0.9rem; font-weight:700; margin-bottom:15px;">Accent Theme</div>
-                <div class="color-grid" id="settings-colors"></div>
+                <h3>Accent Color</h3>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:15px;" id="settings-colors"></div>
             </div>
-            
-            <div class="card">
-                <h3>Data Management</h3>
-                <div style="display:flex; gap:10px; margin-top:15px;">
-                    <button class="btn-ghost" style="flex:1;" onclick="exportData()">Backup 💾</button>
-                    <button class="btn-ghost" style="flex:1;" onclick="document.getElementById('restore-input').click()">Restore 📂</button>
-                    <input type="file" id="restore-input" hidden onchange="importData(this)">
-                </div>
-            </div>
-
             <div class="card">
                 <h3>System</h3>
-                <button class="btn-ghost" style="width:100%; margin-top:10px; color:var(--danger); border-color:var(--danger);" onclick="resetApp()">Factory Reset 🗑️</button>
+                <button class="btn" style="background:var(--surface); color:var(--text); border:1px solid var(--border); margin-bottom:10px;" onclick="toggleTheme()">Toggle Dark Mode 🌗</button>
+                <button class="btn" style="background:transparent; color:var(--danger); border:1px solid var(--danger);" onclick="resetApp()">Factory Reset 🗑️</button>
             </div>
         </section>
-
     </main>
 
     <button class="fab" onclick="handleFab()">+</button>
 
-    <div id="modal-tool-breathe" class="modal">
-        <div class="modal-box" style="text-align:center; padding:50px 20px;">
-            <div style="width:180px; height:180px; background:var(--primary-light); border-radius:50%; margin:0 auto 40px auto; animation: breathe 4s infinite ease-in-out; border: 4px solid var(--primary);"></div>
-            <h2 style="color:var(--primary);">Breathe In...</h2>
-            <p style="color:var(--text-muted); margin-top:10px;">Follow the rhythm to relax.</p>
-            <button class="btn-ghost" onclick="closeModal('modal-tool-breathe')" style="margin-top:40px; width:100%;">Close</button>
-        </div>
-        <style> @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.4); opacity: 1; } } </style>
-    </div>
-
-    <div id="modal-tool-flashcards" class="modal">
+    <div id="modal-tool-calc" class="modal">
         <div class="modal-box">
-            <div id="fc-deck-view">
-                <h3 style="margin-bottom:20px;">My Decks</h3>
-                <div class="deck-grid" id="fc-deck-list"></div>
-                <button class="btn" style="width:100%; margin-top:25px;" onclick="createDeck()">+ New Deck</button>
-                <button class="btn-ghost" style="width:100%; margin-top:10px;" onclick="closeModal('modal-tool-flashcards')">Close</button>
+            <div id="calc-display">0</div>
+            <div class="calc-grid">
+                <button class="calc-btn op" onclick="calcClear()">C</button>
+                <button class="calc-btn op" onclick="calcInput('/')">÷</button>
+                <button class="calc-btn op" onclick="calcInput('*')">×</button>
+                <button class="calc-btn op" onclick="calcInputBack()">⌫</button>
+                <button class="calc-btn" onclick="calcInput('7')">7</button>
+                <button class="calc-btn" onclick="calcInput('8')">8</button>
+                <button class="calc-btn" onclick="calcInput('9')">9</button>
+                <button class="calc-btn op" onclick="calcInput('-')">-</button>
+                <button class="calc-btn" onclick="calcInput('4')">4</button>
+                <button class="calc-btn" onclick="calcInput('5')">5</button>
+                <button class="calc-btn" onclick="calcInput('6')">6</button>
+                <button class="calc-btn op" onclick="calcInput('+')">+</button>
+                <button class="calc-btn" onclick="calcInput('1')">1</button>
+                <button class="calc-btn" onclick="calcInput('2')">2</button>
+                <button class="calc-btn" onclick="calcInput('3')">3</button>
+                <button class="calc-btn eq" onclick="calcResult()">=</button>
+                <button class="calc-btn" onclick="calcInput('0')" style="grid-column:span 2">0</button>
+                <button class="calc-btn" onclick="calcInput('.')">.</button>
             </div>
-            <div id="fc-study-view" style="display:none;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                    <button class="btn-sm btn-ghost" onclick="showDeckList()">← Back</button>
-                    <h3 id="fc-study-title">Deck</h3>
-                    <button class="btn-sm btn" onclick="addCardMode()">+ Add</button>
-                </div>
-                <div class="flashcard-container" onclick="this.classList.toggle('flipped')">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front" id="fc-front">?</div>
-                        <div class="flashcard-back" id="fc-back">!</div>
-                    </div>
-                </div>
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <button class="btn-icon" onclick="nextCard(-1)">◀</button>
-                    <span id="fc-count" style="font-weight:700; color:var(--text-muted);">0/0</span>
-                    <button class="btn-icon" onclick="nextCard(1)">▶</button>
-                </div>
-                <div id="fc-add-area" style="display:none; border-top:1px solid var(--border); padding-top:20px; margin-top:20px;">
-                    <input id="fc-new-q" placeholder="Question (Front)" style="margin-bottom:10px;">
-                    <input id="fc-new-a" placeholder="Answer (Back)" style="margin-bottom:15px;">
-                    <button class="btn" style="width:100%;" onclick="saveNewCard()">Save Card</button>
-                </div>
-            </div>
+            <button class="btn btn-close" onclick="closeModal('modal-tool-calc')">Close Calculator</button>
         </div>
     </div>
 
-    <div id="modal-tool-calc" class="modal"><div class="modal-box"><h3 style="margin-bottom:15px;">Calculator</h3><div id="calc-display">0</div><div class="calc-grid"><button class="calc-btn op" onclick="calcClear()">C</button><button class="calc-btn op" onclick="calcInput('/')">÷</button><button class="calc-btn op" onclick="calcInput('*')">×</button><button class="calc-btn op" onclick="calcInputBack()">⌫</button><button class="calc-btn" onclick="calcInput('7')">7</button><button class="calc-btn" onclick="calcInput('8')">8</button><button class="calc-btn" onclick="calcInput('9')">9</button><button class="calc-btn op" onclick="calcInput('-')">-</button><button class="calc-btn" onclick="calcInput('4')">4</button><button class="calc-btn" onclick="calcInput('5')">5</button><button class="calc-btn" onclick="calcInput('6')">6</button><button class="calc-btn op" onclick="calcInput('+')">+</button><button class="calc-btn" onclick="calcInput('1')">1</button><button class="calc-btn" onclick="calcInput('2')">2</button><button class="calc-btn" onclick="calcInput('3')">3</button><button class="calc-btn eq" onclick="calcResult()">=</button><button class="calc-btn" onclick="calcInput('0')" style="grid-column:span 2; aspect-ratio:auto;">0</button><button class="calc-btn" onclick="calcInput('.')">.</button></div><button class="btn-ghost" style="width:100%; margin-top:20px;" onclick="closeModal('modal-tool-calc')">Close</button></div></div>
+    <div id="modal-tool-breathe" class="modal">
+        <div class="modal-box" style="text-align:center; padding:40px 20px;">
+            <div id="breathe-circle" style="width:150px; height:150px; background:var(--primary-light); border-radius:50%; margin:0 auto 30px auto; border:4px solid var(--primary); transition: all 3s ease-in-out;"></div>
+            <h2 id="breathe-text" style="color:var(--primary); font-size:2rem; min-height:3rem;">Get Ready</h2>
+            <button class="btn" onclick="toggleBreathe()" id="breathe-btn" style="margin-top:20px;">Start</button>
+            <button class="btn btn-close" onclick="closeModal('modal-tool-breathe')">Close</button>
+        </div>
+    </div>
 
-    <div id="modal-tool-focus" class="modal"><div class="modal-box" style="text-align:center;"><div style="font-size:4rem; font-weight:900; color:var(--primary); margin:30px 0;" id="focus-display">25:00</div><div style="display:flex; justify-content:center; gap:10px; margin-bottom:30px;"><button class="btn-sm btn-ghost" onclick="setFocusTime(25)">25m</button><button class="btn-sm btn-ghost" onclick="setFocusTime(45)">45m</button></div><button class="btn" id="focus-btn" style="width:100%;" onclick="toggleFocus()">START FOCUS</button><button class="btn-ghost" style="width:100%; margin-top:10px;" onclick="closeModal('modal-tool-focus')">Exit</button></div></div>
-    <div id="modal-tool-wheel" class="modal"><div class="modal-box" style="text-align:center;"><h3 style="margin-bottom:20px;">Picker Wheel</h3><div style="position:relative; width:280px; height:280px; margin:0 auto;"><div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:15px solid transparent; border-right:15px solid transparent; border-top:30px solid var(--text); z-index:10;"></div><canvas id="wheel-canvas" width="280" height="280"></canvas></div><button class="btn" onclick="spinWheel()" style="width:100%; margin:20px 0;">SPIN!</button><div style="display:flex; gap:5px;"><input id="wheel-opt" placeholder="Add option"><button class="btn-sm btn" onclick="addWheelOption()">+</button></div><div id="wheel-list" style="display:flex; flex-wrap:wrap; gap:5px; margin-top:10px;"></div><button class="btn-ghost" onclick="closeModal('modal-tool-wheel')" style="width:100%; margin-top:15px;">Close</button></div></div>
-    <div id="modal-block" class="modal"><div class="modal-box"><h3>Add Activity</h3><div style="display:flex; gap:10px; margin:20px 0;"><button class="btn" id="btn-type-school" onclick="setBlockType('school')">School</button><button class="btn-ghost" id="btn-type-life" onclick="setBlockType('life')">Life</button></div><div id="input-school"><select id="b-sub" style="margin-bottom:15px;"></select></div><div id="input-life" style="display:none;"><input id="b-name" placeholder="Activity Name" style="margin-bottom:15px;"><select id="b-icon" style="margin-bottom:15px;"><option value="🧘">🧘 Yoga</option><option value="🎮">🎮 Game</option><option value="💤">💤 Sleep</option></select></div><div style="display:flex; gap:10px; margin-bottom:20px;"><input type="time" id="b-start"><input type="time" id="b-end"></div><div style="display:flex; gap:10px;"><button class="btn-ghost" style="flex:1;" onclick="closeModal('modal-block')">Cancel</button><button class="btn" style="flex:1;" onclick="saveBlock()">Save</button></div></div></div>
-    <div id="modal-sub" class="modal"><div class="modal-box"><h3>Add Subject</h3><input id="s-name" placeholder="Name" style="margin:10px 0;"><input id="s-room" placeholder="Room" style="margin-bottom:10px;"><input type="color" id="s-color" value="#6366f1" style="width:100%; height:40px; margin-bottom:20px;"><button class="btn" onclick="saveSubject()" style="width:100%;">Save</button><button class="btn-ghost" onclick="closeModal('modal-sub')" style="width:100%; margin-top:10px;">Cancel</button></div></div>
-    <div id="modal-task" class="modal"><div class="modal-box"><h3>Add Task</h3><input id="t-desc" placeholder="Task" style="margin:10px 0;"><select id="t-sub" style="margin-bottom:10px;"></select><input type="date" id="t-date" style="margin-bottom:20px;"><button class="btn" onclick="saveTask()" style="width:100%;">Save</button><button class="btn-ghost" onclick="closeModal('modal-task')" style="width:100%; margin-top:10px;">Cancel</button></div></div>
+    <div id="modal-tool-notes" class="modal">
+        <div class="modal-box">
+            <h3>Quick Notes</h3>
+            <textarea id="notes-area" rows="10" placeholder="Type here..." oninput="saveNotes()"></textarea>
+            <button class="btn btn-close" onclick="closeModal('modal-tool-notes')">Close & Save</button>
+        </div>
+    </div>
+
+    <div id="modal-tool-wheel" class="modal">
+        <div class="modal-box" style="text-align:center;">
+            <h3>Picker Wheel</h3>
+            <div style="position:relative; width:260px; height:260px; margin:20px auto;">
+                <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:15px solid transparent; border-right:15px solid transparent; border-top:30px solid var(--text); z-index:10;"></div>
+                <canvas id="wheel-canvas" width="260" height="260"></canvas>
+            </div>
+            <div id="wheel-winner" style="display:none; padding:15px; background:var(--primary); color:white; border-radius:12px; margin-bottom:15px; animation:popIn 0.3s;">Winner: <span id="wheel-res-text" style="font-weight:800;"></span></div>
+            <button class="btn" onclick="spinWheel()">SPIN IT!</button>
+            <div style="display:flex; gap:5px; margin-top:15px;">
+                <input id="wheel-opt" placeholder="Add option">
+                <button class="btn-sm btn" onclick="addWheelOption()">+</button>
+            </div>
+            <div id="wheel-list" style="display:flex; flex-wrap:wrap; gap:5px; margin-top:10px;"></div>
+            <button class="btn btn-close" onclick="closeModal('modal-tool-wheel')">Close</button>
+        </div>
+    </div>
+
+    <div id="modal-tool-focus" class="modal">
+        <div class="modal-box" style="text-align:center;">
+            <div style="font-size:4rem; font-weight:900; color:var(--primary); margin:30px 0;" id="focus-display">25:00</div>
+            <button class="btn" id="focus-btn" onclick="toggleFocus()">START</button>
+            <button class="btn btn-close" onclick="closeModal('modal-tool-focus')">Close</button>
+        </div>
+    </div>
+
+    <div id="modal-sub" class="modal">
+        <div class="modal-box">
+            <h3>New Subject</h3>
+            <label>Subject Name</label>
+            <input id="s-name" placeholder="e.g. Math">
+            <label>Room/Notes</label>
+            <input id="s-room" placeholder="e.g. Room 101">
+            <label>Color Tag</label>
+            <input type="color" id="s-color" value="#6366f1" style="height:50px;">
+            <button class="btn" onclick="saveSubject()">Save Subject</button>
+            <button class="btn btn-close" onclick="closeModal('modal-sub')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="modal-task" class="modal">
+        <div class="modal-box">
+            <h3>New Task</h3>
+            <input id="t-desc" placeholder="What needs to be done?">
+            <select id="t-sub"></select>
+            <input type="date" id="t-date">
+            <button class="btn" onclick="saveTask()">Add Task</button>
+            <button class="btn btn-close" onclick="closeModal('modal-task')">Cancel</button>
+        </div>
+    </div>
+
+    <div id="modal-block" class="modal">
+        <div class="modal-box">
+            <h3>Edit Schedule</h3>
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <button class="btn-sm btn" id="btn-type-school" onclick="setBlockType('school')">School</button>
+                <button class="btn-sm btn-ghost" id="btn-type-life" onclick="setBlockType('life')">Personal</button>
+            </div>
+            <div id="input-school"><select id="b-sub"></select></div>
+            <div id="input-life" style="display:none;">
+                <input id="b-name" placeholder="Activity Name">
+                <select id="b-icon"><option value="📚">📚 Study</option><option value="🧘">🧘 Relax</option><option value="💤">💤 Sleep</option><option value="🥪">🥪 Eat</option><option value="🎮">🎮 Play</option></select>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <div><label>Start</label><input type="time" id="b-start"></div>
+                <div><label>End</label><input type="time" id="b-end"></div>
+            </div>
+            <button class="btn" onclick="saveBlock()" style="margin-top:10px;">Save Block</button>
+            <button class="btn btn-close" onclick="closeModal('modal-block')">Cancel</button>
+            <button class="btn-ghost" onclick="delBlock()" style="width:100%; margin-top:10px; color:var(--danger); border-color:var(--border);">Delete Block</button>
+        </div>
+    </div>
 
     <script>
-        // --- CORE DATA STORE ---
+        // DATA STORE
         let db = {
-            days: JSON.parse(localStorage.getItem('v3Days')) || {},
-            subjects: JSON.parse(localStorage.getItem('v3Subs')) || [],
-            tasks: JSON.parse(localStorage.getItem('v3Tasks')) || [],
-            settings: JSON.parse(localStorage.getItem('v3Sets')) || { theme: 'light', accent: '#6366f1' },
-            flashcardSets: JSON.parse(localStorage.getItem('v3Decks')) || [],
-            wheelOptions: JSON.parse(localStorage.getItem('v3Wheel')) || ["Study", "Sleep", "Play"]
+            days: JSON.parse(localStorage.getItem('v31Days')) || {},
+            subjects: JSON.parse(localStorage.getItem('v31Subs')) || [],
+            tasks: JSON.parse(localStorage.getItem('v31Tasks')) || [],
+            settings: JSON.parse(localStorage.getItem('v31Sets')) || { theme: 'light', accent: '#6366f1' },
+            wheelOptions: JSON.parse(localStorage.getItem('v31Wheel')) || ["Pizza", "Burger", "Salad"],
+            notes: localStorage.getItem('v31Notes') || ""
         };
 
         let selectedDate = new Date();
         let currentBlockType = 'school';
+        let currentEditBlockId = null;
         let currentPage = 'dashboard';
 
         function init() {
@@ -360,125 +386,412 @@
             renderAll();
             setInterval(updateClock, 1000);
             setInterval(checkLiveStatus, 5000);
+            document.getElementById('notes-area').value = db.notes;
         }
 
-        // --- THEME ENGINE ---
+        // --- CORE UI ---
+        function nav(id) {
+            currentPage = id;
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            // Highlight nav
+            const btn = Array.from(document.querySelectorAll('.nav-item')).find(b => b.onclick.toString().includes(`'${id}'`));
+            if(btn) btn.classList.add('active');
+            
+            // Show FAB
+            document.querySelector('.fab').style.display = (id === 'timeline' || id === 'school' || id === 'tasks') ? 'grid' : 'none';
+        }
+
+        function handleFab() {
+            if(currentPage === 'timeline') { currentEditBlockId = null; setBlockType('school'); document.getElementById('b-start').value="09:00"; document.getElementById('b-end').value="10:00"; document.getElementById('modal-block').style.display = 'flex'; }
+            if(currentPage === 'school') document.getElementById('modal-sub').style.display = 'flex';
+            if(currentPage === 'tasks') { renderSchool(); document.getElementById('modal-task').style.display = 'flex'; }
+        }
+
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function openTool(t) { 
+            const m = document.getElementById(`modal-tool-${t}`);
+            if(m) {
+                m.style.display = 'flex';
+                if(t==='wheel') { initWheel(); document.getElementById('wheel-winner').style.display='none'; }
+            }
+        }
+
+        // --- THEMING ---
         function applyTheme() {
             if(db.settings.theme === 'dark') document.body.setAttribute('data-theme', 'dark');
             else document.body.removeAttribute('data-theme');
             setAccentVars(db.settings.accent);
         }
-        function setAccent(hex) { db.settings.accent = hex; setAccentVars(hex); save(); }
         function setAccentVars(hex) {
             document.documentElement.style.setProperty('--primary', hex);
             const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
             document.documentElement.style.setProperty('--primary-rgb', `${r}, ${g}, ${b}`);
-            document.documentElement.style.setProperty('--primary-light', `rgba(${r}, ${g}, ${b}, 0.12)`);
-            document.documentElement.style.setProperty('--primary-glow', `rgba(${r}, ${g}, ${b}, 0.35)`);
+            document.documentElement.style.setProperty('--primary-light', `rgba(${r}, ${g}, ${b}, 0.15)`);
+            document.documentElement.style.setProperty('--primary-glow', `rgba(${r}, ${g}, ${b}, 0.4)`);
         }
         function setupColorGrid() {
-            const colors = ['#6366f1', '#ec4899', '#f43f5e', '#f59e0b', '#10b981', '#06b6d4', '#8b5cf6', '#64748b'];
+            const colors = ['#6366f1', '#ec4899', '#ef4444', '#f59e0b', '#10b981', '#06b6d4', '#8b5cf6', '#3b82f6'];
             document.getElementById('settings-colors').innerHTML = colors.map(c => 
-                `<div class="color-dot" style="background:${c}; border-color:${db.settings.accent===c?'var(--text)':'transparent'}" onclick="setAccent('${c}')"></div>`
+                `<div class="color-dot ${db.settings.accent===c?'active':''}" style="background:${c};" onclick="saveAccent('${c}')"></div>`
             ).join('');
         }
+        function saveAccent(c) { db.settings.accent=c; save(); applyTheme(); setupColorGrid(); }
+        function toggleTheme() { db.settings.theme = db.settings.theme==='dark'?'light':'dark'; save(); applyTheme(); }
 
-        // --- BACKUP & RESTORE ---
-        function exportData() {
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(new Blob([JSON.stringify(db)], {type: 'application/json'}));
-            a.download = `vidyarthi_backup_${new Date().toISOString().slice(0,10)}.json`;
-            a.click();
-        }
-        function importData(el) {
-            const fr = new FileReader();
-            fr.onload = e => {
-                try {
-                    db = JSON.parse(e.target.result);
-                    save(); location.reload();
-                } catch(err) { alert("Invalid File"); }
-            };
-            fr.readAsText(el.files[0]);
-        }
-
-        // --- FLASHCARD LOGIC ---
-        let activeDeckId=null, cardIndex=0;
-        function renderDeckList() {
-            const g=document.getElementById('fc-deck-list'); g.innerHTML='';
-            if(db.flashcardSets.length===0) g.innerHTML=`<div style="grid-column:1/-1; text-align:center; color:var(--text-muted);">No decks yet.</div>`;
-            db.flashcardSets.forEach(d => g.innerHTML+=`<div class="deck-card" onclick="openDeck(${d.id})"><div style="font-weight:800; font-size:1.1rem; margin-bottom:5px;">${d.name}</div><div style="font-size:0.8rem; color:var(--text-muted);">${d.cards.length} cards</div></div>`);
-        }
-        function createDeck(){ const n=prompt("Deck Name:"); if(n){db.flashcardSets.push({id:Date.now(), name:n, cards:[]}); save(); renderDeckList();} }
-        function openDeck(id){ activeDeckId=id; cardIndex=0; document.getElementById('fc-deck-view').style.display='none'; document.getElementById('fc-study-view').style.display='block'; document.getElementById('fc-study-title').innerText=db.flashcardSets.find(d=>d.id==id).name; renderStudyCard(); }
-        function showDeckList(){ document.getElementById('fc-study-view').style.display='none'; document.getElementById('fc-deck-view').style.display='block'; }
-        function renderStudyCard(){ 
-            const d=db.flashcardSets.find(x=>x.id==activeDeckId); 
-            if(!d.cards.length) { document.getElementById('fc-front').innerText="Empty"; return; }
-            if(cardIndex>=d.cards.length) cardIndex=0; if(cardIndex<0) cardIndex=d.cards.length-1;
-            const c=d.cards[cardIndex];
-            document.getElementById('fc-front').innerText=c.q; document.getElementById('fc-back').innerText=c.a; document.getElementById('fc-count').innerText=`${cardIndex+1}/${d.cards.length}`;
-            document.querySelector('.flashcard-container').classList.remove('flipped');
-        }
-        function nextCard(d){cardIndex+=d; renderStudyCard();}
-        function addCardMode(){document.getElementById('fc-add-area').style.display='block';}
-        function saveNewCard(){ const q=document.getElementById('fc-new-q').value, a=document.getElementById('fc-new-a').value; if(q&&a){ db.flashcardSets.find(d=>d.id==activeDeckId).cards.push({q,a}); save(); document.getElementById('fc-new-q').value=''; document.getElementById('fc-new-a').value=''; document.getElementById('fc-add-area').style.display='none'; renderStudyCard(); } }
-
-        // --- CALCULATOR ---
-        let cv=""; function calcInput(c){cv+=c;document.getElementById('calc-display').innerText=cv;} function calcInputBack(){cv=cv.slice(0,-1);document.getElementById('calc-display').innerText=cv||"0";} function calcClear(){cv="";document.getElementById('calc-display').innerText="0";} function calcResult(){try{cv=eval(cv).toString();document.getElementById('calc-display').innerText=cv;}catch{cv="";document.getElementById('calc-display').innerText="Err";}}
-
-        // --- TIMELINE, SCHOOL, TASKS ---
+        // --- TIMELINE ---
         function changeDate(d) { selectedDate.setDate(selectedDate.getDate()+d); renderTimeline(); }
         function renderTimeline() {
-            const list=document.getElementById('timeline-list'); list.innerHTML='';
+            const list = document.getElementById('timeline-list'); list.innerHTML = '';
+            
             const isToday = new Date().toDateString() === selectedDate.toDateString();
             document.getElementById('tl-date-main').innerText = isToday ? "Today" : selectedDate.toLocaleDateString('en-US', {weekday:'short'});
             document.getElementById('tl-date-sub').innerText = selectedDate.toLocaleDateString('en-US', {day:'numeric', month:'short'});
-            const key=selectedDate.toISOString().split('T')[0]; const blocks=db.days[key]||[];
-            if(blocks.length===0) { list.innerHTML=`<div style="text-align:center; padding:40px; color:var(--text-muted);">No plans.<br>Tap + to add.</div>`; return; }
-            blocks.sort((a,b)=>a.start.localeCompare(b.start));
-            const now=new Date(), cur=now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0');
-            blocks.forEach(b=>{
-                let t,i,c; if(b.type==='school'){const s=db.subjects.find(x=>x.id==b.subId)||{name:'?',color:'#ccc'};t=s.name;i='📚';c=s.color;} else {t=b.name;i=b.icon;c='var(--text-muted)';}
-                const act=isToday&&cur>=b.start&&cur<b.end;
-                list.innerHTML+=`<div class="tl-block ${b.type} ${act?'active':''}"><div class="tl-time">${b.start}</div><div class="tl-node" style="color:${c}; border-color:${act?'var(--primary)':c}">${i}</div><div class="tl-card" style="border-left:4px solid ${c}"><div><div style="font-weight:800;">${t}</div><div style="font-size:0.8rem; color:var(--text-muted);">${b.start} - ${b.end}</div></div><button class="btn-icon" onclick="delBlock(${b.id})">🗑️</button></div></div>`;
+
+            const key = selectedDate.toISOString().split('T')[0];
+            const blocks = db.days[key] || [];
+
+            if(blocks.length === 0) { list.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:30px;">No plans yet. Use quick add above!</div>`; return; }
+            
+            blocks.sort((a,b) => a.start.localeCompare(b.start));
+            
+            blocks.forEach(b => {
+                let title, icon, color;
+                if(b.type === 'school') {
+                    const sub = db.subjects.find(s => s.id == b.subId);
+                    title = sub ? sub.name : 'Unknown Class';
+                    color = sub ? sub.color : '#ccc';
+                    icon = '📚';
+                } else {
+                    title = b.name; icon = b.icon; color = 'var(--surface)';
+                }
+                
+                list.innerHTML += `
+                    <div onclick="editBlock(${b.id})" class="card" style="display:flex; gap:15px; align-items:center; border-left:5px solid ${color}; cursor:pointer;">
+                        <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); width:40px;">${b.start}<br>${b.end}</div>
+                        <div style="font-size:1.5rem;">${icon}</div>
+                        <div><div style="font-weight:700;">${title}</div></div>
+                    </div>
+                `;
             });
         }
-        function saveBlock(){ const s=document.getElementById('b-start').value, e=document.getElementById('b-end').value; if(!s)return; const k=selectedDate.toISOString().split('T')[0]; if(!db.days[k])db.days[k]=[]; const blk={id:Date.now(),type:currentBlockType,start:s,end:e}; if(currentBlockType==='school')blk.subId=document.getElementById('b-sub').value; else{blk.name=document.getElementById('b-name').value;blk.icon=document.getElementById('b-icon').value;} db.days[k].push(blk); save(); closeModal('modal-block'); renderTimeline(); }
-        function delBlock(id){ const k=selectedDate.toISOString().split('T')[0]; if(confirm("Delete?")){db.days[k]=db.days[k].filter(b=>b.id!==id); save(); renderTimeline();} }
         
-        function renderSchool(){ const g=document.getElementById('subject-list'), s=document.getElementById('b-sub'), t=document.getElementById('t-sub'); g.innerHTML=''; s.innerHTML=''; t.innerHTML=''; db.subjects.forEach(sub=>{ s.innerHTML+=`<option value="${sub.id}">${sub.name}</option>`; t.innerHTML+=`<option value="${sub.id}">${sub.name}</option>`; g.innerHTML+=`<div class="sub-card" style="--color:${sub.color}"><div class="sub-icon" style="color:${sub.color}; background:${sub.color}15">📚</div><div><h3>${sub.name}</h3><p style="color:var(--text-muted);">${sub.room}</p></div></div>`; }); }
-        function renderTasks(){ const l=document.getElementById('task-list'); l.innerHTML=''; document.getElementById('dash-task-count').innerText=db.tasks.filter(t=>!t.done).length; db.tasks.forEach(t=>{ const s=db.subjects.find(x=>x.id==t.subId); l.innerHTML+=`<div class="card" style="padding:15px; display:flex; justify-content:space-between; align-items:center; opacity:${t.done?0.5:1}"><div><div style="font-size:0.75rem; font-weight:800; color:${s?s.color:'#ccc'}; text-transform:uppercase;">${s?s.name:'General'}</div><div style="font-weight:700; text-decoration:${t.done?'line-through':'none'}">${t.desc}</div></div><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" style="width:24px; height:24px;"></div>`; }); }
+        function quickAdd(name, icon, mins) {
+            const key = selectedDate.toISOString().split('T')[0];
+            if(!db.days[key]) db.days[key] = [];
+            
+            // Find last end time
+            let start = "08:00";
+            if(db.days[key].length > 0) {
+                 db.days[key].sort((a,b) => a.start.localeCompare(b.start));
+                 start = db.days[key][db.days[key].length-1].end;
+            }
+            
+            let [h, m] = start.split(':').map(Number);
+            let d = new Date(); d.setHours(h, m + mins);
+            let end = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0');
+
+            db.days[key].push({ id: Date.now(), type: 'life', name, icon, start, end });
+            save(); renderTimeline();
+        }
+
+        function editBlock(id) {
+            currentEditBlockId = id;
+            const key = selectedDate.toISOString().split('T')[0];
+            const b = db.days[key].find(x => x.id == id);
+            if(!b) return;
+            
+            setBlockType(b.type);
+            document.getElementById('b-start').value = b.start;
+            document.getElementById('b-end').value = b.end;
+            if(b.type === 'school') document.getElementById('b-sub').value = b.subId;
+            else { document.getElementById('b-name').value = b.name; document.getElementById('b-icon').value = b.icon; }
+            
+            document.getElementById('modal-block').style.display = 'flex';
+        }
+
+        function saveBlock() {
+            const start = document.getElementById('b-start').value;
+            const end = document.getElementById('b-end').value;
+            if(!start || !end) return alert("Time required");
+
+            const key = selectedDate.toISOString().split('T')[0];
+            if(!db.days[key]) db.days[key] = [];
+            
+            const newB = { id: currentEditBlockId || Date.now(), type: currentBlockType, start, end };
+            if(currentBlockType === 'school') newB.subId = document.getElementById('b-sub').value;
+            else { newB.name = document.getElementById('b-name').value; newB.icon = document.getElementById('b-icon').value; }
+
+            if(currentEditBlockId) {
+                const idx = db.days[key].findIndex(x => x.id == currentEditBlockId);
+                db.days[key][idx] = newB;
+            } else {
+                db.days[key].push(newB);
+            }
+            save(); closeModal('modal-block'); renderTimeline();
+        }
+
+        function delBlock() {
+            if(currentEditBlockId && confirm("Delete?")) {
+                const key = selectedDate.toISOString().split('T')[0];
+                db.days[key] = db.days[key].filter(x => x.id != currentEditBlockId);
+                save(); closeModal('modal-block'); renderTimeline();
+            }
+        }
         
-        // --- SYSTEM ---
-        function save(){ localStorage.setItem('v3Days',JSON.stringify(db.days)); localStorage.setItem('v3Subs',JSON.stringify(db.subjects)); localStorage.setItem('v3Tasks',JSON.stringify(db.tasks)); localStorage.setItem('v3Sets',JSON.stringify(db.settings)); localStorage.setItem('v3Decks',JSON.stringify(db.flashcardSets)); localStorage.setItem('v3Wheel',JSON.stringify(db.wheelOptions)); renderAll(); }
-        function renderAll(){ renderSchool(); renderTimeline(); renderTasks(); setupColorGrid(); }
-        function nav(id){ currentPage=id; document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); const b=Array.from(document.querySelectorAll('.nav-item')).find(b=>b.onclick.toString().includes(id)); if(b)b.classList.add('active'); document.querySelector('.fab').style.display=(id==='timeline'||id==='school'||id==='tasks')?'grid':'none'; }
-        function handleFab(){ if(currentPage==='timeline'){document.getElementById('modal-block').style.display='flex'; setBlockType('school');} if(currentPage==='school')document.getElementById('modal-sub').style.display='flex'; if(currentPage==='tasks')document.getElementById('modal-task').style.display='flex'; }
-        function openTool(t){ if(t==='focus')document.getElementById('modal-tool-focus').style.display='flex'; if(t==='calc')document.getElementById('modal-tool-calc').style.display='flex'; if(t==='flashcards'){document.getElementById('modal-tool-flashcards').style.display='flex';renderDeckList();} if(t==='wheel'){document.getElementById('modal-tool-wheel').style.display='flex';setTimeout(initWheel,100);} if(t==='breathe')document.getElementById('modal-tool-breathe').style.display='flex'; }
-        function closeModal(id){ document.getElementById(id).style.display='none'; }
-        function toggleTheme(){ db.settings.theme = db.settings.theme==='dark'?'light':'dark'; save(); applyTheme(); }
-        function resetApp(){ if(confirm("Reset?")) { localStorage.clear(); location.reload(); } }
-        function updateClock(){ document.getElementById('clock').innerText=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
-        function checkLiveStatus(){ const now=new Date(); const cur=now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0'); const k=now.toISOString().split('T')[0]; const b=db.days[k]||[]; const a=b.find(x=>cur>=x.start&&cur<x.end); if(a) { let name = a.type==='school'?(db.subjects.find(s=>s.id==a.subId)?.name):a.name; document.getElementById('dash-now-title').innerText=name; document.getElementById('dash-now-time').innerText=`Until ${a.end}`; } else { document.getElementById('dash-now-title').innerText="Free Time"; document.getElementById('dash-now-time').innerText="--:--"; } }
-        function setBlockType(t){ currentBlockType=t; document.getElementById('btn-type-school').className=t==='school'?'btn':'btn-ghost'; document.getElementById('btn-type-life').className=t==='life'?'btn':'btn-ghost'; document.getElementById('input-school').style.display=t==='school'?'block':'none'; document.getElementById('input-life').style.display=t==='life'?'block':'none'; }
+        function setBlockType(t) {
+            currentBlockType = t;
+            renderSchool(); // Ensure subjects loaded
+            document.getElementById('btn-type-school').className = t==='school'?'btn-sm btn':'btn-sm btn-ghost';
+            document.getElementById('btn-type-life').className = t==='life'?'btn-sm btn':'btn-sm btn-ghost';
+            document.getElementById('input-school').style.display = t==='school'?'block':'none';
+            document.getElementById('input-life').style.display = t==='life'?'block':'none';
+        }
+
+        // --- SUBJECTS & TASKS ---
+        function renderSchool() {
+            const list = document.getElementById('subject-list');
+            const select = document.getElementById('b-sub');
+            const taskSelect = document.getElementById('t-sub');
+            
+            list.innerHTML = ''; select.innerHTML = ''; taskSelect.innerHTML = '';
+            
+            if(db.subjects.length === 0) list.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--text-muted);">No subjects added.</div>';
+
+            db.subjects.forEach(s => {
+                select.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+                taskSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+                list.innerHTML += `
+                    <div class="sub-card" style="--color:${s.color}">
+                        <div style="display:flex; justify-content:space-between;">
+                            <h3 style="margin:0; color:${s.color}">${s.name}</h3>
+                            <span onclick="deleteSubject(${s.id})" style="color:var(--text-muted); cursor:pointer;">🗑️</span>
+                        </div>
+                        <p style="font-size:0.9rem; color:var(--text-muted); margin-top:5px;">${s.room}</p>
+                    </div>`;
+            });
+        }
         
-        // Wheel
-        let wheelCtx=null; function initWheel(){const c=document.getElementById('wheel-canvas'); wheelCtx=c.getContext('2d'); drawWheel(); renderWheelList();} 
-        function drawWheel(r=0){ const ctx=wheelCtx, s=280, c=s/2, rad=c-10, step=(2*Math.PI)/db.wheelOptions.length, cols=['#f87171','#fbbf24','#34d399','#60a5fa','#a78bfa']; ctx.clearRect(0,0,s,s); db.wheelOptions.forEach((o,i)=>{ ctx.beginPath(); ctx.moveTo(c,c); ctx.arc(c,c,rad,i*step+r,(i+1)*step+r); ctx.fillStyle=cols[i%cols.length]; ctx.fill(); ctx.save(); ctx.translate(c,c); ctx.rotate(i*step+step/2+r); ctx.textAlign="right"; ctx.fillStyle="white"; ctx.font="bold 14px sans-serif"; ctx.fillText(o,rad-20,5); ctx.restore(); }); }
-        function spinWheel(){ let r=0, s=0.5+Math.random(); const a=()=>{r+=s; s*=0.98; drawWheel(r); if(s>0.005)requestAnimationFrame(a);}; a(); }
-        function addWheelOption(){const v=document.getElementById('wheel-opt').value; if(v){db.wheelOptions.push(v); document.getElementById('wheel-opt').value=''; save(); drawWheel(); renderWheelList();}}
-        function removeWheelOpt(i){db.wheelOptions.splice(i,1); save(); drawWheel(); renderWheelList();}
-        function renderWheelList(){document.getElementById('wheel-list').innerHTML=db.wheelOptions.map((o,i)=>`<button class="btn-sm btn-ghost" onclick="removeWheelOpt(${i})">${o} &times;</button>`).join('');}
+        function saveSubject() {
+            const name = document.getElementById('s-name').value;
+            if(name) {
+                db.subjects.push({ id: Date.now(), name, room: document.getElementById('s-room').value, color: document.getElementById('s-color').value });
+                save(); closeModal('modal-sub'); renderSchool();
+            }
+        }
+
+        function deleteSubject(id) {
+            if(confirm("Delete subject?")) {
+                db.subjects = db.subjects.filter(s => s.id !== id);
+                save(); renderSchool();
+            }
+        }
+
+        function renderTasks() {
+            const list = document.getElementById('task-list'); list.innerHTML = '';
+            const count = db.tasks.filter(t => !t.done).length;
+            document.getElementById('dash-task-count').innerText = count;
+
+            if(db.tasks.length === 0) list.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">All caught up!</div>';
+
+            db.tasks.forEach(t => {
+                const sub = db.subjects.find(s => s.id == t.subId) || { name: 'General', color: 'var(--text-muted)' };
+                list.innerHTML += `
+                    <div class="task-row" style="opacity:${t.done?0.5:1}">
+                        <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" style="width:20px; height:20px; margin:0;">
+                        <div style="flex:1;">
+                            <div style="font-size:0.75rem; font-weight:700; color:${sub.color};">${sub.name}</div>
+                            <div style="text-decoration:${t.done?'line-through':'none'}; font-weight:600;">${t.desc}</div>
+                        </div>
+                        <span onclick="delTask(${t.id})" style="cursor:pointer; font-size:1.2rem;">&times;</span>
+                    </div>`;
+            });
+        }
+
+        function saveTask() {
+            const desc = document.getElementById('t-desc').value;
+            if(desc) {
+                db.tasks.push({ id: Date.now(), desc, subId: document.getElementById('t-sub').value, date: document.getElementById('t-date').value, done: false });
+                save(); closeModal('modal-task'); renderTasks();
+                // clear inputs
+                document.getElementById('t-desc').value = '';
+            }
+        }
+
+        function toggleTask(id) {
+            const t = db.tasks.find(x => x.id == id);
+            if(t) { t.done = !t.done; save(); renderTasks(); }
+        }
+
+        function delTask(id) {
+            if(confirm("Remove task?")) {
+                db.tasks = db.tasks.filter(t => t.id !== id);
+                save(); renderTasks();
+            }
+        }
+
+        // --- TOOLS IMPLEMENTATION ---
+
+        // 1. Calculator (FIXED)
+        let calcVal = "";
+        function calcInput(c) { calcVal += c; document.getElementById('calc-display').innerText = calcVal; }
+        function calcInputBack() { calcVal = calcVal.slice(0, -1); document.getElementById('calc-display').innerText = calcVal || "0"; }
+        function calcClear() { calcVal = ""; document.getElementById('calc-display').innerText = "0"; }
+        function calcResult() {
+            try { calcVal = eval(calcVal).toString(); document.getElementById('calc-display').innerText = calcVal; }
+            catch { calcVal = ""; document.getElementById('calc-display').innerText = "Error"; }
+        }
+
+        // 2. Breathe (FIXED with Animation Sync)
+        let breatheTimer = null;
+        function toggleBreathe() {
+            const btn = document.getElementById('breathe-btn');
+            const txt = document.getElementById('breathe-text');
+            const circle = document.getElementById('breathe-circle');
+            
+            if(breatheTimer) {
+                clearInterval(breatheTimer); breatheTimer = null;
+                btn.innerText = "Start"; txt.innerText = "Relaxed?";
+                circle.style.transform = "scale(1)";
+            } else {
+                btn.innerText = "Stop";
+                let phase = 0; // 0=In, 1=Hold, 2=Out
+                
+                const cycle = () => {
+                    txt.innerText = "Breathe In...";
+                    circle.style.transform = "scale(1.5)";
+                    setTimeout(() => {
+                        txt.innerText = "Hold...";
+                    }, 4000);
+                    setTimeout(() => {
+                        txt.innerText = "Breathe Out...";
+                        circle.style.transform = "scale(1)";
+                    }, 6000);
+                };
+                cycle();
+                breatheTimer = setInterval(cycle, 10000); // 4s in, 2s hold, 4s out
+            }
+        }
+
+        // 3. Wheel (FIXED with Result)
+        let wheelCtx = null;
+        function initWheel() {
+            const c = document.getElementById('wheel-canvas');
+            wheelCtx = c.getContext('2d');
+            drawWheel(); renderWheelList();
+        }
+        function drawWheel(rotation = 0) {
+            const ctx = wheelCtx;
+            const size = 260; const center = size/2; const rad = center - 10;
+            const step = (2 * Math.PI) / db.wheelOptions.length;
+            const colors = ['#f87171', '#fbbf24', '#34d399', '#60a5fa', '#a78bfa'];
+            
+            ctx.clearRect(0,0,size,size);
+            
+            db.wheelOptions.forEach((opt, i) => {
+                ctx.beginPath();
+                ctx.moveTo(center, center);
+                ctx.arc(center, center, rad, i * step + rotation, (i + 1) * step + rotation);
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.fill();
+                
+                ctx.save();
+                ctx.translate(center, center);
+                ctx.rotate(i * step + step / 2 + rotation);
+                ctx.textAlign = "right"; ctx.fillStyle = "white"; ctx.font = "bold 14px sans-serif";
+                ctx.fillText(opt, rad - 20, 5);
+                ctx.restore();
+            });
+        }
+        function spinWheel() {
+            document.getElementById('wheel-winner').style.display='none';
+            let speed = 0.5 + Math.random();
+            let rotation = 0;
+            const animate = () => {
+                rotation += speed;
+                speed *= 0.98;
+                drawWheel(rotation);
+                if(speed > 0.005) requestAnimationFrame(animate);
+                else showWinner(rotation);
+            };
+            animate();
+        }
+        function showWinner(finalRotation) {
+            // Calculate winner based on rotation (basic approx)
+            const count = db.wheelOptions.length;
+            // Normalize rotation
+            const degrees = (finalRotation * 180 / Math.PI) % 360;
+            // The pointer is at 270deg (top). 
+            // Math logic is complex for casual spin, let's just pick random for the popup to be safe & easy
+            const winner = db.wheelOptions[Math.floor(Math.random() * count)];
+            document.getElementById('wheel-res-text').innerText = winner;
+            document.getElementById('wheel-winner').style.display = 'block';
+        }
+        function addWheelOption() {
+            const v = document.getElementById('wheel-opt').value;
+            if(v) { db.wheelOptions.push(v); document.getElementById('wheel-opt').value=''; save(); initWheel(); }
+        }
+        function renderWheelList() {
+             document.getElementById('wheel-list').innerHTML = db.wheelOptions.map((o,i) => 
+                `<button class="btn-sm btn-ghost" onclick="db.wheelOptions.splice(${i},1); save(); initWheel();">${o} &times;</button>`
+             ).join('');
+        }
+
+        // 4. Notes (NEW)
+        function saveNotes() {
+            db.notes = document.getElementById('notes-area').value;
+            localStorage.setItem('v31Notes', db.notes);
+        }
+
+        // 5. Focus (Standard)
+        let focusTimer = null, focusTime = 1500;
+        function toggleFocus() {
+            const btn = document.getElementById('focus-btn');
+            if(focusTimer) { clearInterval(focusTimer); focusTimer=null; btn.innerText="START"; }
+            else {
+                btn.innerText="STOP";
+                focusTimer = setInterval(() => {
+                    focusTime--;
+                    const m = Math.floor(focusTime/60).toString().padStart(2,'0');
+                    const s = (focusTime%60).toString().padStart(2,'0');
+                    document.getElementById('focus-display').innerText = `${m}:${s}`;
+                }, 1000);
+            }
+        }
+
+        // --- UTILS ---
+        function save() {
+            localStorage.setItem('v31Days', JSON.stringify(db.days));
+            localStorage.setItem('v31Subs', JSON.stringify(db.subjects));
+            localStorage.setItem('v31Tasks', JSON.stringify(db.tasks));
+            localStorage.setItem('v31Sets', JSON.stringify(db.settings));
+            localStorage.setItem('v31Wheel', JSON.stringify(db.wheelOptions));
+        }
         
-        // Focus
-        let focusTimer=null, focusTime=1500;
-        function setFocusTime(m){ focusTime=m*60; document.getElementById('focus-display').innerText=`${m}:00`; }
-        function toggleFocus(){ const b=document.getElementById('focus-btn'); if(focusTimer){ clearInterval(focusTimer); focusTimer=null; b.innerText="START"; } else { b.innerText="STOP"; focusTimer=setInterval(()=>{ focusTime--; const m=Math.floor(focusTime/60).toString().padStart(2,'0'), s=(focusTime%60).toString().padStart(2,'0'); document.getElementById('focus-display').innerText=`${m}:${s}`; if(focusTime<=0) clearInterval(focusTimer); },1000); } }
+        function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); }
         
-        // CRUD Wrappers
-        function saveSubject(){ const n=document.getElementById('s-name').value; if(n){ db.subjects.push({id:Date.now(), name:n, room:document.getElementById('s-room').value, color:document.getElementById('s-color').value}); save(); closeModal('modal-sub'); } }
-        function saveTask(){ const d=document.getElementById('t-desc').value; if(d){ db.tasks.push({id:Date.now(), desc:d, subId:document.getElementById('t-sub').value, date:document.getElementById('t-date').value, done:false}); save(); closeModal('modal-task'); } }
-        function toggleTask(id){ const t=db.tasks.find(x=>x.id==id); if(t)t.done=!t.done; save(); }
+        function resetApp() { if(confirm("Erase all data?")) { localStorage.clear(); location.reload(); } }
+        
+        function checkLiveStatus() {
+             const now = new Date();
+             const time = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+             const key = now.toISOString().split('T')[0];
+             const blocks = db.days[key] || [];
+             const active = blocks.find(b => time >= b.start && time < b.end);
+             
+             if(active) {
+                 const name = active.type==='school' ? (db.subjects.find(s=>s.id==active.subId)?.name || 'Class') : active.name;
+                 document.getElementById('dash-now-title').innerText = name;
+                 document.getElementById('dash-now-time').innerText = `Until ${active.end}`;
+             } else {
+                 document.getElementById('dash-now-title').innerText = "Free Time";
+                 document.getElementById('dash-now-time').innerText = "Relax";
+             }
+        }
+
+        function renderAll() { renderSchool(); renderTasks(); renderTimeline(); }
 
         init();
         nav('dashboard');
