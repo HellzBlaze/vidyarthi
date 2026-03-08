@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - LifeOS v3.2</title>
+    <title>Vidyarthi - LifeOS v3.3</title>
     <style>
         :root {
             /* Theme Variables */
@@ -73,17 +73,9 @@
         @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         /* UI COMPONENTS */
-        .card { 
-            background: var(--surface); border-radius: var(--radius-lg); padding: 20px; 
-            border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 15px; 
-        }
+        .card { background: var(--surface); border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 15px; }
         
-        .btn { 
-            padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 14px; 
-            font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            gap: 8px; transition: var(--transition); font-size: 0.95rem; width: 100%;
-            box-shadow: 0 4px 12px var(--primary-glow);
-        }
+        .btn { padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition); font-size: 0.95rem; width: 100%; box-shadow: 0 4px 12px var(--primary-glow); }
         .btn:active { transform: scale(0.97); }
         
         .btn-close { background: var(--surface); color: var(--text-muted); border: 1px solid var(--border); margin-top: 15px; box-shadow: none; }
@@ -92,10 +84,7 @@
         .btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 10px; }
         .btn-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); cursor: pointer; }
 
-        input, select, textarea { 
-            padding: 12px 15px; border: 2px solid var(--border); border-radius: 12px; 
-            background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 1rem; margin-bottom: 10px; 
-        }
+        input, select, textarea { padding: 12px 15px; border: 2px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 1rem; margin-bottom: 10px; }
         input:focus, textarea:focus { border-color: var(--primary); background: var(--surface); }
 
         /* TIMELINE QUICK CHIPS */
@@ -105,11 +94,7 @@
 
         /* TOOLS GRID */
         .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
-        .tool-card { 
-            background: var(--surface); padding: 20px; border-radius: var(--radius-lg); border: 1px solid var(--border); 
-            cursor: pointer; text-align: center; height: 140px; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; transition: var(--transition); 
-        }
+        .tool-card { background: var(--surface); padding: 20px; border-radius: var(--radius-lg); border: 1px solid var(--border); cursor: pointer; text-align: center; height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: var(--transition); }
         .tool-card:hover { transform: translateY(-4px); border-color: var(--primary); background: var(--primary-light); }
         .tool-icon { font-size: 2.2rem; margin-bottom: 8px; }
 
@@ -125,7 +110,7 @@
         .flashcard-container { perspective: 1000px; width: 100%; height: 220px; cursor: pointer; margin-bottom: 20px; }
         .flashcard-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
         .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
-        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 20px; font-size: 1.2rem; font-weight: 700; border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow); }
+        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 20px; font-size: 1.2rem; font-weight: 700; border: 1px solid var(--border); box-shadow: var(--shadow); background: var(--surface); }
         .flashcard-back { background: var(--primary); color: white; transform: rotateY(180deg); border:none; }
 
         /* NOTEBOOKS & COUNTDOWNS */
@@ -143,7 +128,7 @@
         .calc-btn { height: 55px; border-radius: 14px; border: none; font-size: 1.3rem; font-weight: 600; background: var(--bg); color: var(--text); cursor: pointer; }
         .calc-btn.op { background: var(--primary-light); color: var(--primary); }
         .calc-btn.eq { background: var(--primary); color: white; grid-column: span 2; }
-        #calc-display { text-align: right; font-size: 2.5rem; padding: 15px; margin-bottom: 0; background: transparent; border: none; width: 100%; }
+        #calc-display { text-align: right; font-size: 2.5rem; padding: 15px; margin-bottom: 0; background: transparent; border: none; width: 100%; transition: font-size 0.1s; }
 
         /* SETTINGS ACCENTS */
         .color-dot { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; transition: 0.2s; border: 3px solid transparent; }
@@ -167,7 +152,7 @@
     <nav class="sidebar">
         <div class="logo">V</div>
         <button class="nav-item active" onclick="nav('dashboard')" title="Home">🏠</button>
-        <button class="nav-item" onclick="nav('timeline')" title="Timeline">⏱️</button>
+        <button class="nav-item" onclick="nav('timeline')" title="Timeline">📅</button>
         <button class="nav-item" onclick="nav('school')" title="School">🎒</button>
         <button class="nav-item" onclick="nav('tasks')" title="Tasks">✅</button>
         <button class="nav-item" onclick="nav('tools')" title="Tools">🛠️</button>
@@ -176,7 +161,7 @@
 
     <main class="main-content">
         <div class="header">
-            <div><div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">LifeOS 3.2</div><h1 id="page-title">Dashboard</h1></div>
+            <div><div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">LifeOS 3.3</div><h1 id="page-title">Dashboard</h1></div>
             <div id="clock" style="font-family:monospace; font-weight:700; color:var(--primary); background:var(--primary-light); padding:8px 12px; border-radius:12px;">00:00</div>
         </div>
 
@@ -215,6 +200,7 @@
                 </div>
                 <button class="btn-icon" onclick="changeDate(1)">▶</button>
             </div>
+            
             <div id="timeline-list"></div>
         </section>
 
@@ -411,7 +397,7 @@
 
     <div id="modal-block" class="modal">
         <div class="modal-box">
-            <h3>Add Activity</h3>
+            <h3>Edit Activity</h3>
             <div style="display:flex; gap:10px; margin: 20px 0;">
                 <button class="btn" style="flex:1;" id="btn-type-school" onclick="setBlockType('school')">🏫 School</button>
                 <button class="btn-ghost" style="flex:1;" id="btn-type-life" onclick="setBlockType('life')">🧘 Life</button>
@@ -428,6 +414,7 @@
                 <div style="flex:1"><label style="font-size:0.8rem; font-weight:700;">End</label><input type="time" id="b-end"></div>
             </div>
             <button class="btn" onclick="saveBlock()">Save Block</button>
+            <button class="btn-ghost" onclick="delBlock()" style="width:100%; margin-top:10px; color:var(--danger); border-color:var(--border);">Delete Block</button>
             <button class="btn btn-close" onclick="closeModal('modal-block')" style="width:100%;">Cancel</button>
         </div>
     </div>
@@ -435,8 +422,11 @@
     <div id="modal-sub" class="modal">
         <div class="modal-box">
             <h3>New Subject</h3>
-            <input id="s-name" placeholder="Name (e.g. Math)">
-            <input id="s-room" placeholder="Room">
+            <label>Subject Name</label>
+            <input id="s-name" placeholder="e.g. Math">
+            <label>Room/Notes</label>
+            <input id="s-room" placeholder="e.g. Room 101">
+            <label>Color Tag</label>
             <input type="color" id="s-color" value="#6366f1" style="height:50px; padding:0;">
             <button class="btn" onclick="saveSubject()">Save Subject</button>
             <button class="btn btn-close" onclick="closeModal('modal-sub')" style="width:100%;">Cancel</button>
@@ -464,9 +454,8 @@
         };
 
         try {
-            const saved = localStorage.getItem('v32Data');
+            const saved = localStorage.getItem('v33Data'); // Updated Key
             if(saved) db = JSON.parse(saved);
-            // Ensure new structures exist for old saves
             if(!db.flashcardSets) db.flashcardSets = [];
             if(!db.notebooks) db.notebooks = [{id:1, title:'General Notes', content:''}];
             if(!db.countdowns) db.countdowns = [];
@@ -474,6 +463,7 @@
 
         let selectedDate = new Date();
         let currentBlockType = 'school';
+        let currentEditBlockId = null;
         let currentPage = 'dashboard';
 
         function init() {
@@ -496,10 +486,11 @@
             
             document.querySelector('.fab').style.display = (id === 'timeline' || id === 'school' || id === 'tasks') ? 'grid' : 'none';
             document.getElementById('page-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
+            if(id === 'timeline') renderTimeline(); // Refresh timeline specifically
         }
 
         function handleFab() {
-            if(currentPage === 'timeline') { setBlockType('school'); document.getElementById('b-start').value="09:00"; document.getElementById('b-end').value="10:00"; document.getElementById('modal-block').style.display = 'flex'; }
+            if(currentPage === 'timeline') { currentEditBlockId = null; setBlockType('school'); document.getElementById('b-start').value="09:00"; document.getElementById('b-end').value="10:00"; document.getElementById('modal-block').style.display = 'flex'; }
             if(currentPage === 'school') document.getElementById('modal-sub').style.display = 'flex';
             if(currentPage === 'tasks') { renderSchool(); document.getElementById('modal-task').style.display = 'flex'; }
         }
@@ -613,12 +604,21 @@
         }
         function deleteCountdown(id) { db.countdowns = db.countdowns.filter(c => c.id !== id); save(); renderCountdowns(); }
 
-        // --- CALCULATOR ---
+        // --- CALCULATOR (FIXED) ---
         let calcVal = "";
-        function calcInput(c) { calcVal += c; document.getElementById('calc-display').innerText = calcVal; }
-        function calcInputBack() { calcVal = calcVal.slice(0, -1); document.getElementById('calc-display').innerText = calcVal || "0"; }
-        function calcClear() { calcVal = ""; document.getElementById('calc-display').innerText = "0"; }
-        function calcResult() { try { calcVal = eval(calcVal).toString(); document.getElementById('calc-display').innerText = calcVal; } catch { calcVal = ""; document.getElementById('calc-display').innerText = "Error"; } }
+        function updateCalcDisplay() {
+            const disp = document.getElementById('calc-display');
+            disp.innerText = calcVal || "0";
+            if (calcVal.length > 10) {
+                disp.style.fontSize = Math.max(1.2, 2.5 - (calcVal.length - 10) * 0.15) + 'rem';
+            } else {
+                disp.style.fontSize = '2.5rem';
+            }
+        }
+        function calcInput(c) { calcVal += c; updateCalcDisplay(); }
+        function calcInputBack() { calcVal = calcVal.slice(0, -1); updateCalcDisplay(); }
+        function calcClear() { calcVal = ""; updateCalcDisplay(); }
+        function calcResult() { try { calcVal = eval(calcVal).toString(); updateCalcDisplay(); } catch { calcVal = ""; document.getElementById('calc-display').innerText = "Error"; } }
 
         // --- BREATHE ---
         let breatheTimer = null;
@@ -633,7 +633,7 @@
                 circle.style.animation = "none"; circle.style.transform = "scale(1)";
             } else {
                 btn.innerText = "Stop";
-                circle.style.animation = "breathe 8s infinite ease-in-out"; // 4s in, 4s out mapped to CSS
+                circle.style.animation = "breathe 8s infinite ease-in-out"; 
                 
                 const cycle = () => {
                     txt.innerText = "Inhale...";
@@ -667,10 +667,7 @@
                 rotation += speed; speed *= 0.98; drawWheel(rotation);
                 if(speed > 0.005) requestAnimationFrame(animate);
                 else {
-                    const normalizedRot = rotation % (2 * Math.PI);
-                    const step = (2 * Math.PI) / db.wheelOptions.length;
-                    // Pointer is at top (270 degrees or 3PI/2). Math to find exact slice is tricky, so simplified pseudo-random matching visual stop:
-                    const winnerIdx = Math.floor(Math.random() * db.wheelOptions.length); // Safe fallback
+                    const winnerIdx = Math.floor(Math.random() * db.wheelOptions.length); 
                     document.getElementById('wheel-res-text').innerText = db.wheelOptions[winnerIdx];
                     document.getElementById('wheel-winner').style.display = 'block';
                 }
@@ -696,104 +693,265 @@
             }
         }
 
-        // --- TIMELINE & SCHOOL ---
+        // --- TIMELINE (MS TEAMS DAY CALENDAR STYLE) ---
         function changeDate(d) { selectedDate.setDate(selectedDate.getDate()+d); renderTimeline(); }
+        
         function renderTimeline() {
-            const list = document.getElementById('timeline-list'); list.innerHTML = '';
+            const list = document.getElementById('timeline-list');
+            list.innerHTML = '';
+            
             const isToday = new Date().toDateString() === selectedDate.toDateString();
             document.getElementById('tl-date-main').innerText = isToday ? "Today" : selectedDate.toLocaleDateString('en-US', {weekday:'short'});
             document.getElementById('tl-date-sub').innerText = selectedDate.toLocaleDateString('en-US', {day:'numeric', month:'short'});
 
             const key = selectedDate.toISOString().split('T')[0];
             const blocks = db.days[key] || [];
-            if(blocks.length === 0) { list.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted);">No plans. Add blocks using the chips above.</div>`; return; }
             
-            blocks.sort((a,b) => a.start.localeCompare(b.start));
-            const now = new Date(); const curTime = now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0');
+            // Generate 24-hour Calendar Grid
+            const pxPerHour = 60; // 1px per minute
+            let gridHtml = '<div style="position:relative; height:1440px; background:var(--surface); border-radius:12px; border:1px solid var(--border); overflow:hidden; width:100%;">';
+            
+            // Grid Lines
+            for(let i=0; i<24; i++) {
+                const top = i * pxPerHour;
+                const timeLabel = (i < 10 ? '0'+i : i) + ':00';
+                gridHtml += `<div style="position:absolute; top:${top}px; left:0; right:0; height:1px; background:var(--border); z-index:1;"></div>`;
+                gridHtml += `<div style="position:absolute; top:${top - 8}px; left:5px; width:40px; text-align:right; font-size:0.7rem; color:var(--text-muted); z-index:2;">${timeLabel}</div>`;
+            }
 
+            // Blocks Absolute Positioning
             blocks.forEach(b => {
                 let title, icon, color;
-                if(b.type === 'school') { const sub = db.subjects.find(s => s.id == b.subId); title = sub?sub.name:'?'; icon = '📚'; color = sub?sub.color:'#ccc'; } 
-                else { title = b.name; icon = b.icon; color = 'var(--surface)'; }
-                const isActive = isToday && (curTime >= b.start && curTime < b.end);
-                
-                list.innerHTML += `
-                    <div class="card" style="display:flex; gap:15px; align-items:center; border-left:5px solid ${color}; margin-bottom:10px; padding:15px;">
-                        <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); width:40px;">${b.start}<br>${b.end}</div>
-                        <div style="font-size:1.5rem;">${icon}</div>
-                        <div style="flex:1"><div style="font-weight:700;">${title}</div></div>
-                        <button class="btn-icon" style="background:transparent; border:none;" onclick="delBlock(${b.id})">🗑️</button>
+                if(b.type === 'school') {
+                    const sub = db.subjects.find(s => s.id == b.subId);
+                    title = sub ? sub.name : 'Class'; icon = '📚'; color = sub ? sub.color : '#cbd5e1';
+                } else {
+                    title = b.name; icon = b.icon; color = 'var(--text-muted)';
+                }
+
+                const [sH, sM] = b.start.split(':').map(Number);
+                const [eH, eM] = b.end.split(':').map(Number);
+                const startPx = (sH * 60) + sM;
+                const endPx = (eH * 60) + eM;
+                const height = Math.max(endPx - startPx, 20); // Min 20px height to click
+
+                gridHtml += `
+                    <div onclick="editBlock(${b.id})" style="position:absolute; top:${startPx}px; left:55px; right:10px; height:${height}px; background:${color}33; border-left:4px solid ${color}; border-radius:6px; padding:2px 8px; font-size:0.8rem; overflow:hidden; z-index:3; cursor:pointer; display:flex; flex-direction:column; justify-content:center; box-shadow:0 1px 3px rgba(0,0,0,0.1); transition:var(--transition);">
+                        <div style="font-weight:700; color:var(--text); white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">${icon} ${title}</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted);">${b.start} - ${b.end}</div>
                     </div>`;
             });
+
+            // Current Time Indicator
+            if(isToday) {
+                const now = new Date();
+                const top = (now.getHours() * 60) + now.getMinutes();
+                gridHtml += `<div style="position:absolute; top:${top}px; left:50px; right:0; height:2px; background:var(--danger); z-index:10; pointer-events:none;"></div>`;
+                gridHtml += `<div style="position:absolute; top:${top - 4}px; left:46px; width:10px; height:10px; border-radius:50%; background:var(--danger); z-index:10;"></div>`;
+            }
+
+            gridHtml += '</div>';
+            list.innerHTML = `<div style="max-height: 500px; overflow-y: auto; border-radius:12px; margin-top:10px;" id="cal-scroll-wrapper">${gridHtml}</div>`;
+            
+            // Auto Scroll
+            setTimeout(() => {
+                const wrapper = document.getElementById('cal-scroll-wrapper');
+                if(wrapper) {
+                    if (isToday) {
+                        const now = new Date();
+                        wrapper.scrollTop = Math.max(0, (now.getHours() * 60) - 100);
+                    } else {
+                        wrapper.scrollTop = 8 * 60; // 8 AM
+                    }
+                }
+            }, 50);
         }
+        
         function quickAdd(name, icon, mins) {
-            const key = selectedDate.toISOString().split('T')[0]; if(!db.days[key]) db.days[key] = [];
+            const key = selectedDate.toISOString().split('T')[0];
+            if(!db.days[key]) db.days[key] = [];
+            
             let start = "08:00";
-            if(db.days[key].length > 0) { db.days[key].sort((a,b) => a.start.localeCompare(b.start)); start = db.days[key][db.days[key].length-1].end; }
-            let [h, m] = start.split(':').map(Number); let d = new Date(); d.setHours(h, m + mins);
+            if(db.days[key].length > 0) {
+                 db.days[key].sort((a,b) => a.start.localeCompare(b.start));
+                 start = db.days[key][db.days[key].length-1].end;
+            }
+            
+            let [h, m] = start.split(':').map(Number);
+            let d = new Date(); d.setHours(h, m + mins);
             let end = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0');
-            db.days[key].push({ id: Date.now(), type: 'life', name, icon, start, end }); save(); renderTimeline();
+
+            db.days[key].push({ id: Date.now(), type: 'life', name, icon, start, end });
+            save(); renderTimeline();
         }
+
+        function editBlock(id) {
+            currentEditBlockId = id;
+            const key = selectedDate.toISOString().split('T')[0];
+            const b = db.days[key].find(x => x.id == id);
+            if(!b) return;
+            
+            setBlockType(b.type);
+            document.getElementById('b-start').value = b.start;
+            document.getElementById('b-end').value = b.end;
+            if(b.type === 'school') document.getElementById('b-sub').value = b.subId;
+            else { document.getElementById('b-name').value = b.name; }
+            
+            document.getElementById('modal-block').style.display = 'flex';
+        }
+
+        function saveBlock() {
+            const start = document.getElementById('b-start').value;
+            const end = document.getElementById('b-end').value;
+            if(!start || !end) return alert("Time required");
+
+            const key = selectedDate.toISOString().split('T')[0];
+            if(!db.days[key]) db.days[key] = [];
+            
+            const newB = { id: currentEditBlockId || Date.now(), type: currentBlockType, start, end };
+            if(currentBlockType === 'school') { newB.subId = document.getElementById('b-sub').value; }
+            else { newB.name = document.getElementById('b-name').value || "Activity"; newB.icon = document.getElementById('b-icon').value || "✅"; }
+
+            if(currentEditBlockId) {
+                const idx = db.days[key].findIndex(x => x.id == currentEditBlockId);
+                db.days[key][idx] = newB;
+            } else {
+                db.days[key].push(newB);
+            }
+            save(); closeModal('modal-block'); renderTimeline();
+        }
+
+        function delBlock() {
+            if(currentEditBlockId && confirm("Delete?")) {
+                const key = selectedDate.toISOString().split('T')[0];
+                db.days[key] = db.days[key].filter(x => x.id != currentEditBlockId);
+                save(); closeModal('modal-block'); renderTimeline();
+            }
+        }
+        
         function setBlockType(t) {
-            currentBlockType = t; renderSchool();
+            currentBlockType = t;
+            renderSchool(); // Ensure subjects loaded
             document.getElementById('btn-type-school').className = t==='school'?'btn-sm btn':'btn-sm btn-ghost';
             document.getElementById('btn-type-life').className = t==='life'?'btn-sm btn':'btn-sm btn-ghost';
             document.getElementById('input-school').style.display = t==='school'?'block':'none';
             document.getElementById('input-life').style.display = t==='life'?'block':'none';
         }
-        function saveBlock() {
-            const start = document.getElementById('b-start').value, end = document.getElementById('b-end').value;
-            if(!start || !end) return;
-            const key = selectedDate.toISOString().split('T')[0]; if(!db.days[key]) db.days[key] = [];
-            const blk = { id:Date.now(), type:currentBlockType, start, end };
-            if(currentBlockType==='school') blk.subId=document.getElementById('b-sub').value;
-            else { blk.name=document.getElementById('b-name').value; blk.icon=document.getElementById('b-icon').value; }
-            db.days[key].push(blk); save(); closeModal('modal-block'); renderTimeline();
-        }
-        function delBlock(id) { const key = selectedDate.toISOString().split('T')[0]; if(confirm("Delete?")) { db.days[key] = db.days[key].filter(x=>x.id!==id); save(); renderTimeline(); } }
 
+        // --- SUBJECTS & TASKS ---
         function renderSchool() {
-            const list = document.getElementById('subject-list'), bSub = document.getElementById('b-sub'), tSub = document.getElementById('t-sub');
-            list.innerHTML=''; bSub.innerHTML=''; tSub.innerHTML='';
+            const list = document.getElementById('subject-list');
+            const select = document.getElementById('b-sub');
+            const taskSelect = document.getElementById('t-sub');
+            
+            list.innerHTML = ''; select.innerHTML = ''; taskSelect.innerHTML = '';
+            
+            if(db.subjects.length === 0) list.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--text-muted);">No subjects added.</div>';
+
             db.subjects.forEach(s => {
-                bSub.innerHTML += `<option value="${s.id}">${s.name}</option>`; tSub.innerHTML += `<option value="${s.id}">${s.name}</option>`;
-                list.innerHTML += `<div class="sub-card" style="--color:${s.color}"><div style="display:flex; justify-content:space-between;"><h3 style="margin:0; color:${s.color}">${s.name}</h3><span onclick="deleteSubject(${s.id})" style="color:var(--text-muted); cursor:pointer;">🗑️</span></div><p style="font-size:0.9rem; color:var(--text-muted); margin-top:5px;">${s.room}</p></div>`;
+                select.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+                taskSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+                list.innerHTML += `
+                    <div class="sub-card" style="--color:${s.color}">
+                        <div style="display:flex; justify-content:space-between;">
+                            <h3 style="margin:0; color:${s.color}">${s.name}</h3>
+                            <span onclick="deleteSubject(${s.id})" style="color:var(--text-muted); cursor:pointer;">🗑️</span>
+                        </div>
+                        <p style="font-size:0.9rem; color:var(--text-muted); margin-top:5px;">${s.room}</p>
+                    </div>`;
             });
         }
-        function saveSubject() { const n = document.getElementById('s-name').value; if(n) { db.subjects.push({ id: Date.now(), name: n, room: document.getElementById('s-room').value, color: document.getElementById('s-color').value }); save(); closeModal('modal-sub'); } }
-        function deleteSubject(id) { if(confirm("Delete subject?")) { db.subjects = db.subjects.filter(s => s.id !== id); save(); } }
+        
+        function saveSubject() {
+            const name = document.getElementById('s-name').value;
+            if(name) {
+                db.subjects.push({ id: Date.now(), name, room: document.getElementById('s-room').value, color: document.getElementById('s-color').value });
+                save(); closeModal('modal-sub'); renderSchool();
+            }
+        }
+
+        function deleteSubject(id) {
+            if(confirm("Delete subject?")) {
+                db.subjects = db.subjects.filter(s => s.id !== id);
+                save(); renderSchool();
+            }
+        }
 
         function renderTasks() {
             const list = document.getElementById('task-list'); list.innerHTML = '';
-            document.getElementById('dash-task-count').innerText = db.tasks.filter(t=>!t.done).length;
+            const count = db.tasks.filter(t => !t.done).length;
+            document.getElementById('dash-task-count').innerText = count;
+
+            if(db.tasks.length === 0) list.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">All caught up!</div>';
+
             db.tasks.forEach(t => {
-                const sub = db.subjects.find(s => s.id == t.subId) || {name:'General', color:'var(--text-muted)'};
-                list.innerHTML += `<div class="task-row" style="opacity:${t.done?0.5:1}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" style="width:20px; height:20px; margin:0;"><div style="flex:1;"><div style="font-size:0.75rem; font-weight:700; color:${sub.color};">${sub.name}</div><div style="text-decoration:${t.done?'line-through':'none'}; font-weight:600;">${t.desc}</div></div><span onclick="delTask(${t.id})" style="cursor:pointer; font-size:1.2rem;">&times;</span></div>`;
+                const sub = db.subjects.find(s => s.id == t.subId) || { name: 'General', color: 'var(--text-muted)' };
+                list.innerHTML += `
+                    <div class="task-row" style="opacity:${t.done?0.5:1}">
+                        <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" style="width:20px; height:20px; margin:0;">
+                        <div style="flex:1;">
+                            <div style="font-size:0.75rem; font-weight:700; color:${sub.color};">${sub.name}</div>
+                            <div style="text-decoration:${t.done?'line-through':'none'}; font-weight:600;">${t.desc}</div>
+                        </div>
+                        <span onclick="delTask(${t.id})" style="cursor:pointer; font-size:1.2rem; color:var(--text-muted);">&times;</span>
+                    </div>`;
             });
         }
-        function saveTask() { const d=document.getElementById('t-desc').value; if(d) { db.tasks.push({ id:Date.now(), desc:d, subId:document.getElementById('t-sub').value, date:document.getElementById('t-date').value, done:false }); save(); closeModal('modal-task'); document.getElementById('t-desc').value=''; } }
-        function toggleTask(id) { const t=db.tasks.find(x=>x.id==id); if(t)t.done=!t.done; save(); }
-        function delTask(id) { db.tasks=db.tasks.filter(t=>t.id!==id); save(); }
 
-        // --- UTILS ---
-        function save() { localStorage.setItem('v32Data', JSON.stringify(db)); renderAll(); }
-        function renderAll() { renderSchool(); renderTasks(); renderTimeline(); }
-        function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([],{hour:'2-digit', minute:'2-digit'}); }
-        function checkLiveStatus() {
-            const now = new Date(); const cur = now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0');
-            const key = now.toISOString().split('T')[0]; const blocks = db.days[key] || [];
-            const active = blocks.find(b => cur >= b.start && cur < b.end);
-            if(active) {
-                const name = active.type==='school' ? (db.subjects.find(s=>s.id==active.subId)?.name) : active.name;
-                document.getElementById('dash-now-title').innerText = name || "Activity";
-                document.getElementById('dash-now-time').innerText = `Until ${active.end}`;
-            } else {
-                document.getElementById('dash-now-title').innerText = "Free Time"; document.getElementById('dash-now-time').innerText = "Relax";
+        function saveTask() {
+            const desc = document.getElementById('t-desc').value;
+            if(desc) {
+                db.tasks.push({ id: Date.now(), desc, subId: document.getElementById('t-sub').value, date: document.getElementById('t-date').value, done: false });
+                save(); closeModal('modal-task'); renderTasks();
+                document.getElementById('t-desc').value = '';
             }
         }
-        function exportData() { const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(db)],{type:'application/json'})); a.download=`vidyarthi_v3.2_${new Date().toISOString().slice(0,10)}.json`; a.click(); }
-        function importData(el) { const fr=new FileReader(); fr.onload=e=>{try{db=JSON.parse(e.target.result); save(); location.reload();}catch(err){alert("Invalid File");}}; fr.readAsText(el.files[0]); }
+
+        function toggleTask(id) { const t = db.tasks.find(x => x.id == id); if(t) { t.done = !t.done; save(); renderTasks(); } }
+        function delTask(id) { if(confirm("Remove task?")) { db.tasks = db.tasks.filter(t => t.id !== id); save(); renderTasks(); } }
+
+        // --- UTILS ---
+        function save() {
+            localStorage.setItem('v32Data', JSON.stringify(db));
+        }
+        
+        function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); }
+        
         function resetApp() { if(confirm("Erase all data?")) { localStorage.clear(); location.reload(); } }
+        
+        function checkLiveStatus() {
+             const now = new Date();
+             const time = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+             const key = now.toISOString().split('T')[0];
+             const blocks = db.days[key] || [];
+             const active = blocks.find(b => time >= b.start && time < b.end);
+             
+             if(active) {
+                 const name = active.type==='school' ? (db.subjects.find(s=>s.id==active.subId)?.name || 'Class') : active.name;
+                 document.getElementById('dash-now-title').innerText = name;
+                 document.getElementById('dash-now-time').innerText = `Until ${active.end}`;
+             } else {
+                 document.getElementById('dash-now-title').innerText = "Free Time";
+                 document.getElementById('dash-now-time').innerText = "Relax";
+             }
+             if(selectedDate.toDateString() === now.toDateString() && currentPage === 'timeline') renderTimeline();
+        }
+
+        function exportData() {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([JSON.stringify(db)], {type: 'application/json'}));
+            a.download = `vidyarthi_backup_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+        }
+        function importData(el) {
+            const fr = new FileReader();
+            fr.onload = e => {
+                try { db = JSON.parse(e.target.result); save(); location.reload(); } catch(err) { alert("Invalid File"); }
+            };
+            fr.readAsText(el.files[0]);
+        }
+
+        function renderAll() { renderSchool(); renderTasks(); renderTimeline(); }
 
         init();
         nav('dashboard');
