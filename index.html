@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - LifeOS v3.3</title>
+    <title>Vidyarthi - LifeOS v3.4</title>
     <style>
         :root {
             /* Theme Variables */
@@ -44,21 +44,9 @@
         body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; transition: background 0.3s ease; }
 
         /* SIDEBAR */
-        .sidebar { 
-            width: 80px; background: var(--surface-glass); backdrop-filter: blur(10px); 
-            border-right: 1px solid var(--border); z-index: 100; display: flex; flex-direction: column; 
-            align-items: center; padding-top: 30px; 
-        }
-        .logo { 
-            width: 45px; height: 45px; background: linear-gradient(135deg, var(--primary), #a855f7); 
-            border-radius: 14px; display: grid; place-items: center; color: white; font-weight: 900; 
-            font-size: 1.5rem; margin-bottom: 40px; box-shadow: 0 5px 15px var(--primary-glow);
-        }
-        .nav-item { 
-            width: 50px; height: 50px; border-radius: 16px; color: var(--text-muted); font-size: 1.4rem; 
-            margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            transition: var(--transition); border: none; background: transparent; 
-        }
+        .sidebar { width: 80px; background: var(--surface-glass); backdrop-filter: blur(10px); border-right: 1px solid var(--border); z-index: 100; display: flex; flex-direction: column; align-items: center; padding-top: 30px; }
+        .logo { width: 45px; height: 45px; background: linear-gradient(135deg, var(--primary), #a855f7); border-radius: 14px; display: grid; place-items: center; color: white; font-weight: 900; font-size: 1.5rem; margin-bottom: 40px; box-shadow: 0 5px 15px var(--primary-glow); }
+        .nav-item { width: 50px; height: 50px; border-radius: 16px; color: var(--text-muted); font-size: 1.4rem; margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); border: none; background: transparent; }
         .nav-item:hover { background: var(--primary-light); color: var(--primary); transform: scale(1.05); }
         .nav-item.active { background: var(--primary); color: white; box-shadow: 0 8px 20px -5px var(--primary-glow); }
 
@@ -74,10 +62,8 @@
 
         /* UI COMPONENTS */
         .card { background: var(--surface); border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 15px; }
-        
         .btn { padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition); font-size: 0.95rem; width: 100%; box-shadow: 0 4px 12px var(--primary-glow); }
         .btn:active { transform: scale(0.97); }
-        
         .btn-close { background: var(--surface); color: var(--text-muted); border: 1px solid var(--border); margin-top: 15px; box-shadow: none; }
         .btn-close:hover { background: var(--bg); color: var(--text); border-color: var(--text-muted); }
         .btn-ghost { background: transparent; color: var(--text-muted); border: 2px solid var(--border); width: auto; display: inline-flex; }
@@ -85,12 +71,33 @@
         .btn-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); cursor: pointer; }
 
         input, select, textarea { padding: 12px 15px; border: 2px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); outline: none; width: 100%; font-size: 1rem; margin-bottom: 10px; }
-        input:focus, textarea:focus { border-color: var(--primary); background: var(--surface); }
+        input:focus, textarea:focus, select:focus { border-color: var(--primary); background: var(--surface); }
 
         /* TIMELINE QUICK CHIPS */
         .chip-container { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; }
         .chip { padding: 8px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
         .chip:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+        /* VIEWS TOGGLE */
+        .view-tabs { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+        .view-tab { padding: 8px 15px; background: transparent; border: none; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
+        .view-tab.active { background: var(--primary-light); color: var(--primary); }
+
+        /* MONTH/YEAR CALENDAR GRIDS */
+        .month-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; }
+        .month-header { text-align: center; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 5px; }
+        .day-cell { aspect-ratio: 1; border-radius: 8px; border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 5px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s; background: var(--surface); }
+        .day-cell:hover { border-color: var(--primary); }
+        .day-cell.today { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+        .day-cell.dim { opacity: 0.3; }
+        .dot-container { display: flex; gap: 2px; margin-top: auto; flex-wrap: wrap; justify-content: center; }
+        .evt-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+        .year-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .mini-month { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
+        .mini-month h4 { text-align: center; font-size: 0.9rem; margin-bottom: 5px; }
+        .mini-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+        .mini-cell { aspect-ratio: 1; border-radius: 4px; font-size: 0.6rem; display: grid; place-items: center; }
 
         /* TOOLS GRID */
         .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
@@ -110,7 +117,7 @@
         .flashcard-container { perspective: 1000px; width: 100%; height: 220px; cursor: pointer; margin-bottom: 20px; }
         .flashcard-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
         .flashcard-container.flipped .flashcard-inner { transform: rotateY(180deg); }
-        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 20px; font-size: 1.2rem; font-weight: 700; border: 1px solid var(--border); box-shadow: var(--shadow); background: var(--surface); }
+        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 20px; font-size: 1.2rem; font-weight: 700; border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow); }
         .flashcard-back { background: var(--primary); color: white; transform: rotateY(180deg); border:none; }
 
         /* NOTEBOOKS & COUNTDOWNS */
@@ -144,6 +151,7 @@
             .logo { display: none; }
             .main-content { padding: 20px; margin-bottom: 70px; }
             .fab { bottom: 85px; right: 20px; }
+            .view-tabs { display: none; /* Hide advanced views on small mobile if needed, or make smaller */ }
         }
     </style>
 </head>
@@ -151,17 +159,17 @@
 
     <nav class="sidebar">
         <div class="logo">V</div>
-        <button class="nav-item active" onclick="nav('dashboard')" title="Home">🏠</button>
-        <button class="nav-item" onclick="nav('timeline')" title="Timeline">📅</button>
-        <button class="nav-item" onclick="nav('school')" title="School">🎒</button>
-        <button class="nav-item" onclick="nav('tasks')" title="Tasks">✅</button>
-        <button class="nav-item" onclick="nav('tools')" title="Tools">🛠️</button>
-        <button class="nav-item" onclick="nav('settings')" title="Settings">⚙️</button>
+        <button class="nav-item active" onclick="nav('dashboard')">🏠</button>
+        <button class="nav-item" onclick="nav('timeline')">📅</button>
+        <button class="nav-item" onclick="nav('school')">🎒</button>
+        <button class="nav-item" onclick="nav('tasks')">✅</button>
+        <button class="nav-item" onclick="nav('tools')">🛠️</button>
+        <button class="nav-item" onclick="nav('settings')">⚙️</button>
     </nav>
 
     <main class="main-content">
         <div class="header">
-            <div><div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">LifeOS 3.3</div><h1 id="page-title">Dashboard</h1></div>
+            <div><div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">LifeOS 3.4</div><h1 id="page-title">Dashboard</h1></div>
             <div id="clock" style="font-family:monospace; font-weight:700; color:var(--primary); background:var(--primary-light); padding:8px 12px; border-radius:12px;">00:00</div>
         </div>
 
@@ -192,13 +200,22 @@
                 <div class="chip" onclick="quickAdd('Gym', '💪', 60)">+ 1h Gym</div>
                 <div class="chip" onclick="quickAdd('Sleep', '💤', 480)">+ Sleep</div>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; background:var(--surface); padding:10px 15px; border-radius:16px; border:1px solid var(--border);">
-                <button class="btn-icon" onclick="changeDate(-1)">◀</button>
-                <div style="text-align:center;">
-                    <div style="font-weight:800;" id="tl-date-main">Today</div>
-                    <div style="font-size:0.8rem; color:var(--text-muted);" id="tl-date-sub">Date</div>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+                <div style="display:flex; align-items:center; background:var(--surface); padding:5px; border-radius:12px; border:1px solid var(--border);">
+                    <button class="btn-icon" style="width:30px; height:30px; border:none; background:transparent;" onclick="changeDate(-1)">◀</button>
+                    <div style="text-align:center; min-width:100px;">
+                        <div style="font-weight:800; font-size:0.9rem;" id="tl-date-main">Today</div>
+                    </div>
+                    <button class="btn-icon" style="width:30px; height:30px; border:none; background:transparent;" onclick="changeDate(1)">▶</button>
                 </div>
-                <button class="btn-icon" onclick="changeDate(1)">▶</button>
+                
+                <div class="view-tabs">
+                    <button class="view-tab active" id="tab-day" onclick="setTlView('day')">Day</button>
+                    <button class="view-tab" id="tab-week" onclick="setTlView('week')">Week</button>
+                    <button class="view-tab" id="tab-month" onclick="setTlView('month')">Month</button>
+                    <button class="view-tab" id="tab-year" onclick="setTlView('year')">Year</button>
+                </div>
             </div>
             
             <div id="timeline-list"></div>
@@ -313,6 +330,16 @@
         </div>
     </div>
 
+    <div id="modal-category" class="modal">
+        <div class="modal-box">
+            <h3>Custom Category</h3>
+            <input id="cat-name" placeholder="Category Name (e.g. Work)">
+            <input type="color" id="cat-color" value="#3b82f6" style="height:40px; padding:0;">
+            <button class="btn" onclick="saveCategory()">Save Category</button>
+            <button class="btn btn-close" style="width:100%;" onclick="closeModal('modal-category')">Cancel</button>
+        </div>
+    </div>
+
     <div id="modal-tool-countdowns" class="modal">
         <div class="modal-box">
             <h3 id="cd-title" style="margin-bottom:15px;">Timers</h3>
@@ -351,7 +378,7 @@
                 <button class="calc-btn" onclick="calcInput('0')" style="grid-column:span 2">0</button>
                 <button class="calc-btn" onclick="calcInput('.')">.</button>
             </div>
-            <button class="btn btn-close" onclick="closeModal('modal-tool-calc')" style="width:100%;">Close Calculator</button>
+            <button class="btn btn-close" onclick="closeModal('modal-tool-calc')" style="width:100%;">Close</button>
         </div>
     </div>
 
@@ -405,9 +432,20 @@
             <div id="input-school"><select id="b-sub"></select></div>
             <div id="input-life" style="display:none;">
                 <input id="b-name" placeholder="e.g. Gym, Gaming" style="margin-bottom:10px;">
-                <select id="b-icon">
-                    <option value="🧘">🧘 Yoga/Gym</option><option value="🎮">🎮 Gaming</option><option value="💤">💤 Sleep</option><option value="🥪">🥪 Eat</option><option value="🚿">🚿 Routine</option><option value="🚌">🚌 Commute</option>
-                </select>
+                
+                <div style="display:flex; gap:10px; margin-bottom:15px;">
+                    <div style="flex:1;">
+                        <label style="font-size:0.8rem; font-weight:700;">Category</label>
+                        <div style="display:flex; gap:5px;">
+                            <select id="b-cat" style="margin:0;"></select>
+                            <button class="btn-sm btn-ghost" style="margin:0; padding:0 10px;" onclick="openCategoryModal()">+</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label style="font-size:0.8rem; font-weight:700;">Icon</label>
+                        <input id="b-icon" placeholder="Emoji" style="margin:0; width:60px; text-align:center;">
+                    </div>
+                </div>
             </div>
             <div style="display:flex; gap:15px; margin:15px 0;">
                 <div style="flex:1"><label style="font-size:0.8rem; font-weight:700;">Start</label><input type="time" id="b-start"></div>
@@ -450,21 +488,25 @@
             days: {}, subjects: [], tasks: [], 
             settings: { theme: 'light', accent: '#6366f1' },
             wheelOptions: ["Pizza", "Burger", "Salad"],
-            flashcardSets: [], notebooks: [{id:1, title:'General Notes', content:''}], countdowns: []
+            flashcardSets: [], notebooks: [{id:1, title:'General Notes', content:''}], countdowns: [],
+            categories: [{id:'cat-gen', name:'General', color:'#64748b'}]
         };
 
         try {
-            const saved = localStorage.getItem('v33Data'); // Updated Key
+            const saved = localStorage.getItem('v34Data'); // Updated Key
             if(saved) db = JSON.parse(saved);
+            // Ensure structures exist for older saves
             if(!db.flashcardSets) db.flashcardSets = [];
             if(!db.notebooks) db.notebooks = [{id:1, title:'General Notes', content:''}];
             if(!db.countdowns) db.countdowns = [];
+            if(!db.categories) db.categories = [{id:'cat-gen', name:'General', color:'#64748b'}];
         } catch(e) { console.log('Init storage'); }
 
         let selectedDate = new Date();
         let currentBlockType = 'school';
         let currentEditBlockId = null;
         let currentPage = 'dashboard';
+        let timelineView = 'day';
 
         function init() {
             applyTheme();
@@ -472,6 +514,7 @@
             renderAll();
             setInterval(updateClock, 1000);
             setInterval(checkLiveStatus, 5000);
+            document.getElementById('nb-area').value = db.notebooks[0].content || "";
         }
 
         // --- CORE UI & NAVIGATION ---
@@ -486,7 +529,7 @@
             
             document.querySelector('.fab').style.display = (id === 'timeline' || id === 'school' || id === 'tasks') ? 'grid' : 'none';
             document.getElementById('page-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
-            if(id === 'timeline') renderTimeline(); // Refresh timeline specifically
+            if(id === 'timeline') renderTimeline();
         }
 
         function handleFab() {
@@ -530,188 +573,59 @@
         function saveAccent(c) { db.settings.accent=c; save(); applyTheme(); setupColorGrid(); }
         function toggleTheme() { db.settings.theme = db.settings.theme==='dark'?'light':'dark'; save(); applyTheme(); }
 
-        // --- FLASHCARDS (SETS) ---
-        let activeDeckId=null, cardIndex=0;
-        function renderDeckList() {
-            const g = document.getElementById('fc-deck-list'); g.innerHTML='';
-            if(db.flashcardSets.length===0) g.innerHTML=`<div style="grid-column:1/-1; text-align:center; color:var(--text-muted);">No decks yet.</div>`;
-            db.flashcardSets.forEach(d => g.innerHTML+=`<div class="deck-card" onclick="openDeck(${d.id})"><div style="font-weight:700; font-size:1.1rem; margin-bottom:5px;">${d.name}</div><div style="font-size:0.8rem; color:var(--text-muted);">${d.cards.length} cards</div></div>`);
+        // --- CATEGORIES (NEW) ---
+        function renderCategorySelect() {
+            const sel = document.getElementById('b-cat');
+            sel.innerHTML = db.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
         }
-        function createDeck(){ const n=prompt("Deck Name:"); if(n){db.flashcardSets.push({id:Date.now(), name:n, cards:[]}); save(); renderDeckList();} }
-        function openDeck(id){ activeDeckId=id; cardIndex=0; document.getElementById('fc-deck-view').style.display='none'; document.getElementById('fc-study-view').style.display='flex'; document.getElementById('fc-study-title').innerText=db.flashcardSets.find(d=>d.id==id).name; renderStudyCard(); }
-        function showDeckList(){ document.getElementById('fc-study-view').style.display='none'; document.getElementById('fc-deck-view').style.display='block'; document.getElementById('fc-add-area').style.display='none'; }
-        function renderStudyCard(){ 
-            const d=db.flashcardSets.find(x=>x.id==activeDeckId); 
-            if(!d.cards.length) { document.getElementById('fc-front').innerText="Empty"; document.getElementById('fc-back').innerText="Add cards +"; document.getElementById('fc-count').innerText="0/0"; return; }
-            if(cardIndex>=d.cards.length) cardIndex=0; if(cardIndex<0) cardIndex=d.cards.length-1;
-            const c=d.cards[cardIndex];
-            document.getElementById('fc-front').innerText=c.q; document.getElementById('fc-back').innerText=c.a; document.getElementById('fc-count').innerText=`${cardIndex+1}/${d.cards.length}`;
-            document.querySelector('.flashcard-container').classList.remove('flipped');
+        function openCategoryModal() {
+            document.getElementById('modal-category').style.display = 'flex';
         }
-        function nextCard(dir){cardIndex+=dir; renderStudyCard();}
-        function addCardMode(){document.getElementById('fc-add-area').style.display='block'; document.getElementById('fc-study-area').style.display='none'; }
-        function saveNewCard(){ const q=document.getElementById('fc-new-q').value, a=document.getElementById('fc-new-a').value; if(q&&a){ db.flashcardSets.find(d=>d.id==activeDeckId).cards.push({q,a}); save(); document.getElementById('fc-new-q').value=''; document.getElementById('fc-new-a').value=''; document.getElementById('fc-add-area').style.display='none'; document.getElementById('fc-study-area').style.display='block'; renderStudyCard(); } }
-
-        // --- NOTEBOOKS ---
-        let currentNbId = null;
-        function createNotebook() {
-            const title = prompt("Notebook Title:");
-            if(title) { db.notebooks.push({ id: Date.now(), title, content: "" }); save(); renderNotebooks(); }
-        }
-        function renderNotebooks() {
-            const list = document.getElementById('nb-list'); list.innerHTML = '';
-            if(db.notebooks.length === 0) list.innerHTML = '<div style="color:var(--text-muted); text-align:center;">No notebooks yet.</div>';
-            db.notebooks.forEach(nb => {
-                list.innerHTML += `<div class="nb-card" onclick="openNotebook(${nb.id})"><div style="font-weight:700; display:flex; align-items:center; gap:10px;"><span style="font-size:1.2rem;">📓</span> ${nb.title}</div><span style="color:var(--text-muted);">❯</span></div>`;
-            });
-        }
-        function openNotebook(id) {
-            currentNbId = id; const nb = db.notebooks.find(n => n.id === id);
-            document.getElementById('nb-edit-title').innerText = nb.title; document.getElementById('nb-area').value = nb.content;
-            document.getElementById('nb-list-view').style.display = 'none'; document.getElementById('nb-edit-view').style.display = 'flex';
-        }
-        function closeNotebook() { currentNbId = null; document.getElementById('nb-edit-view').style.display = 'none'; document.getElementById('nb-list-view').style.display = 'block'; renderNotebooks(); }
-        function saveCurrentNotebook() { if(currentNbId) { const nb = db.notebooks.find(n => n.id === currentNbId); nb.content = document.getElementById('nb-area').value; save(); } }
-        function deleteNotebook() { if(confirm("Delete this notebook forever?")) { db.notebooks = db.notebooks.filter(n => n.id !== currentNbId); save(); closeNotebook(); } }
-
-        // --- COUNTDOWNS (EXAMS & HOLIDAYS) ---
-        let currentCdType = 'exam';
-        function openCountdownTool(type) {
-            currentCdType = type;
-            document.getElementById('cd-title').innerText = type === 'exam' ? 'Exam Timers ⏳' : 'Holiday Timers 🏖️';
-            renderCountdowns();
-            document.getElementById('modal-tool-countdowns').style.display = 'flex';
-        }
-        function renderCountdowns() {
-            const list = document.getElementById('cd-list'); list.innerHTML = '';
-            const cds = db.countdowns.filter(c => c.type === currentCdType);
-            if (cds.length === 0) { list.innerHTML = '<div style="color:var(--text-muted); text-align:center;">No timers set.</div>'; return; }
-            cds.sort((a,b) => new Date(a.date) - new Date(b.date));
-            const today = new Date(); today.setHours(0,0,0,0);
-            
-            cds.forEach(c => {
-                const d = new Date(c.date);
-                const diffDays = Math.ceil((d - today) / (1000 * 60 * 60 * 24));
-                let dayText = diffDays > 0 ? `${diffDays} Days` : (diffDays === 0 ? "TODAY!" : "Passed");
-                let color = diffDays > 0 ? 'var(--primary)' : (diffDays === 0 ? 'var(--warning)' : 'var(--text-muted)');
-                
-                list.innerHTML += `<div class="cd-card"><div><div style="font-weight:700;">${c.name}</div><div style="font-size:0.8rem; color:var(--text-muted);">${c.date}</div></div><div style="display:flex; align-items:center; gap:15px;"><div class="cd-days" style="color:${color};">${dayText}</div><button class="btn-icon" onclick="deleteCountdown(${c.id})" style="border:none;">&times;</button></div></div>`;
-            });
-        }
-        function saveCountdown() {
-            const name = document.getElementById('cd-name').value; const date = document.getElementById('cd-date').value;
-            if(name && date) { db.countdowns.push({ id: Date.now(), type: currentCdType, name, date }); save(); document.getElementById('cd-name').value = ''; document.getElementById('cd-date').value = ''; renderCountdowns(); }
-        }
-        function deleteCountdown(id) { db.countdowns = db.countdowns.filter(c => c.id !== id); save(); renderCountdowns(); }
-
-        // --- CALCULATOR (FIXED) ---
-        let calcVal = "";
-        function updateCalcDisplay() {
-            const disp = document.getElementById('calc-display');
-            disp.innerText = calcVal || "0";
-            if (calcVal.length > 10) {
-                disp.style.fontSize = Math.max(1.2, 2.5 - (calcVal.length - 10) * 0.15) + 'rem';
-            } else {
-                disp.style.fontSize = '2.5rem';
-            }
-        }
-        function calcInput(c) { calcVal += c; updateCalcDisplay(); }
-        function calcInputBack() { calcVal = calcVal.slice(0, -1); updateCalcDisplay(); }
-        function calcClear() { calcVal = ""; updateCalcDisplay(); }
-        function calcResult() { try { calcVal = eval(calcVal).toString(); updateCalcDisplay(); } catch { calcVal = ""; document.getElementById('calc-display').innerText = "Error"; } }
-
-        // --- BREATHE ---
-        let breatheTimer = null;
-        function toggleBreathe() {
-            const btn = document.getElementById('breathe-btn');
-            const txt = document.getElementById('breathe-text');
-            const circle = document.getElementById('breathe-circle');
-            
-            if(breatheTimer) {
-                clearInterval(breatheTimer); breatheTimer = null;
-                btn.innerText = "Start"; txt.innerText = "Get Ready";
-                circle.style.animation = "none"; circle.style.transform = "scale(1)";
-            } else {
-                btn.innerText = "Stop";
-                circle.style.animation = "breathe 8s infinite ease-in-out"; 
-                
-                const cycle = () => {
-                    txt.innerText = "Inhale...";
-                    setTimeout(() => { txt.innerText = "Exhale..."; }, 4000);
-                };
-                cycle();
-                breatheTimer = setInterval(cycle, 8000);
+        function saveCategory() {
+            const name = document.getElementById('cat-name').value;
+            const color = document.getElementById('cat-color').value;
+            if(name) {
+                db.categories.push({id: 'cat-'+Date.now(), name, color});
+                save(); renderCategorySelect(); closeModal('modal-category');
+                document.getElementById('cat-name').value = '';
             }
         }
 
-        // --- WHEEL ---
-        let wheelCtx = null;
-        function initWheel() { const c = document.getElementById('wheel-canvas'); wheelCtx = c.getContext('2d'); drawWheel(); renderWheelList(); }
-        function drawWheel(rotation = 0) {
-            const ctx = wheelCtx; const size = 260; const center = size/2; const rad = center - 10;
-            const step = (2 * Math.PI) / db.wheelOptions.length;
-            const colors = ['#f87171', '#fbbf24', '#34d399', '#60a5fa', '#a78bfa'];
-            ctx.clearRect(0,0,size,size);
-            db.wheelOptions.forEach((opt, i) => {
-                ctx.beginPath(); ctx.moveTo(center, center); ctx.arc(center, center, rad, i * step + rotation, (i + 1) * step + rotation);
-                ctx.fillStyle = colors[i % colors.length]; ctx.fill();
-                ctx.save(); ctx.translate(center, center); ctx.rotate(i * step + step / 2 + rotation);
-                ctx.textAlign = "right"; ctx.fillStyle = "white"; ctx.font = "bold 14px sans-serif";
-                ctx.fillText(opt, rad - 20, 5); ctx.restore();
-            });
-        }
-        function spinWheel() {
-            document.getElementById('wheel-winner').style.display='none';
-            let speed = 0.5 + Math.random(); let rotation = 0;
-            const animate = () => {
-                rotation += speed; speed *= 0.98; drawWheel(rotation);
-                if(speed > 0.005) requestAnimationFrame(animate);
-                else {
-                    const winnerIdx = Math.floor(Math.random() * db.wheelOptions.length); 
-                    document.getElementById('wheel-res-text').innerText = db.wheelOptions[winnerIdx];
-                    document.getElementById('wheel-winner').style.display = 'block';
-                }
-            };
-            animate();
-        }
-        function addWheelOption() { const v = document.getElementById('wheel-opt').value; if(v) { db.wheelOptions.push(v); document.getElementById('wheel-opt').value=''; save(); initWheel(); } }
-        function renderWheelList() { document.getElementById('wheel-list').innerHTML = db.wheelOptions.map((o,i) => `<button class="btn-sm btn-ghost" onclick="db.wheelOptions.splice(${i},1); save(); initWheel();">${o} &times;</button>`).join(''); }
-
-        // --- FOCUS TIMER ---
-        let focusTimer = null, focusTime = 1500;
-        function setFocusTime(m) { focusTime = m * 60; document.getElementById('focus-display').innerText = `${m}:00`; }
-        function toggleFocus() {
-            const btn = document.getElementById('focus-btn');
-            if(focusTimer) { clearInterval(focusTimer); focusTimer=null; btn.innerText="START"; }
-            else {
-                btn.innerText="STOP";
-                focusTimer = setInterval(() => {
-                    focusTime--; const m = Math.floor(focusTime/60).toString().padStart(2,'0'); const s = (focusTime%60).toString().padStart(2,'0');
-                    document.getElementById('focus-display').innerText = `${m}:${s}`;
-                    if(focusTime<=0) clearInterval(focusTimer);
-                }, 1000);
-            }
+        // --- TIMELINE (VIEWS) ---
+        function setTlView(view) {
+            timelineView = view;
+            document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-'+view).classList.add('active');
+            renderTimeline();
         }
 
-        // --- TIMELINE (MS TEAMS DAY CALENDAR STYLE) ---
-        function changeDate(d) { selectedDate.setDate(selectedDate.getDate()+d); renderTimeline(); }
+        function changeDate(d) { 
+            if(timelineView === 'day') selectedDate.setDate(selectedDate.getDate()+d); 
+            else if(timelineView === 'week') selectedDate.setDate(selectedDate.getDate()+(d*7));
+            else if(timelineView === 'month') selectedDate.setMonth(selectedDate.getMonth()+d);
+            else if(timelineView === 'year') selectedDate.setFullYear(selectedDate.getFullYear()+d);
+            renderTimeline(); 
+        }
         
         function renderTimeline() {
+            if(timelineView === 'day') renderDayView();
+            else if(timelineView === 'week') renderWeekView();
+            else if(timelineView === 'month') renderMonthView();
+            else if(timelineView === 'year') renderYearView();
+        }
+
+        function renderDayView() {
             const list = document.getElementById('timeline-list');
-            list.innerHTML = '';
-            
             const isToday = new Date().toDateString() === selectedDate.toDateString();
             document.getElementById('tl-date-main').innerText = isToday ? "Today" : selectedDate.toLocaleDateString('en-US', {weekday:'short'});
-            document.getElementById('tl-date-sub').innerText = selectedDate.toLocaleDateString('en-US', {day:'numeric', month:'short'});
+            document.getElementById('tl-date-sub').innerText = selectedDate.toLocaleDateString('en-US', {day:'numeric', month:'short', year:'numeric'});
 
             const key = selectedDate.toISOString().split('T')[0];
             const blocks = db.days[key] || [];
             
-            // Generate 24-hour Calendar Grid
-            const pxPerHour = 60; // 1px per minute
+            const pxPerHour = 60; 
             let gridHtml = '<div style="position:relative; height:1440px; background:var(--surface); border-radius:12px; border:1px solid var(--border); overflow:hidden; width:100%;">';
             
-            // Grid Lines
             for(let i=0; i<24; i++) {
                 const top = i * pxPerHour;
                 const timeLabel = (i < 10 ? '0'+i : i) + ':00';
@@ -719,21 +633,21 @@
                 gridHtml += `<div style="position:absolute; top:${top - 8}px; left:5px; width:40px; text-align:right; font-size:0.7rem; color:var(--text-muted); z-index:2;">${timeLabel}</div>`;
             }
 
-            // Blocks Absolute Positioning
             blocks.forEach(b => {
                 let title, icon, color;
                 if(b.type === 'school') {
                     const sub = db.subjects.find(s => s.id == b.subId);
                     title = sub ? sub.name : 'Class'; icon = '📚'; color = sub ? sub.color : '#cbd5e1';
                 } else {
-                    title = b.name; icon = b.icon; color = 'var(--text-muted)';
+                    const cat = db.categories.find(c => c.id == b.categoryId) || db.categories[0];
+                    title = b.name; icon = b.icon || '📌'; color = cat ? cat.color : '#cbd5e1';
                 }
 
                 const [sH, sM] = b.start.split(':').map(Number);
                 const [eH, eM] = b.end.split(':').map(Number);
                 const startPx = (sH * 60) + sM;
                 const endPx = (eH * 60) + eM;
-                const height = Math.max(endPx - startPx, 20); // Min 20px height to click
+                const height = Math.max(endPx - startPx, 20);
 
                 gridHtml += `
                     <div onclick="editBlock(${b.id})" style="position:absolute; top:${startPx}px; left:55px; right:10px; height:${height}px; background:${color}33; border-left:4px solid ${color}; border-radius:6px; padding:2px 8px; font-size:0.8rem; overflow:hidden; z-index:3; cursor:pointer; display:flex; flex-direction:column; justify-content:center; box-shadow:0 1px 3px rgba(0,0,0,0.1); transition:var(--transition);">
@@ -742,7 +656,6 @@
                     </div>`;
             });
 
-            // Current Time Indicator
             if(isToday) {
                 const now = new Date();
                 const top = (now.getHours() * 60) + now.getMinutes();
@@ -753,36 +666,153 @@
             gridHtml += '</div>';
             list.innerHTML = `<div style="max-height: 500px; overflow-y: auto; border-radius:12px; margin-top:10px;" id="cal-scroll-wrapper">${gridHtml}</div>`;
             
-            // Auto Scroll
             setTimeout(() => {
                 const wrapper = document.getElementById('cal-scroll-wrapper');
                 if(wrapper) {
-                    if (isToday) {
-                        const now = new Date();
-                        wrapper.scrollTop = Math.max(0, (now.getHours() * 60) - 100);
-                    } else {
-                        wrapper.scrollTop = 8 * 60; // 8 AM
-                    }
+                    if (isToday) wrapper.scrollTop = Math.max(0, (new Date().getHours() * 60) - 100);
+                    else wrapper.scrollTop = 8 * 60;
                 }
             }, 50);
         }
-        
+
+        function renderWeekView() {
+            const list = document.getElementById('timeline-list');
+            let d = new Date(selectedDate);
+            let day = d.getDay();
+            let diff = d.getDate() - day;
+            let sunday = new Date(d.setDate(diff));
+            
+            let endWeek = new Date(sunday); endWeek.setDate(endWeek.getDate()+6);
+            document.getElementById('tl-date-main').innerText = "Week";
+            document.getElementById('tl-date-sub').innerText = sunday.toLocaleDateString('en-US',{month:'short', day:'numeric'}) + ' - ' + endWeek.toLocaleDateString('en-US',{month:'short', day:'numeric'});
+
+            const pxPerHour = 60;
+            let html = '<div style="display:flex; overflow-x:auto; height:500px; background:var(--surface); border-radius:12px; border:1px solid var(--border); position:relative;" id="cal-scroll-wrapper">';
+            
+            // Time Axis
+            html += `<div style="width:45px; flex-shrink:0; position:relative; height:1440px; border-right:1px solid var(--border); background:var(--surface); z-index:5; position:sticky; left:0;">`;
+            for(let i=0; i<24; i++) {
+                html += `<div style="position:absolute; top:${i*pxPerHour - 8}px; left:0; right:5px; text-align:right; font-size:0.6rem; color:var(--text-muted);">${i}:00</div>`;
+            }
+            html += `</div>`;
+
+            // 7 Days
+            for(let i=0; i<7; i++) {
+                let curr = new Date(sunday); curr.setDate(curr.getDate() + i);
+                let key = curr.toISOString().split('T')[0];
+                let isToday = curr.toDateString() === new Date().toDateString();
+                let blocks = db.days[key] || [];
+
+                html += `<div style="flex:1; min-width:100px; position:relative; height:1440px; border-right:1px solid var(--border);">`;
+                
+                // Day Header Sticky
+                html += `<div style="position:sticky; top:0; background:var(--surface-glass); backdrop-filter:blur(5px); z-index:4; text-align:center; padding:5px 0; border-bottom:1px solid var(--border); font-size:0.75rem; font-weight:700; ${isToday?'color:var(--primary);':''}">${curr.toLocaleDateString('en-US',{weekday:'short'})} <br> <span style="font-size:1rem;">${curr.getDate()}</span></div>`;
+
+                // Grid Lines
+                for(let h=0; h<24; h++) html += `<div style="position:absolute; top:${h*pxPerHour}px; left:0; right:0; height:1px; background:var(--border); z-index:1;"></div>`;
+
+                // Blocks
+                blocks.forEach(b => {
+                    let title, color;
+                    if(b.type === 'school') {
+                        const sub = db.subjects.find(s => s.id == b.subId);
+                        title = sub ? sub.name : 'Class'; color = sub ? sub.color : '#cbd5e1';
+                    } else {
+                        const cat = db.categories.find(c => c.id == b.categoryId) || db.categories[0];
+                        title = b.name; color = cat ? cat.color : '#cbd5e1';
+                    }
+
+                    const [sH, sM] = b.start.split(':').map(Number); const [eH, eM] = b.end.split(':').map(Number);
+                    const startPx = (sH * 60) + sM; const endPx = (eH * 60) + eM;
+                    const height = Math.max(endPx - startPx, 20);
+
+                    html += `<div onclick="selectedDate=new Date('${key}'); editBlock(${b.id})" style="position:absolute; top:${startPx}px; left:2px; right:2px; height:${height}px; background:${color}33; border-left:3px solid ${color}; border-radius:4px; padding:2px 4px; font-size:0.65rem; overflow:hidden; z-index:3; cursor:pointer;">
+                        <strong style="color:var(--text);">${title}</strong>
+                    </div>`;
+                });
+
+                if(isToday) {
+                    const top = (new Date().getHours() * 60) + new Date().getMinutes();
+                    html += `<div style="position:absolute; top:${top}px; left:0; right:0; height:2px; background:var(--danger); z-index:10; pointer-events:none;"></div>`;
+                }
+
+                html += `</div>`;
+            }
+            html += '</div>';
+            list.innerHTML = html;
+            setTimeout(() => { const w = document.getElementById('cal-scroll-wrapper'); if(w) w.scrollTop = 8 * 60; }, 50);
+        }
+
+        function renderMonthView() {
+            const list = document.getElementById('timeline-list');
+            let y = selectedDate.getFullYear(), m = selectedDate.getMonth();
+            document.getElementById('tl-date-main').innerText = selectedDate.toLocaleDateString('en-US', {month:'long'});
+            document.getElementById('tl-date-sub').innerText = y;
+
+            let firstDay = new Date(y, m, 1).getDay();
+            let daysInMonth = new Date(y, m + 1, 0).getDate();
+
+            let html = '<div class="month-grid">';
+            const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            days.forEach(d => html += `<div class="month-header">${d}</div>`);
+
+            // Blanks
+            for(let i=0; i<firstDay; i++) html += `<div class="day-cell dim"></div>`;
+            
+            // Days
+            for(let i=1; i<=daysInMonth; i++) {
+                let dStr = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                let isToday = dStr === new Date().toISOString().split('T')[0];
+                let blocks = db.days[dStr] || [];
+                
+                let dotsHtml = '';
+                blocks.slice(0,4).forEach(b => {
+                    let color = '#ccc';
+                    if(b.type === 'school') { const sub = db.subjects.find(s=>s.id==b.subId); if(sub) color=sub.color; }
+                    else { const cat = db.categories.find(c=>c.id==b.categoryId); if(cat) color=cat.color; }
+                    dotsHtml += `<div class="evt-dot" style="background:${color}"></div>`;
+                });
+                if(blocks.length > 4) dotsHtml += `<span style="font-size:0.5rem; line-height:6px;">+</span>`;
+
+                html += `<div class="day-cell ${isToday?'today':''}" onclick="selectedDate=new Date('${dStr}T00:00:00'); setTlView('day');">${i}<div class="dot-container">${dotsHtml}</div></div>`;
+            }
+            html += '</div>';
+            list.innerHTML = html;
+        }
+
+        function renderYearView() {
+            const list = document.getElementById('timeline-list');
+            let y = selectedDate.getFullYear();
+            document.getElementById('tl-date-main').innerText = y;
+            document.getElementById('tl-date-sub').innerText = "Year Overview";
+
+            let html = '<div class="year-grid">';
+            for(let m=0; m<12; m++) {
+                html += `<div class="mini-month"><h4>${new Date(y,m,1).toLocaleDateString('en-US',{month:'long'})}</h4><div class="mini-grid">`;
+                let firstDay = new Date(y, m, 1).getDay();
+                let daysInMonth = new Date(y, m + 1, 0).getDate();
+                for(let i=0; i<firstDay; i++) html += `<div></div>`;
+                for(let i=1; i<=daysInMonth; i++) {
+                    let dStr = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                    let hasEvt = (db.days[dStr] && db.days[dStr].length > 0);
+                    let isToday = dStr === new Date().toISOString().split('T')[0];
+                    html += `<div class="mini-cell" style="${hasEvt?'background:var(--primary-light); color:var(--primary); font-weight:bold;':''} ${isToday?'border:1px solid var(--primary);':''}">${i}</div>`;
+                }
+                html += `</div></div>`;
+            }
+            html += '</div>';
+            list.innerHTML = html;
+        }
+
+        // --- BLOCK CRUD ---
         function quickAdd(name, icon, mins) {
             const key = selectedDate.toISOString().split('T')[0];
             if(!db.days[key]) db.days[key] = [];
-            
             let start = "08:00";
-            if(db.days[key].length > 0) {
-                 db.days[key].sort((a,b) => a.start.localeCompare(b.start));
-                 start = db.days[key][db.days[key].length-1].end;
-            }
-            
-            let [h, m] = start.split(':').map(Number);
-            let d = new Date(); d.setHours(h, m + mins);
+            if(db.days[key].length > 0) { db.days[key].sort((a,b) => a.start.localeCompare(b.start)); start = db.days[key][db.days[key].length-1].end; }
+            let [h, m] = start.split(':').map(Number); let d = new Date(); d.setHours(h, m + mins);
             let end = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0');
-
-            db.days[key].push({ id: Date.now(), type: 'life', name, icon, start, end });
-            save(); renderTimeline();
+            db.days[key].push({ id: Date.now(), type: 'life', name, icon, categoryId: db.categories[0].id, start, end }); save(); renderTimeline();
         }
 
         function editBlock(id) {
@@ -790,48 +820,33 @@
             const key = selectedDate.toISOString().split('T')[0];
             const b = db.days[key].find(x => x.id == id);
             if(!b) return;
-            
             setBlockType(b.type);
             document.getElementById('b-start').value = b.start;
             document.getElementById('b-end').value = b.end;
             if(b.type === 'school') document.getElementById('b-sub').value = b.subId;
-            else { document.getElementById('b-name').value = b.name; }
-            
+            else { document.getElementById('b-name').value = b.name; document.getElementById('b-icon').value = b.icon; document.getElementById('b-cat').value = b.categoryId || db.categories[0].id; }
             document.getElementById('modal-block').style.display = 'flex';
         }
 
         function saveBlock() {
-            const start = document.getElementById('b-start').value;
-            const end = document.getElementById('b-end').value;
+            const start = document.getElementById('b-start').value, end = document.getElementById('b-end').value;
             if(!start || !end) return alert("Time required");
-
-            const key = selectedDate.toISOString().split('T')[0];
-            if(!db.days[key]) db.days[key] = [];
-            
+            const key = selectedDate.toISOString().split('T')[0]; if(!db.days[key]) db.days[key] = [];
             const newB = { id: currentEditBlockId || Date.now(), type: currentBlockType, start, end };
             if(currentBlockType === 'school') { newB.subId = document.getElementById('b-sub').value; }
-            else { newB.name = document.getElementById('b-name').value || "Activity"; newB.icon = document.getElementById('b-icon').value || "✅"; }
+            else { newB.name = document.getElementById('b-name').value || "Activity"; newB.icon = document.getElementById('b-icon').value || "✅"; newB.categoryId = document.getElementById('b-cat').value; }
 
-            if(currentEditBlockId) {
-                const idx = db.days[key].findIndex(x => x.id == currentEditBlockId);
-                db.days[key][idx] = newB;
-            } else {
-                db.days[key].push(newB);
-            }
+            if(currentEditBlockId) { const idx = db.days[key].findIndex(x => x.id == currentEditBlockId); db.days[key][idx] = newB; } 
+            else db.days[key].push(newB);
             save(); closeModal('modal-block'); renderTimeline();
         }
 
         function delBlock() {
-            if(currentEditBlockId && confirm("Delete?")) {
-                const key = selectedDate.toISOString().split('T')[0];
-                db.days[key] = db.days[key].filter(x => x.id != currentEditBlockId);
-                save(); closeModal('modal-block'); renderTimeline();
-            }
+            if(currentEditBlockId && confirm("Delete?")) { const key = selectedDate.toISOString().split('T')[0]; db.days[key] = db.days[key].filter(x => x.id != currentEditBlockId); save(); closeModal('modal-block'); renderTimeline(); }
         }
         
         function setBlockType(t) {
-            currentBlockType = t;
-            renderSchool(); // Ensure subjects loaded
+            currentBlockType = t; renderSchool(); renderCategorySelect();
             document.getElementById('btn-type-school').className = t==='school'?'btn-sm btn':'btn-sm btn-ghost';
             document.getElementById('btn-type-life').className = t==='life'?'btn-sm btn':'btn-sm btn-ghost';
             document.getElementById('input-school').style.display = t==='school'?'block':'none';
@@ -840,90 +855,84 @@
 
         // --- SUBJECTS & TASKS ---
         function renderSchool() {
-            const list = document.getElementById('subject-list');
-            const select = document.getElementById('b-sub');
-            const taskSelect = document.getElementById('t-sub');
-            
-            list.innerHTML = ''; select.innerHTML = ''; taskSelect.innerHTML = '';
-            
+            const list = document.getElementById('subject-list'), bSub = document.getElementById('b-sub'), tSub = document.getElementById('t-sub');
+            list.innerHTML=''; bSub.innerHTML=''; tSub.innerHTML='';
             if(db.subjects.length === 0) list.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:var(--text-muted);">No subjects added.</div>';
-
             db.subjects.forEach(s => {
-                select.innerHTML += `<option value="${s.id}">${s.name}</option>`;
-                taskSelect.innerHTML += `<option value="${s.id}">${s.name}</option>`;
-                list.innerHTML += `
-                    <div class="sub-card" style="--color:${s.color}">
-                        <div style="display:flex; justify-content:space-between;">
-                            <h3 style="margin:0; color:${s.color}">${s.name}</h3>
-                            <span onclick="deleteSubject(${s.id})" style="color:var(--text-muted); cursor:pointer;">🗑️</span>
-                        </div>
-                        <p style="font-size:0.9rem; color:var(--text-muted); margin-top:5px;">${s.room}</p>
-                    </div>`;
+                bSub.innerHTML += `<option value="${s.id}">${s.name}</option>`; tSub.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+                list.innerHTML += `<div class="sub-card" style="--color:${s.color}"><div style="display:flex; justify-content:space-between;"><h3 style="margin:0; color:${s.color}">${s.name}</h3><span onclick="deleteSubject(${s.id})" style="color:var(--text-muted); cursor:pointer;">🗑️</span></div><p style="font-size:0.9rem; color:var(--text-muted); margin-top:5px;">${s.room}</p></div>`;
             });
         }
-        
-        function saveSubject() {
-            const name = document.getElementById('s-name').value;
-            if(name) {
-                db.subjects.push({ id: Date.now(), name, room: document.getElementById('s-room').value, color: document.getElementById('s-color').value });
-                save(); closeModal('modal-sub'); renderSchool();
-            }
-        }
-
-        function deleteSubject(id) {
-            if(confirm("Delete subject?")) {
-                db.subjects = db.subjects.filter(s => s.id !== id);
-                save(); renderSchool();
-            }
-        }
+        function saveSubject() { const n = document.getElementById('s-name').value; if(n) { db.subjects.push({ id: Date.now(), name: n, room: document.getElementById('s-room').value, color: document.getElementById('s-color').value }); save(); closeModal('modal-sub'); renderSchool(); } }
+        function deleteSubject(id) { if(confirm("Delete subject?")) { db.subjects = db.subjects.filter(s => s.id !== id); save(); renderSchool(); } }
 
         function renderTasks() {
             const list = document.getElementById('task-list'); list.innerHTML = '';
-            const count = db.tasks.filter(t => !t.done).length;
-            document.getElementById('dash-task-count').innerText = count;
-
+            document.getElementById('dash-task-count').innerText = db.tasks.filter(t => !t.done).length;
             if(db.tasks.length === 0) list.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted);">All caught up!</div>';
-
             db.tasks.forEach(t => {
                 const sub = db.subjects.find(s => s.id == t.subId) || { name: 'General', color: 'var(--text-muted)' };
-                list.innerHTML += `
-                    <div class="task-row" style="opacity:${t.done?0.5:1}">
-                        <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" style="width:20px; height:20px; margin:0;">
-                        <div style="flex:1;">
-                            <div style="font-size:0.75rem; font-weight:700; color:${sub.color};">${sub.name}</div>
-                            <div style="text-decoration:${t.done?'line-through':'none'}; font-weight:600;">${t.desc}</div>
-                        </div>
-                        <span onclick="delTask(${t.id})" style="cursor:pointer; font-size:1.2rem; color:var(--text-muted);">&times;</span>
-                    </div>`;
+                list.innerHTML += `<div class="task-row" style="opacity:${t.done?0.5:1}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" style="width:20px; height:20px; margin:0;"><div style="flex:1;"><div style="font-size:0.75rem; font-weight:700; color:${sub.color};">${sub.name}</div><div style="text-decoration:${t.done?'line-through':'none'}; font-weight:600;">${t.desc}</div></div><span onclick="delTask(${t.id})" style="cursor:pointer; font-size:1.2rem; color:var(--text-muted);">&times;</span></div>`;
             });
         }
-
-        function saveTask() {
-            const desc = document.getElementById('t-desc').value;
-            if(desc) {
-                db.tasks.push({ id: Date.now(), desc, subId: document.getElementById('t-sub').value, date: document.getElementById('t-date').value, done: false });
-                save(); closeModal('modal-task'); renderTasks();
-                document.getElementById('t-desc').value = '';
-            }
-        }
-
+        function saveTask() { const d = document.getElementById('t-desc').value; if(d) { db.tasks.push({ id: Date.now(), desc: d, subId: document.getElementById('t-sub').value, date: document.getElementById('t-date').value, done: false }); save(); closeModal('modal-task'); renderTasks(); document.getElementById('t-desc').value = ''; } }
         function toggleTask(id) { const t = db.tasks.find(x => x.id == id); if(t) { t.done = !t.done; save(); renderTasks(); } }
         function delTask(id) { if(confirm("Remove task?")) { db.tasks = db.tasks.filter(t => t.id !== id); save(); renderTasks(); } }
 
-        // --- UTILS ---
-        function save() {
-            localStorage.setItem('v32Data', JSON.stringify(db));
-        }
-        
+        // --- ALL OTHER TOOLS (Intact) ---
+        // Calc
+        let calcVal = "";
+        function updateCalcDisplay() { const disp = document.getElementById('calc-display'); disp.innerText = calcVal || "0"; if (calcVal.length > 10) { disp.style.fontSize = Math.max(1.2, 2.5 - (calcVal.length - 10) * 0.15) + 'rem'; } else { disp.style.fontSize = '2.5rem'; } }
+        function calcInput(c) { calcVal += c; updateCalcDisplay(); } function calcInputBack() { calcVal = calcVal.slice(0, -1); updateCalcDisplay(); } function calcClear() { calcVal = ""; updateCalcDisplay(); } function calcResult() { try { calcVal = eval(calcVal).toString(); updateCalcDisplay(); } catch { calcVal = ""; document.getElementById('calc-display').innerText = "Error"; } }
+
+        // Breathe
+        let breatheTimer = null;
+        function toggleBreathe() { const btn = document.getElementById('breathe-btn'), txt = document.getElementById('breathe-text'), circle = document.getElementById('breathe-circle'); if(breatheTimer) { clearInterval(breatheTimer); breatheTimer = null; btn.innerText = "Start"; txt.innerText = "Get Ready"; circle.style.animation = "none"; circle.style.transform = "scale(1)"; } else { btn.innerText = "Stop"; circle.style.animation = "breathe 8s infinite ease-in-out"; const cycle = () => { txt.innerText = "Inhale..."; setTimeout(() => { txt.innerText = "Exhale..."; }, 4000); }; cycle(); breatheTimer = setInterval(cycle, 8000); } }
+
+        // Wheel
+        let wheelCtx = null;
+        function initWheel() { const c = document.getElementById('wheel-canvas'); wheelCtx = c.getContext('2d'); drawWheel(); renderWheelList(); }
+        function drawWheel(rotation = 0) { const ctx = wheelCtx; const size = 260; const center = size/2; const rad = center - 10; const step = (2 * Math.PI) / db.wheelOptions.length; const colors = ['#f87171', '#fbbf24', '#34d399', '#60a5fa', '#a78bfa']; ctx.clearRect(0,0,size,size); db.wheelOptions.forEach((opt, i) => { ctx.beginPath(); ctx.moveTo(center, center); ctx.arc(center, center, rad, i * step + rotation, (i + 1) * step + rotation); ctx.fillStyle = colors[i % colors.length]; ctx.fill(); ctx.save(); ctx.translate(center, center); ctx.rotate(i * step + step / 2 + rotation); ctx.textAlign = "right"; ctx.fillStyle = "white"; ctx.font = "bold 14px sans-serif"; ctx.fillText(opt, rad - 20, 5); ctx.restore(); }); }
+        function spinWheel() { document.getElementById('wheel-winner').style.display='none'; let speed = 0.5 + Math.random(); let rotation = 0; const animate = () => { rotation += speed; speed *= 0.98; drawWheel(rotation); if(speed > 0.005) requestAnimationFrame(animate); else { const winnerIdx = Math.floor(Math.random() * db.wheelOptions.length); document.getElementById('wheel-res-text').innerText = db.wheelOptions[winnerIdx]; document.getElementById('wheel-winner').style.display = 'block'; } }; animate(); }
+        function addWheelOption() { const v = document.getElementById('wheel-opt').value; if(v) { db.wheelOptions.push(v); document.getElementById('wheel-opt').value=''; save(); initWheel(); } }
+        function renderWheelList() { document.getElementById('wheel-list').innerHTML = db.wheelOptions.map((o,i) => `<button class="btn-sm btn-ghost" onclick="db.wheelOptions.splice(${i},1); save(); initWheel();">${o} &times;</button>`).join(''); }
+
+        // Focus Timer
+        let focusTimer = null, focusTime = 1500;
+        function setFocusTime(m) { focusTime = m * 60; document.getElementById('focus-display').innerText = `${m}:00`; }
+        function toggleFocus() { const btn = document.getElementById('focus-btn'); if(focusTimer) { clearInterval(focusTimer); focusTimer=null; btn.innerText="START"; } else { btn.innerText="STOP"; focusTimer = setInterval(() => { focusTime--; const m = Math.floor(focusTime/60).toString().padStart(2,'0'); const s = (focusTime%60).toString().padStart(2,'0'); document.getElementById('focus-display').innerText = `${m}:${s}`; if(focusTime<=0) clearInterval(focusTimer); }, 1000); } }
+
+        // Flashcards
+        function renderDeckList() { const g = document.getElementById('fc-deck-list'); g.innerHTML=''; if(db.flashcardSets.length===0) g.innerHTML=`<div style="grid-column:1/-1; text-align:center; color:var(--text-muted);">No decks yet.</div>`; db.flashcardSets.forEach(d => g.innerHTML+=`<div class="deck-card" onclick="openDeck(${d.id})"><div style="font-weight:700; font-size:1.1rem; margin-bottom:5px;">${d.name}</div><div style="font-size:0.8rem; color:var(--text-muted);">${d.cards.length} cards</div></div>`); }
+        function createDeck(){ const n=prompt("Deck Name:"); if(n){db.flashcardSets.push({id:Date.now(), name:n, cards:[]}); save(); renderDeckList();} }
+        function openDeck(id){ activeDeckId=id; cardIndex=0; document.getElementById('fc-deck-view').style.display='none'; document.getElementById('fc-study-view').style.display='flex'; document.getElementById('fc-study-title').innerText=db.flashcardSets.find(d=>d.id==id).name; renderStudyCard(); }
+        function showDeckList(){ document.getElementById('fc-study-view').style.display='none'; document.getElementById('fc-deck-view').style.display='block'; document.getElementById('fc-add-area').style.display='none'; }
+        function renderStudyCard(){ const d=db.flashcardSets.find(x=>x.id==activeDeckId); if(!d.cards.length) { document.getElementById('fc-front').innerText="Empty"; document.getElementById('fc-back').innerText="Add cards +"; document.getElementById('fc-count').innerText="0/0"; return; } if(cardIndex>=d.cards.length) cardIndex=0; if(cardIndex<0) cardIndex=d.cards.length-1; const c=d.cards[cardIndex]; document.getElementById('fc-front').innerText=c.q; document.getElementById('fc-back').innerText=c.a; document.getElementById('fc-count').innerText=`${cardIndex+1}/${d.cards.length}`; document.querySelector('.flashcard-container').classList.remove('flipped'); }
+        function nextCard(dir){cardIndex+=dir; renderStudyCard();} function addCardMode(){document.getElementById('fc-add-area').style.display='block'; document.getElementById('fc-study-area').style.display='none'; } function saveNewCard(){ const q=document.getElementById('fc-new-q').value, a=document.getElementById('fc-new-a').value; if(q&&a){ db.flashcardSets.find(d=>d.id==activeDeckId).cards.push({q,a}); save(); document.getElementById('fc-new-q').value=''; document.getElementById('fc-new-a').value=''; document.getElementById('fc-add-area').style.display='none'; document.getElementById('fc-study-area').style.display='block'; renderStudyCard(); } }
+
+        // Notebooks
+        let currentNbId = null;
+        function createNotebook() { const title = prompt("Notebook Title:"); if(title) { db.notebooks.push({ id: Date.now(), title, content: "" }); save(); renderNotebooks(); } }
+        function renderNotebooks() { const list = document.getElementById('nb-list'); list.innerHTML = ''; if(db.notebooks.length === 0) list.innerHTML = '<div style="color:var(--text-muted); text-align:center;">No notebooks yet.</div>'; db.notebooks.forEach(nb => { list.innerHTML += `<div class="nb-card" onclick="openNotebook(${nb.id})"><div style="font-weight:700; display:flex; align-items:center; gap:10px;"><span style="font-size:1.2rem;">📓</span> ${nb.title}</div><span style="color:var(--text-muted);">❯</span></div>`; }); }
+        function openNotebook(id) { currentNbId = id; const nb = db.notebooks.find(n => n.id === id); document.getElementById('nb-edit-title').innerText = nb.title; document.getElementById('nb-area').value = nb.content; document.getElementById('nb-list-view').style.display = 'none'; document.getElementById('nb-edit-view').style.display = 'flex'; }
+        function closeNotebook() { currentNbId = null; document.getElementById('nb-edit-view').style.display = 'none'; document.getElementById('nb-list-view').style.display = 'block'; renderNotebooks(); }
+        function saveCurrentNotebook() { if(currentNbId) { const nb = db.notebooks.find(n => n.id === currentNbId); nb.content = document.getElementById('nb-area').value; save(); } }
+        function deleteNotebook() { if(confirm("Delete this notebook forever?")) { db.notebooks = db.notebooks.filter(n => n.id !== currentNbId); save(); closeNotebook(); } }
+
+        // Countdowns
+        let currentCdType = 'exam';
+        function openCountdownTool(type) { currentCdType = type; document.getElementById('cd-title').innerText = type === 'exam' ? 'Exam Timers ⏳' : 'Holiday Timers 🏖️'; renderCountdowns(); document.getElementById('modal-tool-countdowns').style.display = 'flex'; }
+        function renderCountdowns() { const list = document.getElementById('cd-list'); list.innerHTML = ''; const cds = db.countdowns.filter(c => c.type === currentCdType); if (cds.length === 0) { list.innerHTML = '<div style="color:var(--text-muted); text-align:center;">No timers set.</div>'; return; } cds.sort((a,b) => new Date(a.date) - new Date(b.date)); const today = new Date(); today.setHours(0,0,0,0); cds.forEach(c => { const d = new Date(c.date); const diffDays = Math.ceil((d - today) / (1000 * 60 * 60 * 24)); let dayText = diffDays > 0 ? `${diffDays} Days` : (diffDays === 0 ? "TODAY!" : "Passed"); let color = diffDays > 0 ? 'var(--primary)' : (diffDays === 0 ? 'var(--warning)' : 'var(--text-muted)'); list.innerHTML += `<div class="cd-card"><div><div style="font-weight:700;">${c.name}</div><div style="font-size:0.8rem; color:var(--text-muted);">${c.date}</div></div><div style="display:flex; align-items:center; gap:15px;"><div class="cd-days" style="color:${color};">${dayText}</div><button class="btn-icon" onclick="deleteCountdown(${c.id})" style="border:none;">&times;</button></div></div>`; }); }
+        function saveCountdown() { const name = document.getElementById('cd-name').value; const date = document.getElementById('cd-date').value; if(name && date) { db.countdowns.push({ id: Date.now(), type: currentCdType, name, date }); save(); document.getElementById('cd-name').value = ''; document.getElementById('cd-date').value = ''; renderCountdowns(); } }
+        function deleteCountdown(id) { db.countdowns = db.countdowns.filter(c => c.id !== id); save(); renderCountdowns(); }
+
+        // --- SYSTEM UTILS ---
+        function save() { localStorage.setItem('v34Data', JSON.stringify(db)); }
         function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); }
-        
         function resetApp() { if(confirm("Erase all data?")) { localStorage.clear(); location.reload(); } }
-        
         function checkLiveStatus() {
-             const now = new Date();
-             const time = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
-             const key = now.toISOString().split('T')[0];
-             const blocks = db.days[key] || [];
+             const now = new Date(); const time = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+             const key = now.toISOString().split('T')[0]; const blocks = db.days[key] || [];
              const active = blocks.find(b => time >= b.start && time < b.end);
              
              if(active) {
@@ -936,22 +945,9 @@
              }
              if(selectedDate.toDateString() === now.toDateString() && currentPage === 'timeline') renderTimeline();
         }
-
-        function exportData() {
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(new Blob([JSON.stringify(db)], {type: 'application/json'}));
-            a.download = `vidyarthi_backup_${new Date().toISOString().slice(0,10)}.json`;
-            a.click();
-        }
-        function importData(el) {
-            const fr = new FileReader();
-            fr.onload = e => {
-                try { db = JSON.parse(e.target.result); save(); location.reload(); } catch(err) { alert("Invalid File"); }
-            };
-            fr.readAsText(el.files[0]);
-        }
-
-        function renderAll() { renderSchool(); renderTasks(); renderTimeline(); }
+        function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(db)], {type: 'application/json'})); a.download = `vidyarthi_backup_${new Date().toISOString().slice(0,10)}.json`; a.click(); }
+        function importData(el) { const fr = new FileReader(); fr.onload = e => { try { db = JSON.parse(e.target.result); save(); location.reload(); } catch(err) { alert("Invalid File"); } }; fr.readAsText(el.files[0]); }
+        function renderAll() { renderCategorySelect(); renderSchool(); renderTasks(); renderTimeline(); }
 
         init();
         nav('dashboard');
