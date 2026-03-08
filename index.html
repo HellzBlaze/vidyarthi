@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vidyarthi - LifeOS v3.4</title>
+    <title>Vidyarthi - LifeOS v3.5</title>
     <style>
         :root {
             /* Theme Variables */
@@ -151,7 +151,7 @@
             .logo { display: none; }
             .main-content { padding: 20px; margin-bottom: 70px; }
             .fab { bottom: 85px; right: 20px; }
-            .view-tabs { display: none; /* Hide advanced views on small mobile if needed, or make smaller */ }
+            .view-tabs { display: none; }
         }
     </style>
 </head>
@@ -159,17 +159,17 @@
 
     <nav class="sidebar">
         <div class="logo">V</div>
-        <button class="nav-item active" onclick="nav('dashboard')">🏠</button>
-        <button class="nav-item" onclick="nav('timeline')">📅</button>
-        <button class="nav-item" onclick="nav('school')">🎒</button>
-        <button class="nav-item" onclick="nav('tasks')">✅</button>
-        <button class="nav-item" onclick="nav('tools')">🛠️</button>
-        <button class="nav-item" onclick="nav('settings')">⚙️</button>
+        <button class="nav-item active" onclick="nav('dashboard')" title="Home">🏠</button>
+        <button class="nav-item" onclick="nav('timeline')" title="Timeline">📅</button>
+        <button class="nav-item" onclick="nav('school')" title="School">🎒</button>
+        <button class="nav-item" onclick="nav('tasks')" title="Tasks">✅</button>
+        <button class="nav-item" onclick="nav('tools')" title="Tools">🛠️</button>
+        <button class="nav-item" onclick="nav('settings')" title="Settings">⚙️</button>
     </nav>
 
     <main class="main-content">
         <div class="header">
-            <div><div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">LifeOS 3.4</div><h1 id="page-title">Dashboard</h1></div>
+            <div><div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">LifeOS 3.5</div><h1 id="page-title">Dashboard</h1></div>
             <div id="clock" style="font-family:monospace; font-weight:700; color:var(--primary); background:var(--primary-light); padding:8px 12px; border-radius:12px;">00:00</div>
         </div>
 
@@ -206,6 +206,7 @@
                     <button class="btn-icon" style="width:30px; height:30px; border:none; background:transparent;" onclick="changeDate(-1)">◀</button>
                     <div style="text-align:center; min-width:100px;">
                         <div style="font-weight:800; font-size:0.9rem;" id="tl-date-main">Today</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted);" id="tl-date-sub">Date</div>
                     </div>
                     <button class="btn-icon" style="width:30px; height:30px; border:none; background:transparent;" onclick="changeDate(1)">▶</button>
                 </div>
@@ -483,7 +484,7 @@
     </div>
 
     <script>
-        // --- DATA STORE ---
+        // --- DATA STORE (Robust Initialization) ---
         let db = {
             days: {}, subjects: [], tasks: [], 
             settings: { theme: 'light', accent: '#6366f1' },
@@ -493,9 +494,8 @@
         };
 
         try {
-            const saved = localStorage.getItem('v34Data'); // Updated Key
+            const saved = localStorage.getItem('v35Data'); 
             if(saved) db = JSON.parse(saved);
-            // Ensure structures exist for older saves
             if(!db.flashcardSets) db.flashcardSets = [];
             if(!db.notebooks) db.notebooks = [{id:1, title:'General Notes', content:''}];
             if(!db.countdowns) db.countdowns = [];
@@ -507,6 +507,11 @@
         let currentEditBlockId = null;
         let currentPage = 'dashboard';
         let timelineView = 'day';
+
+        // Custom Local Date String Generator (Fixes global timezone shifting bugs)
+        function getDateKey(d) {
+            return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+        }
 
         function init() {
             applyTheme();
@@ -529,7 +534,7 @@
             
             document.querySelector('.fab').style.display = (id === 'timeline' || id === 'school' || id === 'tasks') ? 'grid' : 'none';
             document.getElementById('page-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
-            if(id === 'timeline') renderTimeline();
+            if(id === 'timeline') renderTimeline(); 
         }
 
         function handleFab() {
@@ -573,14 +578,12 @@
         function saveAccent(c) { db.settings.accent=c; save(); applyTheme(); setupColorGrid(); }
         function toggleTheme() { db.settings.theme = db.settings.theme==='dark'?'light':'dark'; save(); applyTheme(); }
 
-        // --- CATEGORIES (NEW) ---
+        // --- CATEGORIES ---
         function renderCategorySelect() {
             const sel = document.getElementById('b-cat');
             sel.innerHTML = db.categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
         }
-        function openCategoryModal() {
-            document.getElementById('modal-category').style.display = 'flex';
-        }
+        function openCategoryModal() { document.getElementById('modal-category').style.display = 'flex'; }
         function saveCategory() {
             const name = document.getElementById('cat-name').value;
             const color = document.getElementById('cat-color').value;
@@ -591,7 +594,7 @@
             }
         }
 
-        // --- TIMELINE (VIEWS) ---
+        // --- TIMELINE (VIEWS & CORE LOGIC) ---
         function setTlView(view) {
             timelineView = view;
             document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
@@ -614,23 +617,33 @@
             else if(timelineView === 'year') renderYearView();
         }
 
+        // 1. Day View (MS Teams style perfectly constrained)
         function renderDayView() {
             const list = document.getElementById('timeline-list');
             const isToday = new Date().toDateString() === selectedDate.toDateString();
             document.getElementById('tl-date-main').innerText = isToday ? "Today" : selectedDate.toLocaleDateString('en-US', {weekday:'short'});
             document.getElementById('tl-date-sub').innerText = selectedDate.toLocaleDateString('en-US', {day:'numeric', month:'short', year:'numeric'});
 
-            const key = selectedDate.toISOString().split('T')[0];
+            const key = getDateKey(selectedDate);
             const blocks = db.days[key] || [];
             
             const pxPerHour = 60; 
-            let gridHtml = '<div style="position:relative; height:1440px; background:var(--surface); border-radius:12px; border:1px solid var(--border); overflow:hidden; width:100%;">';
+            
+            // Protected Flex Container so the axis never hides behind overflow blocks
+            let html = '<div style="display:flex; height:1440px; background:var(--surface); border-radius:12px; border:1px solid var(--border); position:relative; overflow:hidden;">';
+            
+            // Fixed Time Axis Column
+            html += '<div style="width:50px; flex-shrink:0; border-right:1px solid var(--border); position:relative; background:var(--surface); z-index:5;">';
+            for(let i=0; i<24; i++) {
+                html += `<div style="position:absolute; top:${i*pxPerHour - 8}px; left:0; right:5px; text-align:right; font-size:0.7rem; color:var(--text-muted);">${i<10?'0'+i:i}:00</div>`;
+            }
+            html += '</div>';
+            
+            // Scrollable Day Blocks Column
+            html += '<div style="flex:1; position:relative;">';
             
             for(let i=0; i<24; i++) {
-                const top = i * pxPerHour;
-                const timeLabel = (i < 10 ? '0'+i : i) + ':00';
-                gridHtml += `<div style="position:absolute; top:${top}px; left:0; right:0; height:1px; background:var(--border); z-index:1;"></div>`;
-                gridHtml += `<div style="position:absolute; top:${top - 8}px; left:5px; width:40px; text-align:right; font-size:0.7rem; color:var(--text-muted); z-index:2;">${timeLabel}</div>`;
+                html += `<div style="position:absolute; top:${i*pxPerHour}px; left:0; right:0; height:1px; background:var(--border); z-index:1;"></div>`;
             }
 
             blocks.forEach(b => {
@@ -643,14 +656,12 @@
                     title = b.name; icon = b.icon || '📌'; color = cat ? cat.color : '#cbd5e1';
                 }
 
-                const [sH, sM] = b.start.split(':').map(Number);
-                const [eH, eM] = b.end.split(':').map(Number);
-                const startPx = (sH * 60) + sM;
-                const endPx = (eH * 60) + eM;
+                const [sH, sM] = b.start.split(':').map(Number); const [eH, eM] = b.end.split(':').map(Number);
+                const startPx = (sH * 60) + sM; const endPx = (eH * 60) + eM;
                 const height = Math.max(endPx - startPx, 20);
 
-                gridHtml += `
-                    <div onclick="editBlock(${b.id})" style="position:absolute; top:${startPx}px; left:55px; right:10px; height:${height}px; background:${color}33; border-left:4px solid ${color}; border-radius:6px; padding:2px 8px; font-size:0.8rem; overflow:hidden; z-index:3; cursor:pointer; display:flex; flex-direction:column; justify-content:center; box-shadow:0 1px 3px rgba(0,0,0,0.1); transition:var(--transition);">
+                html += `
+                    <div onclick="editBlock(${b.id})" style="position:absolute; top:${startPx}px; left:5px; right:10px; height:${height}px; background:${color}33; border-left:4px solid ${color}; border-radius:6px; padding:2px 8px; font-size:0.8rem; overflow:hidden; z-index:3; cursor:pointer; display:flex; flex-direction:column; justify-content:center; box-shadow:0 1px 3px rgba(0,0,0,0.1); transition:var(--transition);">
                         <div style="font-weight:700; color:var(--text); white-space:nowrap; text-overflow:ellipsis; overflow:hidden;">${icon} ${title}</div>
                         <div style="font-size:0.7rem; color:var(--text-muted);">${b.start} - ${b.end}</div>
                     </div>`;
@@ -659,27 +670,24 @@
             if(isToday) {
                 const now = new Date();
                 const top = (now.getHours() * 60) + now.getMinutes();
-                gridHtml += `<div style="position:absolute; top:${top}px; left:50px; right:0; height:2px; background:var(--danger); z-index:10; pointer-events:none;"></div>`;
-                gridHtml += `<div style="position:absolute; top:${top - 4}px; left:46px; width:10px; height:10px; border-radius:50%; background:var(--danger); z-index:10;"></div>`;
+                html += `<div id="red-line-day" style="position:absolute; top:${top}px; left:0; right:0; height:2px; background:var(--danger); z-index:10; pointer-events:none;"></div>`;
+                html += `<div id="red-dot-day" style="position:absolute; top:${top - 4}px; left:-4px; width:10px; height:10px; border-radius:50%; background:var(--danger); z-index:10;"></div>`;
             }
 
-            gridHtml += '</div>';
-            list.innerHTML = `<div style="max-height: 500px; overflow-y: auto; border-radius:12px; margin-top:10px;" id="cal-scroll-wrapper">${gridHtml}</div>`;
+            html += '</div></div>';
+            list.innerHTML = `<div style="max-height: 500px; overflow-y: auto; border-radius:12px; margin-top:10px;" id="cal-scroll-wrapper">${html}</div>`;
             
             setTimeout(() => {
                 const wrapper = document.getElementById('cal-scroll-wrapper');
-                if(wrapper) {
-                    if (isToday) wrapper.scrollTop = Math.max(0, (new Date().getHours() * 60) - 100);
-                    else wrapper.scrollTop = 8 * 60;
-                }
+                if(wrapper) wrapper.scrollTop = isToday ? Math.max(0, (new Date().getHours() * 60) - 100) : 8 * 60;
             }, 50);
         }
 
+        // 2. Week View
         function renderWeekView() {
             const list = document.getElementById('timeline-list');
             let d = new Date(selectedDate);
-            let day = d.getDay();
-            let diff = d.getDate() - day;
+            let day = d.getDay(); let diff = d.getDate() - day;
             let sunday = new Date(d.setDate(diff));
             
             let endWeek = new Date(sunday); endWeek.setDate(endWeek.getDate()+6);
@@ -687,31 +695,23 @@
             document.getElementById('tl-date-sub').innerText = sunday.toLocaleDateString('en-US',{month:'short', day:'numeric'}) + ' - ' + endWeek.toLocaleDateString('en-US',{month:'short', day:'numeric'});
 
             const pxPerHour = 60;
-            let html = '<div style="display:flex; overflow-x:auto; height:500px; background:var(--surface); border-radius:12px; border:1px solid var(--border); position:relative;" id="cal-scroll-wrapper">';
+            let html = '<div style="display:flex; overflow-x:auto; height:1440px; background:var(--surface); border-radius:12px; border:1px solid var(--border); position:relative;">';
             
-            // Time Axis
-            html += `<div style="width:45px; flex-shrink:0; position:relative; height:1440px; border-right:1px solid var(--border); background:var(--surface); z-index:5; position:sticky; left:0;">`;
-            for(let i=0; i<24; i++) {
-                html += `<div style="position:absolute; top:${i*pxPerHour - 8}px; left:0; right:5px; text-align:right; font-size:0.6rem; color:var(--text-muted);">${i}:00</div>`;
-            }
+            html += `<div style="width:45px; flex-shrink:0; position:relative; border-right:1px solid var(--border); background:var(--surface); z-index:5; position:sticky; left:0;">`;
+            for(let i=0; i<24; i++) html += `<div style="position:absolute; top:${i*pxPerHour - 8}px; left:0; right:5px; text-align:right; font-size:0.6rem; color:var(--text-muted);">${i}:00</div>`;
             html += `</div>`;
 
-            // 7 Days
             for(let i=0; i<7; i++) {
                 let curr = new Date(sunday); curr.setDate(curr.getDate() + i);
-                let key = curr.toISOString().split('T')[0];
+                let key = getDateKey(curr);
                 let isToday = curr.toDateString() === new Date().toDateString();
                 let blocks = db.days[key] || [];
 
-                html += `<div style="flex:1; min-width:100px; position:relative; height:1440px; border-right:1px solid var(--border);">`;
-                
-                // Day Header Sticky
+                html += `<div style="flex:1; min-width:100px; position:relative; border-right:1px solid var(--border);">`;
                 html += `<div style="position:sticky; top:0; background:var(--surface-glass); backdrop-filter:blur(5px); z-index:4; text-align:center; padding:5px 0; border-bottom:1px solid var(--border); font-size:0.75rem; font-weight:700; ${isToday?'color:var(--primary);':''}">${curr.toLocaleDateString('en-US',{weekday:'short'})} <br> <span style="font-size:1rem;">${curr.getDate()}</span></div>`;
 
-                // Grid Lines
                 for(let h=0; h<24; h++) html += `<div style="position:absolute; top:${h*pxPerHour}px; left:0; right:0; height:1px; background:var(--border); z-index:1;"></div>`;
 
-                // Blocks
                 blocks.forEach(b => {
                     let title, color;
                     if(b.type === 'school') {
@@ -726,23 +726,24 @@
                     const startPx = (sH * 60) + sM; const endPx = (eH * 60) + eM;
                     const height = Math.max(endPx - startPx, 20);
 
-                    html += `<div onclick="selectedDate=new Date('${key}'); editBlock(${b.id})" style="position:absolute; top:${startPx}px; left:2px; right:2px; height:${height}px; background:${color}33; border-left:3px solid ${color}; border-radius:4px; padding:2px 4px; font-size:0.65rem; overflow:hidden; z-index:3; cursor:pointer;">
+                    html += `<div onclick="selectedDate=new Date(${curr.getFullYear()}, ${curr.getMonth()}, ${curr.getDate()}); editBlock(${b.id})" style="position:absolute; top:${startPx}px; left:2px; right:2px; height:${height}px; background:${color}33; border-left:3px solid ${color}; border-radius:4px; padding:2px 4px; font-size:0.65rem; overflow:hidden; z-index:3; cursor:pointer;">
                         <strong style="color:var(--text);">${title}</strong>
                     </div>`;
                 });
 
                 if(isToday) {
                     const top = (new Date().getHours() * 60) + new Date().getMinutes();
-                    html += `<div style="position:absolute; top:${top}px; left:0; right:0; height:2px; background:var(--danger); z-index:10; pointer-events:none;"></div>`;
+                    html += `<div id="red-line-week-${i}" style="position:absolute; top:${top}px; left:0; right:0; height:2px; background:var(--danger); z-index:10; pointer-events:none;"></div>`;
                 }
 
                 html += `</div>`;
             }
             html += '</div>';
-            list.innerHTML = html;
+            list.innerHTML = `<div style="max-height: 500px; overflow-y: auto; border-radius:12px; margin-top:10px;" id="cal-scroll-wrapper">${html}</div>`;
             setTimeout(() => { const w = document.getElementById('cal-scroll-wrapper'); if(w) w.scrollTop = 8 * 60; }, 50);
         }
 
+        // 3. Month & Year Views
         function renderMonthView() {
             const list = document.getElementById('timeline-list');
             let y = selectedDate.getFullYear(), m = selectedDate.getMonth();
@@ -756,13 +757,11 @@
             const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
             days.forEach(d => html += `<div class="month-header">${d}</div>`);
 
-            // Blanks
             for(let i=0; i<firstDay; i++) html += `<div class="day-cell dim"></div>`;
             
-            // Days
             for(let i=1; i<=daysInMonth; i++) {
-                let dStr = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-                let isToday = dStr === new Date().toISOString().split('T')[0];
+                let dStr = getDateKey(new Date(y, m, i));
+                let isToday = dStr === getDateKey(new Date());
                 let blocks = db.days[dStr] || [];
                 
                 let dotsHtml = '';
@@ -774,7 +773,7 @@
                 });
                 if(blocks.length > 4) dotsHtml += `<span style="font-size:0.5rem; line-height:6px;">+</span>`;
 
-                html += `<div class="day-cell ${isToday?'today':''}" onclick="selectedDate=new Date('${dStr}T00:00:00'); setTlView('day');">${i}<div class="dot-container">${dotsHtml}</div></div>`;
+                html += `<div class="day-cell ${isToday?'today':''}" onclick="selectedDate=new Date(${y}, ${m}, ${i}); setTlView('day');">${i}<div class="dot-container">${dotsHtml}</div></div>`;
             }
             html += '</div>';
             list.innerHTML = html;
@@ -793,10 +792,10 @@
                 let daysInMonth = new Date(y, m + 1, 0).getDate();
                 for(let i=0; i<firstDay; i++) html += `<div></div>`;
                 for(let i=1; i<=daysInMonth; i++) {
-                    let dStr = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                    let dStr = getDateKey(new Date(y, m, i));
                     let hasEvt = (db.days[dStr] && db.days[dStr].length > 0);
-                    let isToday = dStr === new Date().toISOString().split('T')[0];
-                    html += `<div class="mini-cell" style="${hasEvt?'background:var(--primary-light); color:var(--primary); font-weight:bold;':''} ${isToday?'border:1px solid var(--primary);':''}">${i}</div>`;
+                    let isToday = dStr === getDateKey(new Date());
+                    html += `<div class="mini-cell" style="${hasEvt?'background:var(--primary-light); color:var(--primary); font-weight:bold;':''} ${isToday?'border:1px solid var(--primary);':''}" onclick="selectedDate=new Date(${y}, ${m}, ${i}); setTlView('day');">${i}</div>`;
                 }
                 html += `</div></div>`;
             }
@@ -804,9 +803,9 @@
             list.innerHTML = html;
         }
 
-        // --- BLOCK CRUD ---
+        // TIMELINE LOGIC 
         function quickAdd(name, icon, mins) {
-            const key = selectedDate.toISOString().split('T')[0];
+            const key = getDateKey(selectedDate);
             if(!db.days[key]) db.days[key] = [];
             let start = "08:00";
             if(db.days[key].length > 0) { db.days[key].sort((a,b) => a.start.localeCompare(b.start)); start = db.days[key][db.days[key].length-1].end; }
@@ -817,7 +816,7 @@
 
         function editBlock(id) {
             currentEditBlockId = id;
-            const key = selectedDate.toISOString().split('T')[0];
+            const key = getDateKey(selectedDate);
             const b = db.days[key].find(x => x.id == id);
             if(!b) return;
             setBlockType(b.type);
@@ -831,7 +830,7 @@
         function saveBlock() {
             const start = document.getElementById('b-start').value, end = document.getElementById('b-end').value;
             if(!start || !end) return alert("Time required");
-            const key = selectedDate.toISOString().split('T')[0]; if(!db.days[key]) db.days[key] = [];
+            const key = getDateKey(selectedDate); if(!db.days[key]) db.days[key] = [];
             const newB = { id: currentEditBlockId || Date.now(), type: currentBlockType, start, end };
             if(currentBlockType === 'school') { newB.subId = document.getElementById('b-sub').value; }
             else { newB.name = document.getElementById('b-name').value || "Activity"; newB.icon = document.getElementById('b-icon').value || "✅"; newB.categoryId = document.getElementById('b-cat').value; }
@@ -842,7 +841,7 @@
         }
 
         function delBlock() {
-            if(currentEditBlockId && confirm("Delete?")) { const key = selectedDate.toISOString().split('T')[0]; db.days[key] = db.days[key].filter(x => x.id != currentEditBlockId); save(); closeModal('modal-block'); renderTimeline(); }
+            if(currentEditBlockId && confirm("Delete?")) { const key = getDateKey(selectedDate); db.days[key] = db.days[key].filter(x => x.id != currentEditBlockId); save(); closeModal('modal-block'); renderTimeline(); }
         }
         
         function setBlockType(t) {
@@ -879,8 +878,9 @@
         function toggleTask(id) { const t = db.tasks.find(x => x.id == id); if(t) { t.done = !t.done; save(); renderTasks(); } }
         function delTask(id) { if(confirm("Remove task?")) { db.tasks = db.tasks.filter(t => t.id !== id); save(); renderTasks(); } }
 
-        // --- ALL OTHER TOOLS (Intact) ---
-        // Calc
+        // --- ALL OTHER TOOLS ---
+        
+        // Calc (Dynamic size implemented)
         let calcVal = "";
         function updateCalcDisplay() { const disp = document.getElementById('calc-display'); disp.innerText = calcVal || "0"; if (calcVal.length > 10) { disp.style.fontSize = Math.max(1.2, 2.5 - (calcVal.length - 10) * 0.15) + 'rem'; } else { disp.style.fontSize = '2.5rem'; } }
         function calcInput(c) { calcVal += c; updateCalcDisplay(); } function calcInputBack() { calcVal = calcVal.slice(0, -1); updateCalcDisplay(); } function calcClear() { calcVal = ""; updateCalcDisplay(); } function calcResult() { try { calcVal = eval(calcVal).toString(); updateCalcDisplay(); } catch { calcVal = ""; document.getElementById('calc-display').innerText = "Error"; } }
@@ -927,24 +927,40 @@
         function deleteCountdown(id) { db.countdowns = db.countdowns.filter(c => c.id !== id); save(); renderCountdowns(); }
 
         // --- SYSTEM UTILS ---
-        function save() { localStorage.setItem('v34Data', JSON.stringify(db)); }
+        function save() { localStorage.setItem('v35Data', JSON.stringify(db)); }
         function updateClock() { document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); }
         function resetApp() { if(confirm("Erase all data?")) { localStorage.clear(); location.reload(); } }
+        
+        // Smart Live Status Updater (Doesn't break scroll!)
         function checkLiveStatus() {
-             const now = new Date(); const time = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
-             const key = now.toISOString().split('T')[0]; const blocks = db.days[key] || [];
-             const active = blocks.find(b => time >= b.start && time < b.end);
-             
-             if(active) {
-                 const name = active.type==='school' ? (db.subjects.find(s=>s.id==active.subId)?.name || 'Class') : active.name;
-                 document.getElementById('dash-now-title').innerText = name;
-                 document.getElementById('dash-now-time').innerText = `Until ${active.end}`;
-             } else {
-                 document.getElementById('dash-now-title').innerText = "Free Time";
-                 document.getElementById('dash-now-time').innerText = "Relax";
-             }
-             if(selectedDate.toDateString() === now.toDateString() && currentPage === 'timeline') renderTimeline();
+            const now = new Date(); const time = now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0');
+            const key = getDateKey(now); const blocks = db.days[key] || [];
+            const active = blocks.find(b => time >= b.start && time < b.end);
+            
+            if(active) {
+                const name = active.type==='school' ? (db.subjects.find(s=>s.id==active.subId)?.name || 'Class') : active.name;
+                document.getElementById('dash-now-title').innerText = name;
+                document.getElementById('dash-now-time').innerText = `Until ${active.end}`;
+            } else {
+                document.getElementById('dash-now-title').innerText = "Free Time";
+                document.getElementById('dash-now-time').innerText = "Relax";
+            }
+            
+            // Only update DOM position, don't trigger full render
+            if(currentPage === 'timeline' && getDateKey(selectedDate) === key) {
+                const top = (now.getHours() * 60) + now.getMinutes();
+                const dayLine = document.getElementById('red-line-day');
+                const dayDot = document.getElementById('red-dot-day');
+                if(dayLine) dayLine.style.top = top + 'px';
+                if(dayDot) dayDot.style.top = (top - 4) + 'px';
+                
+                for(let i=0; i<7; i++) {
+                    const weekLine = document.getElementById('red-line-week-'+i);
+                    if(weekLine) weekLine.style.top = top + 'px';
+                }
+            }
         }
+        
         function exportData() { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(db)], {type: 'application/json'})); a.download = `vidyarthi_backup_${new Date().toISOString().slice(0,10)}.json`; a.click(); }
         function importData(el) { const fr = new FileReader(); fr.onload = e => { try { db = JSON.parse(e.target.result); save(); location.reload(); } catch(err) { alert("Invalid File"); } }; fr.readAsText(el.files[0]); }
         function renderAll() { renderCategorySelect(); renderSchool(); renderTasks(); renderTimeline(); }
